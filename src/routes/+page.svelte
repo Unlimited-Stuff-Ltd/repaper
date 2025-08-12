@@ -99,5 +99,5 @@
 			<hr class="m-auto my-[5vh] w-[50vw]" />
 			<Button onclick={createFile}>Create New File</Button>
 		{/if}
-	</div>
+	</div> 
 {/if}
