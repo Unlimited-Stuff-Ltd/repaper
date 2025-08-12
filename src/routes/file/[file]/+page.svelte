@@ -5,7 +5,10 @@
 		toggleItalic,
 		setFontSize,
 		setTokens,
-		getTokensText
+		getTokensText,
+		getWordCount,
+		getNumChars,
+		getNumCharsNoSpace
 	} from '$lib/keybindManager';
 	import { Button, AlertDialog, Input } from '$lib/components';
 	import BoldIcon from '@lucide/svelte/icons/bold';
@@ -19,8 +22,9 @@
 	import ReloadIcon from '@lucide/svelte/icons/rotate-cw';
 	import ShareIcon from '@lucide/svelte/icons/share';
 	import HomeIcon from '@lucide/svelte/icons/house';
-	import { onMount } from 'svelte';
+	import InfoIcon from '@lucide/svelte/icons/info';
 	import PDFIcon from '@lucide/svelte/icons/file-text';
+	import { onMount } from 'svelte';
 	import { page } from '$app/state';
 	import { pb, deleteFilePB, saveFile, renameFilePB } from '$lib/pocketbase';
 	import { goto } from '$app/navigation';
@@ -60,8 +64,7 @@
 
 	let hasFocus = true;
 
-	let fileURL = $state('');
-	let fileLink = $state();
+	let infoDialogOpen = $state(false);
 
 	const blinkingInterval = setInterval(() => {
 		if (editor) {
@@ -233,8 +236,10 @@
 
 	function downloadPDF() {
 		saveAsPDF();
-		//fileURL = saveAsPDF().href;
-		//fileLink?.click();
+	}
+
+	function fileInfo() {
+		infoDialogOpen = true;
 	}
 
 	onMount(() => {
@@ -266,8 +271,6 @@
 <svelte:head>
 	<title>{name} - Repaper</title>
 </svelte:head>
-
-<a hidden href={fileURL} bind:this={fileLink} download>Download Link</a>
 
 <AlertDialog.Root bind:open={deleteAlertOpen}>
 	<AlertDialog.Content>
@@ -364,14 +367,35 @@
 	</AlertDialog.Content>
 </AlertDialog.Root>
 
+<AlertDialog.Root bind:open={infoDialogOpen}>
+	<AlertDialog.Content>
+		<AlertDialog.Header>
+			<AlertDialog.Title class="font-serif text-3xl text-(--primary)">{name}</AlertDialog.Title>
+			<AlertDialog.Description>File Info</AlertDialog.Description>
+		</AlertDialog.Header>
+		<div>
+			<p>Number of Words: <strong class="text-(--primary)">{getWordCount()}</strong></p>
+			<p>Number of Characters: <strong class="text-(--primary)">{getNumChars()}</strong></p>
+			<p>
+				Number of Characters (no spaces): <strong class="text-(--primary)"
+					>{getNumCharsNoSpace()[0]}</strong
+				>
+			</p>
+		</div>
+		<AlertDialog.Footer>
+			<AlertDialog.Cancel>Close</AlertDialog.Cancel>
+		</AlertDialog.Footer>
+	</AlertDialog.Content>
+</AlertDialog.Root>
+
 <main>
 	<div class="m-4 grid grid-cols-3">
 		<div class="text-left">
 			<Button onclick={() => goto('/')} size="icon" class="m-1" title="Go Home">
 				<HomeIcon class="h-[1.2rem] w-[1.2rem]" />
 			</Button>
-			<Button onclick={() => reloadButton(true)} size="icon" class="m-1" title="Reload File">
-				<ReloadIcon class="h-[1.2rem] w-[1.2rem]" />
+			<Button class="m-1" size="icon" onclick={fileInfo} title="File Info">
+				<InfoIcon class="h-[1.2rem] w-[1.2rem]" />
 			</Button>
 			{#if editor}
 				<Button class="m-1" size="icon" variant="outline" onclick={textBigger} title="Bigger">
@@ -421,6 +445,9 @@
 					<ShareIcon class="h-[1.2rem] w-[1.2rem]" />
 				</Button>
 			{/if}
+			<Button onclick={() => reloadButton(true)} size="icon" class="m-1" title="Reload File">
+				<ReloadIcon class="h-[1.2rem] w-[1.2rem]" />
+			</Button>
 		</div>
 	</div>
 	<hr class="w-[100%]" />
