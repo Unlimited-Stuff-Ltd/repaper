@@ -9,4 +9,5 @@ jobs:
      - uses: actions/setup-node@v4
        with:
          node-version: '24'
+     - run: npm run build
      - run: npx wrangler deploy
