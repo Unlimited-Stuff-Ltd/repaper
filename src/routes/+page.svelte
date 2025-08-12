@@ -71,7 +71,7 @@
 <h1 class="neon mt-[18vh] h-[14vh] text-center font-serif text-[4.5em] font-black select-none">
 	Repaper
 </h1>
-<p class="text-center font-bold text-red-500">
+<p class="mt-3 text-center font-bold text-red-500">
 	<span class="text-transparent">m</span>{errorText}<span class="text-transparent">m</span>
 </p>
 {#if loading}
@@ -99,5 +99,5 @@
 			<hr class="m-auto my-[5vh] w-[50vw]" />
 			<Button onclick={createFile}>Create New File</Button>
 		{/if}
-	</div> 
+	</div>
 {/if}
