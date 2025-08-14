@@ -39,8 +39,8 @@ function nt(value: string, formatting: string[]) {
 }
 
 // ftw stands for formatting to words
-function ftw(formatting: boolean[], size: number) {
-	let toReturn = [String(size)];
+function ftw(formatting: boolean[], size: string) {
+	let toReturn = [size];
 	if (formatting[0]) {
 		toReturn.push('bold');
 	}
@@ -54,7 +54,7 @@ function ftw(formatting: boolean[], size: number) {
 }
 
 // function ran when key is pressed down
-export function keydown(event: KeyboardEvent, formatting: boolean[], size: number) {
+export function keydown(event: KeyboardEvent, formatting: boolean[], size: string) {
 	// check if key pressed should be added to the text
 	if (event.key === 'ArrowLeft') {
 		if (tokensList.length > Math.abs(cursorPosition)) cursorPosition -= 1;
@@ -148,11 +148,59 @@ export function getText(cursor: boolean, editor: boolean = true) {
 }
 
 export function getTokensText() {
-	return JSON.stringify(tokensList);
+	let toReturn = '';
+	for (let i = 0; i < tokensList.length; i++) {
+		const token = tokensList[i];
+		toReturn += token.formatting[0];
+		if (token.formatting.length > 1) {
+			for (let j = 1; j < token.formatting.length; j++) {
+				switch (token.formatting[j]) {
+					case 'bold':
+						toReturn += 'b';
+						break;
+					case 'italic':
+						toReturn += 'i';
+						break;
+					case 'underline':
+						toReturn += 'u';
+						break;
+					default:
+						break;
+				}
+			}
+		}
+		toReturn += token.value;
+        toReturn += "::";
+	}
+	return toReturn;
 }
 
 export function setTokens(to: string) {
-	tokensList = JSON.parse(to);
+	const toReturn: Token[] = [];
+	let tokens = to.split('::');
+    tokens.pop();
+	for (let i = 0; i < tokens.length; i++) {
+        const token = tokens[i].split('');
+        const char = token.pop() ?? '';
+        let bold = false;
+        let italic = false;
+        let underline = false;
+        if (token.includes('b')) {
+            bold = true;
+            token.pop();
+        }
+        if (token.includes('i')) {
+            italic = true;
+            token.pop();
+        }
+        if (token.includes('u')) {
+            underline = true;
+            token.pop();
+        }
+        toReturn.push(nt(char, ftw([bold, italic, underline], token.join(''))))
+    }
+    fontSize = toReturn[toReturn.length-1].formatting[0];
+	tokensList = toReturn;
 }
 
 export function getWordCount() {

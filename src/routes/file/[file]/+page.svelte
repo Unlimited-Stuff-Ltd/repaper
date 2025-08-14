@@ -121,18 +121,12 @@
 				else if (key === 'i') iClick();
 				else if (key === 's') save();
 			} else {
-				keydown(event, $state.snapshot(formatting), $state.snapshot(size) / 10);
+				keydown(event, $state.snapshot(formatting), String($state.snapshot(size) / 10));
 				text = getText(true);
 			}
 		}
-		if (
-			!renameDialogOpen &&
-			event.key !== 'Meta' &&
-			!(modifierPressed && event.key.toLowerCase() == 'p')
-		) {
+		if (!renameDialogOpen) {
 			event.preventDefault();
-		} else {
-			console.log(event.key);
 		}
 	}
 
