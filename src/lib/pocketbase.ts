@@ -94,7 +94,7 @@ export async function createFile(
 		await pb.collection('files').create({
 			id: random + 'fileid',
 			name,
-			value: '[]',
+			value: ' ',
 			editUser: random + 'editor',
 			viewUser: random + 'viewer'
 		});

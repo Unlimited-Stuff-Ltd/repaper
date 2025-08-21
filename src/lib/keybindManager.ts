@@ -170,7 +170,7 @@ export function getTokensText() {
 			}
 		}
 		toReturn += token.value;
-        toReturn += "::";
+		toReturn += '::';
 	}
 	return toReturn;
 }
@@ -178,28 +178,30 @@ export function getTokensText() {
 export function setTokens(to: string) {
 	const toReturn: Token[] = [];
 	let tokens = to.split('::');
-    tokens.pop();
-	for (let i = 0; i < tokens.length; i++) {
-        const token = tokens[i].split('');
-        const char = token.pop() ?? '';
-        let bold = false;
-        let italic = false;
-        let underline = false;
-        if (token.includes('b')) {
-            bold = true;
-            token.pop();
-        }
-        if (token.includes('i')) {
-            italic = true;
-            token.pop();
-        }
-        if (token.includes('u')) {
-            underline = true;
-            token.pop();
-        }
-        toReturn.push(nt(char, ftw([bold, italic, underline], token.join(''))))
-    }
-    fontSize = toReturn[toReturn.length-1].formatting[0];
+	if (tokens.length > 0) {
+		tokens.pop();
+		for (let i = 0; i < tokens.length; i++) {
+			const token = tokens[i].split('');
+			const char = token.pop() ?? '';
+			let bold = false;
+			let italic = false;
+			let underline = false;
+			if (token.includes('b')) {
+				bold = true;
+				token.pop();
+			}
+			if (token.includes('i')) {
+				italic = true;
+				token.pop();
+			}
+			if (token.includes('u')) {
+				underline = true;
+				token.pop();
+			}
+			toReturn.push(nt(char, ftw([bold, italic, underline], token.join(''))));
+		}
+		fontSize = toReturn[toReturn.length - 1].formatting[0];
+	}
 	tokensList = toReturn;
 }
 
