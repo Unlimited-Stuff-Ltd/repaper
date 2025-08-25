@@ -1,6 +1,6 @@
 // characters that if pressed on keyboard will be added to the text
 const textToAdd =
-	'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*()-+[{]}\\|;:\'",<.>/?=_~` ±"¢∞§¶•ªº≠æ…¬˚∆˙©ƒ∂å≈ç√∫˜µ≤≥÷¿˘¯Â˜◊';
+	'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*()-+[{]}\\|;:\'",<.>/?=_~` ±"¢∞§¶•ªº≠æ…˚˙©ƒå≈ç√∫˜µ≤≥÷¿˘¯Â˜';
 
 // character with keycodes that are different than their values to can be added to the text
 const textToAddCode: string[][] = [
@@ -151,6 +151,8 @@ export function getTokensText() {
 	let toReturn = '';
 	for (let i = 0; i < tokensList.length; i++) {
 		const token = tokensList[i];
+		toReturn += token.value;
+		toReturn += '∆';
 		toReturn += token.formatting[0];
 		if (token.formatting.length > 1) {
 			for (let j = 1; j < token.formatting.length; j++) {
@@ -169,43 +171,37 @@ export function getTokensText() {
 				}
 			}
 		}
-        if (token.value === '<br>') {
-            toReturn += '¬'
-        } else {
-		    toReturn += token.value;
-        }
-		toReturn += '::';
+		toReturn += '¬';
 	}
 	return toReturn;
 }
 
 export function setTokens(to: string) {
+	if (to === '◊') {
+		return;
+	}
 	const toReturn: Token[] = [];
-	let tokens = to.split('::');
+	let tokens = to.split('¬');
 	if (tokens.length > 0) {
 		tokens.pop();
 		for (let i = 0; i < tokens.length; i++) {
-			const token = tokens[i].split('');
-			let char = token.pop() ?? '';
-            if (char === '¬') {
-                char = '<br>';
-            }
-			let bold = false;
-			let italic = false;
-			let underline = false;
+			const encodedToken = tokens[i].split('∆');
+			const char = encodedToken[0];
+			const token = encodedToken[1].split('');
+			let formatting = [false, false, false];
 			if (token.includes('b')) {
-				bold = true;
+				formatting[0] = true;
 				token.pop();
 			}
 			if (token.includes('i')) {
-				italic = true;
+				formatting[1] = true;
 				token.pop();
 			}
 			if (token.includes('u')) {
-				underline = true;
+				formatting[2] = true;
 				token.pop();
 			}
-			toReturn.push(nt(char, ftw([bold, italic, underline], token.join(''))));
+			toReturn.push(nt(char, ftw(formatting, token.join(''))));
 		}
 		fontSize = toReturn[toReturn.length - 1].formatting[0];
 	}
