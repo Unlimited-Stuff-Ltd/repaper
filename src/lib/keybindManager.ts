@@ -1,6 +1,6 @@
 // characters that if pressed on keyboard will be added to the text
 const textToAdd =
-	'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*()-+[{]}\\|;:\'",<.>/?=_~` ';
+	'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*()-+[{]}\\|;:\'",<.>/?=_~` ±"¢∞§¶•ªº≠æ…¬˚∆˙©ƒ∂å≈ç√∫˜µ≤≥÷¿˘¯Â˜◊';
 
 // character with keycodes that are different than their values to can be added to the text
 const textToAddCode: string[][] = [
@@ -169,7 +169,11 @@ export function getTokensText() {
 				}
 			}
 		}
-		toReturn += token.value;
+        if (token.value === '<br>') {
+            toReturn += '¬'
+        } else {
+		    toReturn += token.value;
+        }
 		toReturn += '::';
 	}
 	return toReturn;
@@ -182,7 +186,10 @@ export function setTokens(to: string) {
 		tokens.pop();
 		for (let i = 0; i < tokens.length; i++) {
 			const token = tokens[i].split('');
-			const char = token.pop() ?? '';
+			let char = token.pop() ?? '';
+            if (char === '¬') {
+                char = '<br>';
+            }
 			let bold = false;
 			let italic = false;
 			let underline = false;
