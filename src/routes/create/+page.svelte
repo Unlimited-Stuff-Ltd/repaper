@@ -90,7 +90,7 @@
 </p>
 
 {#if loading}
-	<p class="text-center font-bold text-(--primary)">Loading...</p>
+	<p class="text-center font-bold text-primary">Loading...</p>
 {:else}
 	<div class="m-auto w-[40%]">
 		{#if firstPage}

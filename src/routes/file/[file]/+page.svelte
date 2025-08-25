@@ -364,14 +364,14 @@
 <AlertDialog.Root bind:open={infoDialogOpen}>
 	<AlertDialog.Content>
 		<AlertDialog.Header>
-			<AlertDialog.Title class="font-serif text-3xl text-(--primary)">{name}</AlertDialog.Title>
+			<AlertDialog.Title class="font-serif text-3xl text-primary">{name}</AlertDialog.Title>
 			<AlertDialog.Description>File Info</AlertDialog.Description>
 		</AlertDialog.Header>
 		<div>
-			<p>Number of Words: <strong class="text-(--primary)">{getWordCount()}</strong></p>
-			<p>Number of Characters: <strong class="text-(--primary)">{getNumChars()}</strong></p>
+			<p>Number of Words: <strong class="text-primary">{getWordCount()}</strong></p>
+			<p>Number of Characters: <strong class="text-primary">{getNumChars()}</strong></p>
 			<p>
-				Number of Characters (no spaces): <strong class="text-(--primary)"
+				Number of Characters (no spaces): <strong class="text-primary"
 					>{getNumCharsNoSpace()[0]}</strong
 				>
 			</p>
@@ -411,7 +411,7 @@
 			{/if}
 		</div>
 		<div class="m-auto text-center">
-			<h1 class="font-serif text-[1.9rem] font-black text-(--primary)">{name}</h1>
+			<h1 class="font-serif text-[1.9rem] font-black text-primary">{name}</h1>
 		</div>
 		<div class="text-right">
 			{#if editor}
