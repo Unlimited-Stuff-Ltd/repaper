@@ -263,7 +263,11 @@
 <svelte:window {onkeydown} {onkeyup} {onfocus} {onblur} />
 
 <svelte:head>
-	<title>{name} - Repaper</title>
+	{#if name === 'Loading...'}
+		<title>Repaper</title>
+	{:else}
+		<title>{name} - Repaper</title>
+	{/if}
 </svelte:head>
 
 <AlertDialog.Root bind:open={deleteAlertOpen}>
