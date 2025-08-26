@@ -1,9 +1,19 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { Label, Button, Input } from '$lib/components';
-	import { createFile } from '$lib/pocketbase';
+	import { createFile, deleteAll } from '$lib/pocketbase';
 
 	const validCodeChars = 'abcdefghijklmnopqrstuvwxyz0123456789-';
+
+	function generateID() {
+		const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+		let result = '';
+		const charactersLength = characters.length;
+		for (let i = 0; i < 9; i++) {
+			result += characters.charAt(Math.floor(Math.random() * charactersLength));
+		}
+		return result;
+	}
 
 	let loading = $state(false);
 
@@ -20,6 +30,7 @@
 	let firstPage = $state(true);
 
 	function back() {
+		errorText = '';
 		firstPage = true;
 	}
 
@@ -45,6 +56,10 @@
 
 	async function secondPageSubmit(event: Event) {
 		event.preventDefault();
+		if (viewCode === editCode) {
+			errorText = 'Viewer File Code and Editor File Code cannot be the same.';
+			return;
+		}
 		for (let i = 0; i < viewCode.length; i++) {
 			if (!validCodeChars.includes(viewCode[i])) {
 				errorText = 'File Code can only include lowercase letters, numbers and hyphens.';
@@ -61,12 +76,25 @@
 		}
 		errorText = '';
 		loading = true;
-		const result = await createFile(name, editCode, editPassword, viewCode, viewPassword);
+		const random = generateID();
+		const result = await createFile(name, editCode, editPassword, viewCode, viewPassword, random);
 		if (result.success) {
 			goto('/?reload');
 		} else {
+			deleteAll(random, editCode, editPassword);
+			if (result.code === 0) {
+				firstPage = true;
+				errorText = 'There was an error. Please try again in a few minutes.';
+				console.log(result.error);
+			} else if (result.code === 1) {
+				firstPage = true;
+				errorText = 'Editor File Code already exists';
+				console.log(result.error);
+			} else {
+				errorText = 'Viewer File Code already exists';
+				console.log(result.error);
+			}
 			loading = false;
-			errorText = result.error;
 		}
 	}
 	function home() {
@@ -85,9 +113,6 @@
 	</div>
 {/if}
 <h1 class="neon text-center font-serif text-[3em] font-black select-none">Create New File</h1>
-<p class="text-center font-bold text-red-500">
-	<span class="text-transparent">m</span>{errorText}<span class="text-transparent">m</span>
-</p>
 
 {#if loading}
 	<p class="text-center font-bold text-primary">Loading...</p>
@@ -99,6 +124,9 @@
 				The Editor File Code and Password are used to edit and change the file.
 			</p>
 			<p class="text-center">The file code cannot be changed later, while the file password can.</p>
+			<p class="text-center font-bold text-red-500">
+				<span class="text-transparent">m</span>{errorText}<span class="text-transparent">m</span>
+			</p>
 			<div class="m-auto mt-8 w-fit">
 				<form onsubmit={firstPageSubmit}>
 					<Label for="fileName">File Name:</Label>
@@ -140,6 +168,9 @@
 		{:else}
 			<p class="text-center">The Viewer File Code and Password are used to view the file.</p>
 			<p class="text-center">The file code cannot be changed later, while the file password can.</p>
+			<p class="text-center font-bold text-red-500">
+				<span class="text-transparent">m</span>{errorText}<span class="text-transparent">m</span>
+			</p>
 			<div class="m-auto mt-8 w-fit">
 				<form onsubmit={secondPageSubmit}>
 					<Label for="viewerCode">Viewer File Code & Password:</Label>
