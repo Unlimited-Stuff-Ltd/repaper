@@ -57,24 +57,14 @@ export async function renameFilePB(to: string, fileStr: string) {
 	}
 }
 
-function generateID() {
-	const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
-	let result = '';
-	const charactersLength = characters.length;
-	for (let i = 0; i < 9; i++) {
-		result += characters.charAt(Math.floor(Math.random() * charactersLength));
-	}
-	return result;
-}
-
 export async function createFile(
 	name: string,
 	editorCode: string,
 	editorPassword: string,
 	viewerCode: string,
-	viewerPassword: string
+	viewerPassword: string,
+	random: string
 ) {
-	const random = generateID();
 	try {
 		await pb.collection('users').create({
 			id: random + 'editor',
@@ -83,6 +73,10 @@ export async function createFile(
 			passwordConfirm: editorPassword,
 			editor: true
 		});
+	} catch (error: any) {
+		return { success: false, error: error.message, code: 1 };
+	}
+	try {
 		await pb.collection('users').create({
 			id: random + 'viewer',
 			username: viewerCode,
@@ -91,16 +85,28 @@ export async function createFile(
 			editor: false,
 			editorUser: random + 'editor'
 		});
+	} catch (error: any) {
+		return { success: false, error: error.message, code: 2 };
+	}
+	try {
 		await pb.collection('files').create({
 			id: random + 'fileid',
 			name,
-			value: ' ',
+			value: '◊',
 			editUser: random + 'editor',
 			viewUser: random + 'viewer'
 		});
 		await pb.collection('users').authWithPassword(editorCode, editorPassword);
-		return { success: true, error: '' };
+		return { success: true, error: '', code: 0 };
 	} catch (error: any) {
-		return { success: false, error: error.message };
+		return { success: false, error: error.message, code: 3 };
 	}
+}
+
+export async function deleteAll(random: string, username: string, password: string) {
+	await pb.collection('users').authWithPassword(username, password);
+	try {
+		await pb.collection('users').delete(random + 'viewer');
+	} catch {}
+	await pb.collection('users').delete(random + 'editor');
 }
