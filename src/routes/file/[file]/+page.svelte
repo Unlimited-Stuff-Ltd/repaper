@@ -66,6 +66,8 @@
 
 	let infoDialogOpen = $state(false);
 
+	let changesMadeSinceSave = false;
+
 	const blinkingInterval = setInterval(() => {
 		if (editor) {
 			if (hasFocus) {
@@ -121,6 +123,7 @@
 				else if (key === 'i') iClick();
 				else if (key === 's') save();
 			} else {
+				changesMadeSinceSave = true;
 				keydown(event, $state.snapshot(formatting), String($state.snapshot(size) / 10));
 				text = getText(true);
 			}
@@ -202,7 +205,7 @@
 	}
 
 	function reloadButton(warning: boolean) {
-		if (warning && editor) {
+		if (warning && editor && changesMadeSinceSave) {
 			reloadWarningOpen = true;
 		} else reload();
 	}

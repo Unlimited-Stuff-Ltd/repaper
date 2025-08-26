@@ -35,7 +35,7 @@
 		"tw-animate-css": "^1.3.7",
 		"typescript": "^5.9.2",
 		"vite": "^7.1.3",
-		"wrangler": "^4.32.0"
+		"wrangler": "^4.33.0"
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": [
@@ -44,7 +44,7 @@
 	},
 	"dependencies": {
 		"@sveltejs/adapter-auto": "^6.1.0",
-		"jspdf": "^3.0.1",
+		"jspdf": "^3.0.2",
 		"pocketbase": "^0.26.2"
 	}
 }
