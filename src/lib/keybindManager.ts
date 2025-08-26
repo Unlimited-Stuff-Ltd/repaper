@@ -18,6 +18,10 @@ type Token = {
 // list of tokens
 let tokensList: Token[] = [];
 
+export function resetTokensList() {
+	tokensList = [];
+}
+
 let cursorPosition = 0;
 
 // check if character has different value than keycode

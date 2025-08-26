@@ -1,4 +1,5 @@
 import PocketBase from 'pocketbase';
+import { resetTokensList } from './keybindManager';
 
 export const pb = new PocketBase('https://repaper.pockethost.io/');
 
@@ -96,6 +97,8 @@ export async function createFile(
 			editUser: random + 'editor',
 			viewUser: random + 'viewer'
 		});
+		localStorage.clear();
+		resetTokensList();
 		await pb.collection('users').authWithPassword(editorCode, editorPassword);
 		return { success: true, error: '', code: 0 };
 	} catch (error: any) {
