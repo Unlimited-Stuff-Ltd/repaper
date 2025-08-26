@@ -10,7 +10,7 @@
 		getNumChars,
 		getNumCharsNoSpace
 	} from '$lib/keybindManager';
-	import { Button, AlertDialog, Input } from '$lib/components';
+	import { Button, AlertDialog, Input, HoverCard } from '$lib/components';
 	import BoldIcon from '@lucide/svelte/icons/bold';
 	import ItalicIcon from '@lucide/svelte/icons/italic';
 	import UnderlineIcon from '@lucide/svelte/icons/underline';
@@ -66,7 +66,7 @@
 
 	let infoDialogOpen = $state(false);
 
-	let changesMadeSinceSave = false;
+	let changesMadeSinceSave = $state(false);
 
 	const blinkingInterval = setInterval(() => {
 		if (editor) {
@@ -266,11 +266,7 @@
 <svelte:window {onkeydown} {onkeyup} {onfocus} {onblur} />
 
 <svelte:head>
-	{#if name === 'Loading...'}
-		<title>Repaper</title>
-	{:else}
-		<title>{name} - Repaper</title>
-	{/if}
+	<title>{name}</title>
 </svelte:head>
 
 <AlertDialog.Root bind:open={deleteAlertOpen}>
@@ -417,8 +413,17 @@
 				</Button>
 			{/if}
 		</div>
-		<div class="m-auto text-center">
-			<h1 class="font-serif text-[1.9rem] font-black text-primary">{name}</h1>
+		<div class="m-auto flex text-center">
+			{#if changesMadeSinceSave}
+				<HoverCard.Root>
+					<HoverCard.Trigger class="font-serif text-[1.9rem] font-black text-primary"
+						>{name}*</HoverCard.Trigger
+					>
+					<HoverCard.Content>Changes were made since you last saved this file.</HoverCard.Content>
+				</HoverCard.Root>
+			{:else}
+				<h1 class="font-serif text-[1.9rem] font-black text-primary">{name}</h1>
+			{/if}
 		</div>
 		<div class="text-right">
 			{#if editor}
