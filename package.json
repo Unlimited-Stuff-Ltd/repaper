@@ -43,7 +43,7 @@
 		]
 	},
 	"dependencies": {
-		"@sveltejs/adapter-auto": "^6.1.0",
+		"@sveltejs/adapter-cloudflare": "^7.2.3",
 		"jspdf": "^3.0.2",
 		"pocketbase": "^0.26.2"
 	}
