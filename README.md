@@ -1,4 +1,4 @@
-# ![Repaper icon](./static/favicon.svg) Repaper
+# ![Repaper icon](./src/lib/assets/favicon.svg) Repaper
 
 Repaper is a word processing website aimed to **prevent AI cheating** in writing
 
