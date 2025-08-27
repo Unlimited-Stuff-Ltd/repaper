@@ -58,27 +58,33 @@ function ftw(formatting: boolean[], size: string) {
 }
 
 // function ran when key is pressed down
-export function keydown(event: KeyboardEvent, formatting: boolean[], size: string) {
+export function keydown(event: KeyboardEvent, formatting: boolean[], size: string): boolean {
 	// check if key pressed should be added to the text
 	if (event.key === 'ArrowLeft') {
 		if (tokensList.length > Math.abs(cursorPosition)) cursorPosition -= 1;
 	} else if (event.key === 'ArrowRight') {
 		if (cursorPosition < 0) cursorPosition += 1;
 	} else if (event.key === 'ArrowUp') {
+		upKey();
 	} else if (event.key === 'ArrowDown') {
+		downKey();
 	} else if (textToAdd.includes(event.key)) {
 		tokensList.splice(tokensList.length + cursorPosition, 0, nt(event.key, ftw(formatting, size)));
+		return true;
 		// check if key pressed has different keycode than value and should be added to the text
 	} else if (textCodesIncludes(event.key)) {
 		// get value to be added to the text
 		const code = textToAddCode.find((symbol) => symbol[0] === event.key) ?? ['', ''];
 		tokensList.splice(tokensList.length + cursorPosition, 0, nt(code[1], ftw(formatting, size)));
+		return true;
 		// check if key pressed is backspace
 	} else if (event.key === 'Backspace') {
 		if (tokensList.length + cursorPosition !== 0) {
 			tokensList.splice(tokensList.length + cursorPosition - 1, 1);
+			return true;
 		}
 	}
+	return false;
 }
 
 let italicClass = '';
@@ -233,20 +239,34 @@ export function getNumCharsNoSpace() {
 	return [num, numSpaces];
 }
 
-function findNextNewline() {
-	let currentIndex = tokensList.length + cursorPosition + 1;
-	for (let i = currentIndex; i < tokensList.length; i++) {
+function upKey() {
+	if (tokensList.length - cursorPosition === 0) {
+		return;
+	}
+	let previousBR = -1;
+	for (let i = 0; i < tokensList.length - cursorPosition; i++) {
 		if (tokensList[i].value === '<br>') {
-			return i;
+			previousBR = i;
 		}
 	}
+	if (previousBR === -1) {
+		cursorPosition = -tokensList.length;
+	}
+	// todo: go up one line
 }
 
-function findLastNewLine() {
-	let currentIndex = tokensList.length + cursorPosition - 1;
-	for (let i = currentIndex; i >= 0; i--) {
+function downKey() {
+	if (cursorPosition === 0) {
+		return;
+	}
+	let nextBR = -1;
+	for (let i = tokensList.length - 1; i >= tokensList.length - cursorPosition; i--) {
 		if (tokensList[i].value === '<br>') {
-			return i;
+			nextBR = i;
 		}
 	}
+	if (nextBR === -1) {
+		cursorPosition = 0;
+	}
+	// todo: go down one line
 }

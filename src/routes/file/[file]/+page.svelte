@@ -68,6 +68,8 @@
 
 	let changesMadeSinceSave = $state(false);
 
+	let deleteButtonsDisabled = $state(false);
+
 	const blinkingInterval = setInterval(() => {
 		if (editor) {
 			if (hasFocus) {
@@ -123,8 +125,9 @@
 				else if (key === 'i') iClick();
 				else if (key === 's') save();
 			} else {
-				changesMadeSinceSave = true;
-				keydown(event, $state.snapshot(formatting), String($state.snapshot(size) / 10));
+				if (keydown(event, $state.snapshot(formatting), String($state.snapshot(size) / 10))) {
+					changesMadeSinceSave = true;
+				}
 				text = getText(true);
 			}
 		}
@@ -158,6 +161,7 @@
 	}
 
 	async function deleteFile() {
+		deleteButtonsDisabled = true;
 		const result = await deleteFilePB(localStorage.getItem(`${page.params.file}File`) ?? '');
 		if (result.success) {
 			pb.authStore.clear();
@@ -279,8 +283,14 @@
 			</AlertDialog.Description>
 		</AlertDialog.Header>
 		<AlertDialog.Footer>
-			<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-			<Button onclick={deleteFile} variant="destructive">Continue</Button>
+			<Button
+				onclick={() => (deleteAlertOpen = false)}
+				variant="outline"
+				disabled={deleteButtonsDisabled}>Cancel</Button
+			>
+			<Button onclick={deleteFile} variant="destructive" disabled={deleteButtonsDisabled}
+				>Continue</Button
+			>
 		</AlertDialog.Footer>
 	</AlertDialog.Content>
 </AlertDialog.Root>
