@@ -239,34 +239,50 @@ export function getNumCharsNoSpace() {
 	return [num, numSpaces];
 }
 
-function upKey() {
-	if (tokensList.length - cursorPosition === 0) {
-		return;
-	}
+function getPreviousBR() {
 	let previousBR = -1;
-	for (let i = 0; i < tokensList.length - cursorPosition; i++) {
+	for (let i = 0; i < tokensList.length + cursorPosition; i++) {
 		if (tokensList[i].value === '<br>') {
 			previousBR = i;
 		}
 	}
+	return previousBR;
+}
+
+function getNextBR() {
+	let brs = [];
+	for (let i = tokensList.length - 1; i >= tokensList.length + cursorPosition; i--) {
+		if (tokensList[i].value === '<br>') {
+			brs.push(i);
+		}
+	}
+	if (brs.length > 1) {
+		return brs[brs.length - 2];
+	} else {
+		return -1;
+	}
+}
+
+function upKey() {
+	if (tokensList.length + cursorPosition === 0) {
+		return;
+	}
+	const previousBR = getPreviousBR();
 	if (previousBR === -1) {
 		cursorPosition = -tokensList.length;
+		return;
 	}
-	// todo: go up one line
+	cursorPosition = -(tokensList.length - previousBR);
 }
 
 function downKey() {
 	if (cursorPosition === 0) {
 		return;
 	}
-	let nextBR = -1;
-	for (let i = tokensList.length - 1; i >= tokensList.length - cursorPosition; i--) {
-		if (tokensList[i].value === '<br>') {
-			nextBR = i;
-		}
-	}
+	const nextBR = getNextBR();
 	if (nextBR === -1) {
 		cursorPosition = 0;
+		return;
 	}
-	// todo: go down one line
+	cursorPosition = -(tokensList.length - nextBR);
 }
