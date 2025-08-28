@@ -28,7 +28,6 @@
 	import { page } from '$app/state';
 	import { pb, deleteFilePB, saveFile, renameFilePB } from '$lib/pocketbase';
 	import { goto } from '$app/navigation';
-	import { saveAsPDF } from '$lib/pdf';
 
 	let editor = $state(false);
 
@@ -233,10 +232,6 @@
 
 	function onblur() {
 		hasFocus = false;
-	}
-
-	function downloadPDF() {
-		saveAsPDF();
 	}
 
 	function fileInfo() {
@@ -448,11 +443,6 @@
 				<Button class="m-1" size="icon" onclick={deleteButton} title="Delete File">
 					<DeleteIcon class="h-[1.2rem] w-[1.2rem]" />
 				</Button>
-			{/if}
-			<Button class="m-1" size="icon" onclick={downloadPDF} title="Save as PDF">
-				<PDFIcon class="h-[1.2rem] w-[1.2rem]" />
-			</Button>
-			{#if editor}
 				<Button class="m-1" size="icon" onclick={editorShare} title="Share File">
 					<ShareIcon class="h-[1.2rem] w-[1.2rem]" />
 				</Button>
