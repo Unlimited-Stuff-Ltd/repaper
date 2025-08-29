@@ -44,6 +44,11 @@
 		goto('/create');
 	}
 
+	function help() {
+		pb.authStore.clear();
+		goto('/help');
+	}
+
 	onMount(() => {
 		const code = page.url.searchParams.getAll('code');
 		const password = page.url.searchParams.getAll('password');
@@ -53,8 +58,10 @@
 		} else if (page.url.searchParams.getAll('deleted').length === 1) {
 			errorText = 'File deleted successfully.';
 			goto('/', { replaceState: true });
-		} else if (page.url.searchParams.getAll('reload').length === 1 && pb.authStore.isValid) {
-			signIn(pb.authStore.record?.username, false);
+		} else if (page.url.searchParams.getAll('reload').length === 1) {
+			if (pb.authStore.isValid) {
+				signIn(pb.authStore.record?.username, false);
+			}
 			goto('/', { replaceState: true });
 		} else if (code.length > 0 && password.length > 0) {
 			loading = true;
@@ -86,26 +93,25 @@
 	<p class="text-center font-bold text-primary">Loading...</p>
 {:else}
 	<div class="text-center">
-		{#if !loading}
-			<div class="mt-[11vh]">
-				<form {onsubmit} class="m-auto block w-fit align-middle">
-					<Label for="fileCode">Existing File Code & Password:</Label>
-					<Input
-						required
-						id="fileCode"
-						bind:value={fileCode}
-						type="text"
-						class="my-2 w-[24rem]"
-						placeholder="File Code"
-					/>
-					<div class="mt-1.5 flex">
-						<Input required bind:value={filePassword} type="password" placeholder="File Password" />
-						<Button class="ml-2 w-14" type="submit">Go</Button>
-					</div>
-				</form>
-			</div>
-			<hr class="m-auto my-[5vh] w-[50vw]" />
-			<Button onclick={createFile}>Create New File</Button>
-		{/if}
+		<div class="mt-[8vh]">
+			<form {onsubmit} class="m-auto block w-fit align-middle">
+				<Label for="fileCode">Existing File Code & Password:</Label>
+				<Input
+					required
+					id="fileCode"
+					bind:value={fileCode}
+					type="text"
+					class="my-2 w-[24rem]"
+					placeholder="File Code"
+				/>
+				<div class="mt-1.5 flex">
+					<Input required bind:value={filePassword} type="password" placeholder="File Password" />
+					<Button class="ml-2 w-14" type="submit">Go</Button>
+				</div>
+			</form>
+		</div>
+		<hr class="m-auto my-[5vh] w-[50vw]" />
+		<Button onclick={createFile}>Create New File</Button><br />
+		<Button variant="link" class="mt-8" onclick={help}>Help</Button>
 	</div>
 {/if}

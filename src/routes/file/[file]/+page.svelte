@@ -23,6 +23,7 @@
 	import ShareIcon from '@lucide/svelte/icons/share';
 	import HomeIcon from '@lucide/svelte/icons/house';
 	import InfoIcon from '@lucide/svelte/icons/info';
+	import HelpIcon from '@lucide/svelte/icons/circle-question-mark';
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
 	import { pb, deleteFilePB, saveFile, renameFilePB } from '$lib/pocketbase';
@@ -33,9 +34,10 @@
 	let deleteAlertOpen = $state(false);
 	let renameDialogOpen = $state(false);
 	let reloadWarningOpen = $state(false);
-
 	let editorShareDialogOpen = $state(false);
 	let viewerShareDialogOpen = $state(false);
+	let infoDialogOpen = $state(false);
+	let dialogOpen = $state(false);
 
 	let editCode = $state('');
 	let viewCode = $state('');
@@ -62,8 +64,6 @@
 	let cursorVisible = true;
 
 	let hasFocus = true;
-
-	let infoDialogOpen = $state(false);
 
 	let changesMadeSinceSave = $state(false);
 
@@ -115,7 +115,7 @@
 	}
 
 	function onkeydown(event: KeyboardEvent) {
-		if (editor && !renameDialogOpen) {
+		if (editor && !dialogOpen) {
 			if (event.key === 'Meta') {
 				modifierPressed = true;
 			} else if (modifierPressed) {
@@ -161,6 +161,7 @@
 
 	function deleteButton() {
 		deleteAlertOpen = true;
+		openDialog();
 	}
 
 	async function deleteFile() {
@@ -170,6 +171,7 @@
 			pb.authStore.clear();
 			localStorage.clear();
 			deleteAlertOpen = false;
+			closeDialog();
 			goto('/?deleted');
 		} else {
 			goto(`/?error=${result.error}`);
@@ -201,6 +203,7 @@
 				errorText = result.error;
 			}
 			renameDialogOpen = false;
+			closeDialog();
 			renameValue = '';
 		} else {
 			renameErrorText = 'Name cannot be empty.';
@@ -209,38 +212,56 @@
 
 	function renameButton() {
 		renameDialogOpen = true;
+		openDialog();
 	}
 
 	function reloadButton(warning: boolean) {
 		if (warning && editor && changesMadeSinceSave) {
 			reloadWarningOpen = true;
+			openDialog();
 		} else reload();
 	}
 
 	function reload() {
 		reloadWarningOpen = false;
+		closeDialog();
 		goto('/?reload');
 	}
 
 	function editorShare() {
 		editorShareDialogOpen = true;
+		openDialog();
 	}
 
 	function viewerShare() {
 		viewerShareDialogOpen = true;
+		openDialog();
 	}
 
 	function onfocus() {
-		modifierPressed = false;
-		hasFocus = true;
+		if (!dialogOpen) {
+			modifierPressed = false;
+			hasFocus = true;
+		}
 	}
 
 	function onblur() {
 		hasFocus = false;
 	}
 
+	function openDialog() {
+		onblur();
+		dialogOpen = true;
+	}
+
+	function closeDialog() {
+		dialogOpen = false;
+		onfocus();
+	}
+
 	function fileInfo() {
 		infoDialogOpen = true;
+		openDialog();
 	}
 
 	onMount(() => {
@@ -285,7 +306,10 @@
 		</AlertDialog.Header>
 		<AlertDialog.Footer>
 			<Button
-				onclick={() => (deleteAlertOpen = false)}
+				onclick={() => {
+					deleteAlertOpen = false;
+					closeDialog();
+				}}
 				variant="outline"
 				disabled={deleteButtonsDisabled}>Cancel</Button
 			>
@@ -306,7 +330,13 @@
 			>
 		</AlertDialog.Header>
 		<AlertDialog.Footer>
-			<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+			<Button
+				variant="outline"
+				onclick={() => {
+					reloadWarningOpen = false;
+					closeDialog();
+				}}>Cancel</Button
+			>
 			<AlertDialog.Action onclick={reload}>Continue</AlertDialog.Action>
 		</AlertDialog.Footer>
 	</AlertDialog.Content>
@@ -322,14 +352,20 @@
 		</AlertDialog.Header>
 		<Input
 			id="renameInput"
-			class="h-10 font-serif text-sm font-black"
+			class="h-10 font-serif text-sm font-black text-primary"
 			type="text"
 			placeholder="New Name"
 			bind:value={renameValue}
 		/>
 		<p class="text-red-500">{renameErrorText}</p>
 		<AlertDialog.Footer>
-			<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+			<Button
+				variant="outline"
+				onclick={() => {
+					renameDialogOpen = false;
+					closeDialog();
+				}}>Cancel</Button
+			>
 			<AlertDialog.Action onclick={renameFile}>Continue</AlertDialog.Action>
 		</AlertDialog.Footer>
 	</AlertDialog.Content>
@@ -345,14 +381,20 @@
 		</AlertDialog.Header>
 		<div>
 			<p>File Code for Editors (can edit, rename and delete):</p>
-			<p class="text-[1.3rem] font-black">{editCode}</p>
+			<p class="text-[1.3rem] font-black text-primary">{editCode}</p>
 		</div>
 		<div>
 			<p>File Code for Viewers (can only view):</p>
-			<p class="text-[1.3rem] font-black">{viewCode}</p>
+			<p class="text-[1.3rem] font-black text-primary">{viewCode}</p>
 		</div>
 		<AlertDialog.Footer>
-			<AlertDialog.Cancel>Close</AlertDialog.Cancel>
+			<Button
+				variant="outline"
+				onclick={() => {
+					editorShareDialogOpen = false;
+					closeDialog();
+				}}>Cancel</Button
+			>
 		</AlertDialog.Footer>
 	</AlertDialog.Content>
 </AlertDialog.Root>
@@ -367,10 +409,16 @@
 		</AlertDialog.Header>
 		<div>
 			<p>File Code for Viewers (can only view):</p>
-			<p class="text-[1.3rem] font-black">{viewCode}</p>
+			<p class="text-[1.3rem] font-black text-primary">{viewCode}</p>
 		</div>
 		<AlertDialog.Footer>
-			<AlertDialog.Cancel>Close</AlertDialog.Cancel>
+			<Button
+				variant="outline"
+				onclick={() => {
+					viewerShareDialogOpen = false;
+					closeDialog();
+				}}>Cancel</Button
+			>
 		</AlertDialog.Footer>
 	</AlertDialog.Content>
 </AlertDialog.Root>
@@ -378,7 +426,7 @@
 <AlertDialog.Root bind:open={infoDialogOpen}>
 	<AlertDialog.Content>
 		<AlertDialog.Header>
-			<AlertDialog.Title class="font-serif text-3xl text-primary">{name}</AlertDialog.Title>
+			<AlertDialog.Title>{name}</AlertDialog.Title>
 			<AlertDialog.Description>File Info</AlertDialog.Description>
 		</AlertDialog.Header>
 		<div>
@@ -391,7 +439,13 @@
 			</p>
 		</div>
 		<AlertDialog.Footer>
-			<AlertDialog.Cancel>Close</AlertDialog.Cancel>
+			<Button
+				variant="outline"
+				onclick={() => {
+					infoDialogOpen = false;
+					closeDialog();
+				}}>Cancel</Button
+			>
 		</AlertDialog.Footer>
 	</AlertDialog.Content>
 </AlertDialog.Root>
@@ -466,6 +520,9 @@
 				{/if}
 				<Button onclick={() => reloadButton(true)} size="icon" class="m-1" title="Reload File">
 					<ReloadIcon class="h-[1.2rem] w-[1.2rem]" />
+				</Button>
+				<Button onclick={() => goto('/help')} size="icon" class="m-1" title="Help">
+					<HelpIcon class="h=[1.2rem] w-[1.2rem]" />
 				</Button>
 			</div>
 		</div>
