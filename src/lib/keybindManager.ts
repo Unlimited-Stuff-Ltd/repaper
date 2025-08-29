@@ -102,17 +102,13 @@ export function toggleItalic() {
 // return value of text
 export function getText(cursor: boolean, editor: boolean = true) {
 	const position = tokensList.length + cursorPosition;
-	let tokens: any;
+	let tokens: any = tokensList;
 	if (cursor) {
 		tokens = tokensList.toSpliced(
 			position,
 			0,
 			nt(
-				'<span class="font-bold text-primary ' +
-					italicClass +
-					'" style="font-size: ' +
-					fontSize +
-					'em;">|</span>',
+				'<div class="bg-primary h-[1.2em] w-[1.5px] relative top-0.5 right-[0.05rem] inline-block"></div>',
 				['cursor']
 			)
 		);
@@ -120,14 +116,9 @@ export function getText(cursor: boolean, editor: boolean = true) {
 		tokens = tokensList.toSpliced(
 			position,
 			0,
-			nt(
-				'<span class="font-bold text-transparent ' +
-					italicClass +
-					'" style="font-size: ' +
-					fontSize +
-					'em;">|</span>',
-				['cursor']
-			)
+			nt('<div class="h-[1.2em] w-[1.5px] relative top-0.5 right-[0.05rem] inline-block"></div>', [
+				'cursor'
+			])
 		);
 	}
 	let toReturn = '';

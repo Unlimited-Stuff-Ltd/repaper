@@ -23,7 +23,6 @@
 	import ShareIcon from '@lucide/svelte/icons/share';
 	import HomeIcon from '@lucide/svelte/icons/house';
 	import InfoIcon from '@lucide/svelte/icons/info';
-	import PDFIcon from '@lucide/svelte/icons/file-text';
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
 	import { pb, deleteFilePB, saveFile, renameFilePB } from '$lib/pocketbase';
@@ -44,6 +43,7 @@
 	let file: string;
 
 	let text = $state(getText(false));
+	let noCursorText = $state(getText(false, false));
 	let name = $state('Loading...');
 	let saveText = $state('');
 	let errorText = $state('');
@@ -101,6 +101,7 @@
 		}
 		toggleItalic();
 		text = getText(true);
+		noCursorText = getText(false, false);
 	}
 
 	function uClick() {
@@ -128,6 +129,7 @@
 					changesMadeSinceSave = true;
 				}
 				text = getText(true);
+				noCursorText = getText(false, false);
 			}
 		}
 		if (!renameDialogOpen) {
@@ -147,12 +149,14 @@
 		size += 1;
 		setFontSize($state.snapshot(size / 10));
 		text = getText(true);
+		noCursorText = getText(false, false);
 	}
 
 	function textSmaller() {
 		if (size > 1) size -= 1;
 		setFontSize($state.snapshot(size / 10));
 		text = getText(true);
+		noCursorText = getText(false, false);
 	}
 
 	function deleteButton() {
@@ -239,15 +243,16 @@
 	}
 
 	onMount(() => {
-		let text = localStorage.getItem(page.params.file ?? '');
-		if (text) {
-			setTokens(text);
+		let localStorageFile = localStorage.getItem(page.params.file ?? '');
+		if (localStorageFile) {
+			setTokens(localStorageFile);
 			name = localStorage.getItem(`${page.params.file}Name`) ?? '';
 			file = localStorage.getItem(`${page.params.file}File`) ?? '';
 			const fileObj = JSON.parse(file);
 			if (pb.authStore.record?.editor) {
 				editor = true;
 				text = getText(true);
+				noCursorText = getText(false, false);
 				editCode = fileObj.expand.editUser.username;
 			} else {
 				text = getText(false, false);
@@ -391,78 +396,84 @@
 </AlertDialog.Root>
 
 <main>
-	<div class="m-4 grid grid-cols-3">
-		<div class="text-left">
-			<Button onclick={() => goto('/')} size="icon" class="m-1" title="Go Home">
-				<HomeIcon class="h-[1.2rem] w-[1.2rem]" />
-			</Button>
-			<Button class="m-1" size="icon" onclick={fileInfo} title="File Info">
-				<InfoIcon class="h-[1.2rem] w-[1.2rem]" />
-			</Button>
-			{#if editor}
-				<Button class="m-1" size="icon" variant="outline" onclick={textBigger} title="Bigger">
-					<BiggerIcon class="h-[1.2rem] w-[1.2rem]" />
+	<div class="h-[8vh]">
+		<div class="m-4 grid grid-cols-3">
+			<div class="text-left">
+				<Button onclick={() => goto('/')} size="icon" class="m-1" title="Go Home">
+					<HomeIcon class="h-[1.2rem] w-[1.2rem]" />
 				</Button>
-				<button class="font-black">{size}</button>
-				<Button class="m-1" size="icon" variant="outline" onclick={textSmaller} title="Smaller">
-					<SmallerIcon class="h-[1.2rem] w-[1.2rem]" />
+				<Button class="m-1" size="icon" onclick={fileInfo} title="File Info">
+					<InfoIcon class="h-[1.2rem] w-[1.2rem]" />
 				</Button>
-				<Button class="m-1 font-bold" onclick={bClick} variant={bVariant} size="icon" title="Bold">
-					<BoldIcon class="h-[1.2rem] w-[1.2rem]" />
-				</Button>
-				<Button class="m-1 italic" onclick={iClick} variant={iVariant} size="icon" title="Italic">
-					<ItalicIcon class="h-[1.2rem] w-[1.2rem]" />
-				</Button>
-				<Button class="m-1" onclick={uClick} variant={uVariant} size="icon" title="Underline">
-					<UnderlineIcon class="h-[1.2rem] w-[1.2rem]" />
-				</Button>
-			{/if}
-		</div>
-		<div class="m-auto flex text-center">
-			{#if changesMadeSinceSave}
-				<HoverCard.Root>
-					<HoverCard.Trigger class="font-serif text-[1.9rem] font-black text-primary"
-						>{name}*</HoverCard.Trigger
+				{#if editor}
+					<Button class="m-1" size="icon" variant="outline" onclick={textBigger} title="Bigger">
+						<BiggerIcon class="h-[1.2rem] w-[1.2rem]" />
+					</Button>
+					<button class="font-black">{size}</button>
+					<Button class="m-1" size="icon" variant="outline" onclick={textSmaller} title="Smaller">
+						<SmallerIcon class="h-[1.2rem] w-[1.2rem]" />
+					</Button>
+					<Button
+						class="m-1 font-bold"
+						onclick={bClick}
+						variant={bVariant}
+						size="icon"
+						title="Bold"
 					>
-					<HoverCard.Content>Changes were made since you last saved this file.</HoverCard.Content>
-				</HoverCard.Root>
-			{:else}
-				<h1 class="font-serif text-[1.9rem] font-black text-primary">{name}</h1>
-			{/if}
+						<BoldIcon class="h-[1.2rem] w-[1.2rem]" />
+					</Button>
+					<Button class="m-1 italic" onclick={iClick} variant={iVariant} size="icon" title="Italic">
+						<ItalicIcon class="h-[1.2rem] w-[1.2rem]" />
+					</Button>
+					<Button class="m-1" onclick={uClick} variant={uVariant} size="icon" title="Underline">
+						<UnderlineIcon class="h-[1.2rem] w-[1.2rem]" />
+					</Button>
+				{/if}
+			</div>
+			<div class="m-auto flex text-center">
+				{#if changesMadeSinceSave}
+					<HoverCard.Root>
+						<HoverCard.Trigger class="font-serif text-[1.9rem] font-black text-primary"
+							>{name}*</HoverCard.Trigger
+						>
+						<HoverCard.Content>Changes were made since you last saved this file.</HoverCard.Content>
+					</HoverCard.Root>
+				{:else}
+					<h1 class="font-serif text-[1.9rem] font-black text-primary">{name}</h1>
+				{/if}
+			</div>
+			<div class="text-right">
+				{#if editor}
+					<span class="mr-3 text-red-500">{errorText}</span>
+					<span class="mr-3">{saveText}</span>
+					<Button class="m-1" size="icon" onclick={save} title="Save File">
+						<SaveIcon class="h-[1.2rem] w-[1.2rem]" />
+					</Button>
+					<Button class="m-1" size="icon" onclick={renameButton} title="Rename File">
+						<RenameIcon class="h-[1.2rem] w-[1.2rem]" />
+					</Button>
+					<Button class="m-1" size="icon" onclick={deleteButton} title="Delete File">
+						<DeleteIcon class="h-[1.2rem] w-[1.2rem]" />
+					</Button>
+					<Button class="m-1" size="icon" onclick={editorShare} title="Share File">
+						<ShareIcon class="h-[1.2rem] w-[1.2rem]" />
+					</Button>
+				{:else}
+					<Button class="m-1" size="icon" onclick={viewerShare} title="Share File">
+						<ShareIcon class="h-[1.2rem] w-[1.2rem]" />
+					</Button>
+				{/if}
+				<Button onclick={() => reloadButton(true)} size="icon" class="m-1" title="Reload File">
+					<ReloadIcon class="h-[1.2rem] w-[1.2rem]" />
+				</Button>
+			</div>
 		</div>
-		<div class="text-right">
-			{#if editor}
-				<span class="mr-3 text-red-500">{errorText}</span>
-				<span class="mr-3">{saveText}</span>
-				<Button class="m-1" size="icon" onclick={save} title="Save File">
-					<SaveIcon class="h-[1.2rem] w-[1.2rem]" />
-				</Button>
-				<Button class="m-1" size="icon" onclick={renameButton} title="Rename File">
-					<RenameIcon class="h-[1.2rem] w-[1.2rem]" />
-				</Button>
-				<Button class="m-1" size="icon" onclick={deleteButton} title="Delete File">
-					<DeleteIcon class="h-[1.2rem] w-[1.2rem]" />
-				</Button>
-				<Button class="m-1" size="icon" onclick={editorShare} title="Share File">
-					<ShareIcon class="h-[1.2rem] w-[1.2rem]" />
-				</Button>
-			{:else}
-				<Button class="m-1" size="icon" onclick={viewerShare} title="Share File">
-					<ShareIcon class="h-[1.2rem] w-[1.2rem]" />
-				</Button>
-			{/if}
-			<Button onclick={() => reloadButton(true)} size="icon" class="m-1" title="Reload File">
-				<ReloadIcon class="h-[1.2rem] w-[1.2rem]" />
-			</Button>
-		</div>
+		<hr class="w-[100%]" />
 	</div>
-	<hr class="w-[100%]" />
-	<div class="prewrap text m-5 w-fit">{@html text}</div>
+	<div class="m-5 w-fit text-white">{@html noCursorText}</div>
+	<div
+		class="text absolute top-[8vh] mt-[2.25rem] ml-[1.2rem] w-fit tracking-[0.25px] text-transparent"
+	>
+		{@html text}
+	</div>
 </main>
-
-<style>
-	.prewrap {
-		max-width: calc(100vw - 2.5rem);
-		white-space: normal;
-	}
-</style>
