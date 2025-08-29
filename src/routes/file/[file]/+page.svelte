@@ -231,6 +231,7 @@
 	}
 
 	function onfocus() {
+		modifierPressed = false;
 		hasFocus = true;
 	}
 
@@ -471,9 +472,7 @@
 		<hr class="w-[100%]" />
 	</div>
 	<div class="m-5 w-fit text-white">{@html noCursorText}</div>
-	<div
-		class="text absolute top-[8vh] mt-[2.25rem] ml-[1.2rem] w-fit tracking-[0.25px] text-transparent"
-	>
-		{@html text}
-	</div>
+	{#if editor}<div class="text absolute top-[8vh] mt-[2.25rem] ml-[1.2rem] w-fit text-transparent">
+			{@html text}
+		</div>{/if}
 </main>
