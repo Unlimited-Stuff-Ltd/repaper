@@ -45,6 +45,8 @@
 	}
 
 	onMount(() => {
+		const code = page.url.searchParams.getAll('code');
+		const password = page.url.searchParams.getAll('password');
 		if (page.url.searchParams.getAll('invalid').length === 1) {
 			errorText = 'File not found.';
 			goto('/', { replaceState: true });
@@ -54,6 +56,12 @@
 		} else if (page.url.searchParams.getAll('reload').length === 1 && pb.authStore.isValid) {
 			signIn(pb.authStore.record?.username, false);
 			goto('/', { replaceState: true });
+		} else if (code.length > 0 && password.length > 0) {
+			loading = true;
+			fileCode = code[0];
+			filePassword = password[0];
+			const lcfc = fileCode.toLowerCase();
+			signIn(lcfc, true);
 		} else {
 			const error = page.url.searchParams.getAll('error');
 			if (error.length > 0) {
