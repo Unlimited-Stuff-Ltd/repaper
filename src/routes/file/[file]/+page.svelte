@@ -529,7 +529,7 @@
 		<hr class="w-[100%]" />
 	</div>
 	<div class="m-5 w-fit text-white">{@html noCursorText}</div>
-	{#if editor}<div class="text absolute top-[8vh] mt-[2.25rem] ml-[1.2rem] w-fit text-transparent">
+	{#if editor}<div class="text absolute top-[9.6vh] mt-[2.25rem] ml-[1.2rem] w-fit text-transparent">
 			{@html text}
 		</div>{/if}
 </main>
