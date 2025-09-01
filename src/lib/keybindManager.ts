@@ -108,7 +108,7 @@ export function getText(cursor: boolean, editor: boolean = true) {
 			position,
 			0,
 			nt(
-				'<div class="bg-primary h-[1.2em] w-[1.5px] relative top-0.5 right-[0.05rem] inline-block"></div>',
+				'<div class="bg-primary h-[1.2em] w-[1.5px] relative top-0.5 inline-block"></div>',
 				['cursor']
 			)
 		);
@@ -116,7 +116,7 @@ export function getText(cursor: boolean, editor: boolean = true) {
 		tokens = tokensList.toSpliced(
 			position,
 			0,
-			nt('<div class="h-[1.2em] w-[1.5px] relative top-0.5 right-[0.05rem] inline-block"></div>', [
+			nt('<div class="h-[1.2em] w-[1.5px] relative top-0.5 inline-block"></div>', [
 				'cursor'
 			])
 		);
