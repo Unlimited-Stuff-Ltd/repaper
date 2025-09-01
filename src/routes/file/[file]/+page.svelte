@@ -451,7 +451,7 @@
 </AlertDialog.Root>
 
 <main>
-	<div class="h-[8vh]">
+	<div class="min-h-[8vh]">
 		<div class="m-4 grid grid-cols-3">
 			<div class="text-left">
 				<Button onclick={() => goto('/')} size="icon" class="m-1" title="Go Home">
