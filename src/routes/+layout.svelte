@@ -1,7 +1,7 @@
 <script lang="ts">
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.png';
-	import { Button } from 'bits-ui';
+	import { resolve } from '$app/paths';
 
 	let { children } = $props();
 
@@ -14,13 +14,13 @@
 </svelte:head>
 
 <main class="{mode} h-screen w-screen">
-	<nav class="fixed w-70 border-r h-screen pt-9">
-		<a href="/"><h2 class="text-center font-black text-3xl">Repaper</h2></a>
-		<div class="pl-7 pt-4">
+	<nav class="fixed h-screen w-70 border-r pt-9">
+		<a href={resolve('/')}><h2 class="text-center text-3xl font-black">Repaper</h2></a>
+		<div class="pt-4 pl-7">
 			{#if mode === ''}
-				<button class="a" onclick={() => mode = 'dark'}>Dark Mode</button>
+				<button class="a" onclick={() => (mode = 'dark')}>Dark Mode</button>
 			{:else}
-				<button class="a" onclick={() => mode = ''}>Light Mode</button>
+				<button class="a" onclick={() => (mode = '')}>Light Mode</button>
 			{/if}
 		</div>
 	</nav>
