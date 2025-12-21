@@ -11,16 +11,35 @@
 	font-family: var(--font);
 }
 
+.dark {
+	--background: #180000;
+	--foreground: #fff0d5;
+	--primary: #774e24;
+	--primary-foreground: #fff0d5;
+	background-color: var(--background);
+	color: var(--foreground);
+}
+
 [data-button-root] {
 	background-color: var(--primary);
 	color: var(--primary-foreground);
-	padding: 0.25rem 0.5rem;
-	border-radius: 5px;
+	padding: 0.5rem 1rem;
+	border-radius: 0.75rem;
 	cursor: pointer;
 	opacity: 0.95;
+}
+
+[data-button-root][href="/"] {
+	padding: 0.75rem 1rem;
 }
 
 [data-button-root]:hover {
 	background-color: var(--primary);
 	opacity: 1;
+}
+
+.a:hover {
+	cursor: pointer;
+	text-decoration: underline;
+	text-underline-offset: 2px;
 }
