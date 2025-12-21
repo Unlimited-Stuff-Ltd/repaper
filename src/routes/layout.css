@@ -11,15 +11,6 @@
 	font-family: var(--font);
 }
 
-.dark {
-	--background: #180000;
-	--foreground: #fff0d5;
-	--primary: #774e24;
-	--primary-foreground: #fff0d5;
-	background-color: var(--background);
-	color: var(--foreground);
-}
-
 [data-button-root] {
 	background-color: var(--primary);
 	color: var(--primary-foreground);
@@ -41,5 +32,5 @@
 .a:hover {
 	cursor: pointer;
 	text-decoration: underline;
-	text-underline-offset: 2px;
+	text-underline-offset: 3px;
 }
