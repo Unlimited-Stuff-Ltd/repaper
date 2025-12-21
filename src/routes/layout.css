@@ -34,3 +34,11 @@
 	text-decoration: underline;
 	text-underline-offset: 3px;
 }
+
+input {
+	border: 1px var(--foreground) solid;
+	color: var(--foreground);
+	border-radius: 7px;
+	padding: 0.25rem 0.5rem;
+	outline-color: var(--foreground);
+}

@@ -4,12 +4,18 @@
 	import { resolve } from '$app/paths';
 
 	let { children } = $props();
+
+	function oncontextmenu(event: Event) {
+		event.preventDefault();
+	}
 </script>
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
 	<title>Repaper</title>
 </svelte:head>
+
+<svelte:window {oncontextmenu} />
 
 <main class="h-screen w-screen">
 	<nav class="fixed h-screen w-70 border-r pt-9">
