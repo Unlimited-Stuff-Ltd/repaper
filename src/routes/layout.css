@@ -1,0 +1,26 @@
+@import 'tailwindcss';
+
+:root {
+	--background: #fff0d5;
+	--foreground: #180000;
+	--primary: #774e24;
+	--primary-foreground: #fff0d5;
+	--font: serif;
+	background-color: var(--background);
+	color: var(--foreground);
+	font-family: var(--font);
+}
+
+[data-button-root] {
+	background-color: var(--primary);
+	color: var(--primary-foreground);
+	padding: 0.25rem 0.5rem;
+	border-radius: 5px;
+	cursor: pointer;
+	opacity: 0.95;
+}
+
+[data-button-root]:hover {
+	background-color: var(--primary);
+	opacity: 1;
+}
