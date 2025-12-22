@@ -1,10 +1,23 @@
 <script lang="ts">
-	import { Checkbox, Popover, Loading } from '$lib/components';
+	import { Checkbox, Popover, Loading, I } from '$lib/components';
 	import { Label, Button } from 'bits-ui';
 	import { onMount } from 'svelte';
-	import { enhance } from '$app/forms';
 
 	let account: string | null = $state(null);
+	let loading = $state(false);
+
+	let codeText = $state('');
+	let editorPText = $state('');
+	let viewerPText = $state('');
+
+	let title = $state('');
+	let code = $state('');
+	let editorPassword = $state('');
+	let confirmEditorPassword = $state('');
+	let viewerPassword = $state('');
+	let confirmViewerPassword = $state('');
+
+	let associateAccount = $state(false);
 
 	onMount(() => {
 		const accountLS = localStorage.getItem('repaper-account');
@@ -13,14 +26,53 @@
 		}
 	});
 
-	let loading = $state(false);
+	const codeCharacters = 'abcdefghijklmnopqrstuvwxyz0123456789-';
+
+	function checkCode(code: string): boolean {
+		for (let i = 0; i < code.length; i++) {
+			if (!codeCharacters.includes(code[i])) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	function onsubmit(event: Event) {
+		event.preventDefault();
+		loading = true;
+		let errors = 0;
+		if (!checkCode(code)) {
+			codeText = 'Code can only contain numbers, lowercase letters and hyphens.';
+			loading = false;
+			errors++;
+		} else {
+			codeText = '';
+		}
+		if (editorPassword !== confirmEditorPassword) {
+			editorPText = 'Editor Password and Confirm Editor Password do not match.';
+			loading = false;
+			errors++;
+		} else {
+			editorPText = '';
+		}
+		if (viewerPassword !== confirmViewerPassword) {
+			viewerPText = 'Viewer Password and Confirm Viewer Password do not match.';
+			loading = false;
+			errors++;
+		} else {
+			viewerPText = '';
+		}
+		if (errors > 0) {
+			return;
+		}
+	}
 </script>
 
 <Loading show={loading} />
 
 <div>
 	<h1 class="mb-5 text-5xl font-black">Create a Document</h1>
-	<form method="POST" class="text-center" use:enhance onsubmit={() => (loading = true)}>
+	<form class="text-center" {onsubmit}>
 		<div class="m-auto mb-5 w-fit text-left">
 			<Label.Root for="title"
 				>Document Title:
@@ -28,18 +80,33 @@
 					>This is the title of the document.<br />This <strong>can</strong> be changed later.</Popover
 				>
 			</Label.Root><br />
-			<input id="title" class="mt-0.5 w-120" name="title" maxlength="50" required />
+			<input
+				id="title"
+				autocomplete="off"
+				class="mt-0.5 w-120"
+				bind:value={title}
+				maxlength="50"
+				required
+			/>
 		</div>
-		<div class="m-auto mb-5 w-fit text-left">
+		<div class="m-auto mb-0.5 w-fit text-left">
 			<Label.Root for="code"
 				>Document Code:
 				<Popover
 					>This is the code to access the document.<br />This <strong>cannot</strong> be changed later.</Popover
 				>
 			</Label.Root><br />
-			<input id="code" class="mt-0.5 w-120" name="code" maxlength="50" required />
+			<input
+				id="code"
+				autocomplete="off"
+				class="mt-0.5 w-120"
+				bind:value={code}
+				maxlength="50"
+				required
+			/>
+			<p class="text-sm text-red-800"><I />{codeText}</p>
 		</div>
-		<div class="m-auto mb-3 inline-flex">
+		<div class="m-auto mb-0.5 inline-flex">
 			<div class="text-left">
 				<Label.Root for="editorPassword"
 					>Editor Password:
@@ -51,8 +118,9 @@
 				<input
 					id="editorPassword"
 					class="mt-0.5 mr-3 w-58"
-					name="editorPassword"
+					bind:value={editorPassword}
 					type="password"
+					autocomplete="off"
 					required
 				/>
 			</div>
@@ -60,15 +128,16 @@
 				<Label.Root for="confirmEditorPassword">Confirm Editor Password:</Label.Root><br />
 				<input
 					id="confirmEditorPassword"
-					name="confirmEditorPassword"
+					bind:value={confirmEditorPassword}
 					class="mt-0.5 w-58"
 					type="password"
+					autocomplete="off"
 					required
 				/>
 			</div>
 		</div>
-		<br />
-		<div class="m-auto mb-5 inline-flex">
+		<p class="text-left text-sm text-red-800"><I />{editorPText}</p>
+		<div class="m-auto mb-0.5 inline-flex">
 			<div class="text-left">
 				<Label.Root for="viewerPassword"
 					>Viewer Password:
@@ -77,23 +146,33 @@
 						later.</Popover
 					>
 				</Label.Root><br />
-				<input id="viewerPassword" class="mt-0.5 mr-3 w-58" name="viewerPassword" type="password" />
+				<input
+					id="viewerPassword"
+					autocomplete="off"
+					class="mt-0.5 mr-3 w-58"
+					bind:value={viewerPassword}
+					type="password"
+					required
+				/>
 			</div>
 			<div class="text-left">
 				<Label.Root for="confirmViewerPassword">Confirm Viewer Password:</Label.Root><br />
 				<input
 					id="confirmViewerPassword"
-					name="confirmViewerPassword"
+					autocomplete="off"
+					bind:value={confirmViewerPassword}
 					class="mt-0.5 w-58"
 					type="password"
+					required
 				/>
 			</div>
 		</div>
+		<p class="text-left text-sm text-red-800"><I />{viewerPText}</p>
 		<br />
 		{#if account}
-			<div class="m-auto mb-7 flex w-fit">
+			<div class="m-auto flex w-fit">
 				<input hidden name="account" value={account} />
-				<Checkbox name="associateWithAccount" />
+				<Checkbox bind:checked={associateAccount} />
 				<p class="ml-2">Associate with account</p>
 			</div>
 		{/if}

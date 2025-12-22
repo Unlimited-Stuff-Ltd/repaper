@@ -22,28 +22,16 @@ export const actions = {
 		const code = String(data.get('code'));
 		const editorPassword = String(data.get('editorPassword'));
 		const confirmEditorPassword = String(data.get('confirmEditorPassword'));
-		let viewerPassword;
-		let confirmViewerPassword;
-		const viewerPasswordValue = data.get('viewerPassword');
-		const confirmViewerPasswordValue = data.get('confirmViewerPassword');
-		if (
-			(viewerPasswordValue && !confirmViewerPasswordValue) ||
-			(!viewerPasswordValue && confirmViewerPasswordValue)
-		) {
+		const viewerPassword = String(data.get('viewerPassword'));
+		const confirmViewerPassword = String(data.get('confirmViewerPassword'));
+		if (!checkCode(code)) {
 			redirect(303, '/create?e=1');
 		}
-		if (viewerPasswordValue && confirmViewerPasswordValue) {
-			viewerPassword = String(viewerPasswordValue);
-			confirmViewerPassword = String(confirmViewerPasswordValue);
-		}
-		if (!checkCode(code)) {
+		if (editorPassword !== confirmEditorPassword) {
 			redirect(303, '/create?e=2');
 		}
-		if (editorPassword !== confirmEditorPassword) {
-			redirect(303, '/create?e=3');
-		}
 		if (viewerPassword !== confirmViewerPassword) {
-			redirect(303, '/create?e=4');
+			redirect(303, '/create?e=3');
 		}
 		const userAgent = request.headers.get('user-agent') ?? 'not-found';
 		try {
