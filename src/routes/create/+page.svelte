@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Checkbox, Popover } from '$lib/components';
+	import { Checkbox, Popover, Loading } from '$lib/components';
 	import { Label, Button } from 'bits-ui';
 	import { onMount } from 'svelte';
 	import { enhance } from '$app/forms';
@@ -12,33 +12,40 @@
 			account = accountLS;
 		}
 	});
+
+	let loading = $state(false);
 </script>
+
+<Loading show={loading} />
 
 <div>
 	<h1 class="mb-5 text-5xl font-black">Create a Document</h1>
-	<form method="POST" class="text-center" use:enhance>
+	<form method="POST" class="text-center" use:enhance onsubmit={() => (loading = true)}>
 		<div class="m-auto mb-5 w-fit text-left">
 			<Label.Root for="title"
 				>Document Title:
-				<Popover>This is the title of the document.<br />This can be changed later.</Popover>
+				<Popover
+					>This is the title of the document.<br />This <strong>can</strong> be changed later.</Popover
+				>
 			</Label.Root><br />
-			<input id="title" class="mt-0.5 w-120" name="title" required />
+			<input id="title" class="mt-0.5 w-120" name="title" maxlength="50" required />
 		</div>
 		<div class="m-auto mb-5 w-fit text-left">
 			<Label.Root for="code"
 				>Document Code:
 				<Popover
-					>This is the code to access the document.<br />This cannot be changed later.</Popover
+					>This is the code to access the document.<br />This <strong>cannot</strong> be changed later.</Popover
 				>
 			</Label.Root><br />
-			<input id="code" class="mt-0.5 w-120" name="code" required />
+			<input id="code" class="mt-0.5 w-120" name="code" maxlength="50" required />
 		</div>
 		<div class="m-auto mb-3 inline-flex">
 			<div class="text-left">
 				<Label.Root for="editorPassword"
 					>Editor Password:
 					<Popover
-						>This is the password used to edit the document.<br />This cannot be changed later.</Popover
+						>This is the password used to edit the document.<br />This <strong>cannot</strong> be changed
+						later.</Popover
 					>
 				</Label.Root><br />
 				<input
@@ -66,7 +73,8 @@
 				<Label.Root for="viewerPassword"
 					>Viewer Password:
 					<Popover
-						>This is the password used to view the document.<br />This cannot be changed later.</Popover
+						>This is the password used to view the document.<br />This <strong>cannot</strong> be changed
+						later.</Popover
 					>
 				</Label.Root><br />
 				<input id="viewerPassword" class="mt-0.5 mr-3 w-58" name="viewerPassword" type="password" />

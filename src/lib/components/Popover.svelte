@@ -6,6 +6,7 @@
 
 <Popover.Root>
 	<Popover.Trigger
+		tabindex={-1}
 		class="m-auto h-6 w-6 cursor-pointer items-center justify-center rounded-[50%] align-baseline hover:bg-(--foreground)/10 data-[state=open]:bg-(--foreground)/10"
 		>?</Popover.Trigger
 	>
