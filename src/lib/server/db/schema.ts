@@ -4,7 +4,7 @@ export const documents = sqliteTable('documents', {
 	id: text('id')
 		.primaryKey()
 		.$default(() => crypto.randomUUID()),
-	title: text('title').unique().notNull(),
+	title: text('title').notNull(),
 	code: text('code').unique().notNull(),
 	editorPassword: text('editor_password').notNull(),
 	viewerPassword: text('viewer_password'),

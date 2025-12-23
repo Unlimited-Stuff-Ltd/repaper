@@ -22,6 +22,7 @@
 		<a href={resolve('/')}><h2 class="text-center text-4xl font-black">Repaper</h2></a>
 		<div class="pt-4 pl-7">
 			<a class="a" href={resolve('/create')}>Create a Document</a><br />
+			<a class="a" href={resolve('/open')}>Open a Document</a><br />
 		</div>
 	</nav>
 	<div class="flex">

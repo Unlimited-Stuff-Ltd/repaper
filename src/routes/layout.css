@@ -42,3 +42,14 @@ input {
 	padding: 0.25rem 0.5rem;
 	outline-color: var(--foreground);
 }
+
+.h1 {
+	margin-bottom: 1.25rem;
+	font-weight: 900;
+	font-size: 3rem;
+	text-align: center;
+}
+
+form {
+	text-align: center;
+}

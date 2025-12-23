@@ -16,7 +16,6 @@ type ErrorData = {
 
 export async function success(data: SuccessData) {
 	try {
-		console.log('success');
 		await db.insert(logs).values({
 			userAgent: data.userAgent,
 			action: data.action,

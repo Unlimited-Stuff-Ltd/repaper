@@ -1,7 +1,9 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { Checkbox, Popover, Loading, I } from '$lib/components';
 	import { Label, Button } from 'bits-ui';
 	import { onMount } from 'svelte';
+	import { resolve } from '$app/paths';
 
 	let account: string | null = $state(null);
 	let loading = $state(false);
@@ -37,42 +39,80 @@
 		return true;
 	}
 
-	function onsubmit(event: Event) {
-		event.preventDefault();
-		loading = true;
+	function check() {
 		let errors = 0;
 		if (!checkCode(code)) {
 			codeText = 'Code can only contain numbers, lowercase letters and hyphens.';
-			loading = false;
 			errors++;
 		} else {
 			codeText = '';
 		}
+		if (editorPassword === viewerPassword) {
+			viewerPText = 'Editor Password and Viewer Password cannot match.';
+			errors++;
+		} else if (viewerPassword === confirmViewerPassword) {
+			viewerPText = '';
+		}
 		if (editorPassword !== confirmEditorPassword) {
 			editorPText = 'Editor Password and Confirm Editor Password do not match.';
-			loading = false;
 			errors++;
 		} else {
 			editorPText = '';
 		}
 		if (viewerPassword !== confirmViewerPassword) {
 			viewerPText = 'Viewer Password and Confirm Viewer Password do not match.';
-			loading = false;
 			errors++;
-		} else {
-			viewerPText = '';
 		}
+		return errors;
+	}
+
+	async function onsubmit(event: Event) {
+		event.preventDefault();
+		loading = true;
+		let errors = check();
 		if (errors > 0) {
+			loading = false;
 			return;
 		}
+		const createResponse = await fetch('/api/create', {
+			method: 'POST',
+			body: JSON.stringify({
+				title,
+				code,
+				editorPassword,
+				viewerPassword
+			})
+		});
+		const createJson = await createResponse.json();
+		console.log(createJson);
+		if (createResponse.status === 409) {
+			codeText = 'Document code is already taken.';
+			loading = false;
+			return;
+		}
+		const openResponse = await fetch('/api/open', {
+			method: 'POST',
+			body: JSON.stringify({
+				code,
+				password: editorPassword
+			})
+		});
+		if (openResponse.status === 401 || openResponse.status === 500) {
+			codeText = 'Something unexpected happened on our end. Please try again later.';
+			loading = false;
+			return;
+		}
+		const openJson = await openResponse.json();
+		localStorage.setItem('repaper-token', openJson.ls);
+		goto(resolve(openJson.link), { replaceState: true });
 	}
 </script>
 
 <Loading show={loading} />
 
 <div>
-	<h1 class="mb-5 text-5xl font-black">Create a Document</h1>
-	<form class="text-center" {onsubmit}>
+	<h1 class="h1">Create a Document</h1>
+	<form {onsubmit}>
 		<div class="m-auto mb-5 w-fit text-left">
 			<Label.Root for="title"
 				>Document Title:
