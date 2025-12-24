@@ -1,24 +1,11 @@
 @import 'tailwindcss';
 
 :root {
-	background-color: #fff0d5;
-}
-
-.light {
 	--background: #fff0d5;
 	--foreground: #180000;
 	--primary: #774e24;
 	--primary-foreground: #fff0d5;
-}
-
-.dark {
-	--background: #180000;
-	--foreground: #fff0d5;
-	--primary: #774e24;
-	--primary-foreground: #fff0d5;
-}
-
-.main {
+	font-family: serif;
 	background-color: var(--background);
 	color: var(--foreground);
 }
@@ -71,7 +58,6 @@ input {
 [data-select-content] {
 	width: 7rem;
 	border-radius: 7px;
-	padding: 0.25rem 0.5rem;
 	outline: none;
 	height: fit-content;
 	background-color: var(--background);
@@ -86,7 +72,7 @@ input {
 }
 
 [data-select-item]:hover {
-	background-color: var(--foreground);
+	background-color: #18000020;
 }
 
 .h1 {

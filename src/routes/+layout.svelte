@@ -2,7 +2,6 @@
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.png';
 	import { resolve } from '$app/paths';
-	import { theme } from '$lib/settings';
 
 	let { children } = $props();
 
@@ -18,21 +17,19 @@
 
 <svelte:window {oncontextmenu} />
 
-<div class="{$theme} font-[serif]">
-	<main class="main h-screen w-screen">
-		<nav class="fixed h-screen w-70 border-r pt-9">
-			<a href={resolve('/')}><h2 class="text-center text-4xl font-black">Repaper</h2></a>
-			<div class="pt-4 pl-7">
-				<a class="a" href={resolve('/create')}>Create a Document</a><br />
-				<a class="a" href={resolve('/open')}>Open a Document</a><br />
-				<a class="a" href={resolve('/settings')}>Settings</a><br />
-			</div>
-		</nav>
-		<div class="flex">
-			<div class="w-70"></div>
-			<div class="flex h-screen items-center justify-center" style="width: calc(100vw - 17.5rem)">
-				{@render children()}
-			</div>
+<main class="main h-screen w-screen">
+	<nav class="fixed h-screen w-70 border-r pt-9">
+		<a href={resolve('/')}><h2 class="text-center text-4xl font-black">Repaper</h2></a>
+		<div class="pt-4 pl-7">
+			<a class="a" href={resolve('/create')}>Create a Document</a><br />
+			<a class="a" href={resolve('/open')}>Open a Document</a><br />
+			<a class="a" href={resolve('/settings')}>Settings</a><br />
 		</div>
-	</main>
-</div>
+	</nav>
+	<div class="flex">
+		<div class="w-70"></div>
+		<div class="flex h-screen items-center justify-center" style="width: calc(100vw - 17.5rem)">
+			{@render children()}
+		</div>
+	</div>
+</main>
