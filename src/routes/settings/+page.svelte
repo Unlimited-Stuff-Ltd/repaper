@@ -43,8 +43,7 @@
 		{ value: 'georgia', label: 'Georgia' },
 		{ value: 'arial', label: 'Arial' },
 		{ value: 'verdana', label: 'Verdana' },
-		{ value: 'times', label: 'Times New Roman' },
-		{ value: 'monospace', label: 'Monospace' }
+		{ value: 'times', label: 'Times New Roman' }
 	];
 
 	const selectedFontLabel = $derived(

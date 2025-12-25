@@ -94,15 +94,6 @@
 	font-size: 0.85rem;
 }
 
-[data-theme*='monospace'] {
-	--font: monospace;
-	font-family: var(--font);
-}
-
-.monospace {
-	font-family: monospace;
-}
-
 [data-button-root] {
 	background-color: var(--primary);
 	color: var(--primary-foreground);

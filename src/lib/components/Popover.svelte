@@ -12,7 +12,7 @@
 	>
 	<Popover.Portal>
 		<Popover.Content
-			class="w-fit rounded-md border-(--outline) bg-(--background) px-5 py-3 text-center"
+			class="w-fit rounded-md border border-(--outline) bg-(--background) px-5 py-3 text-center"
 			sideOffset={5}
 		>
 			<p>{@render children()}</p>
