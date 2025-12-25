@@ -123,7 +123,10 @@ input {
 	color: var(--foreground);
 	border-radius: 7px;
 	padding: 0.25rem 0.5rem;
-	outline-color: var(--foreground);
+}
+
+input:focus {
+	outline: 2px solid var(--primary);
 }
 
 [data-select-trigger] {
@@ -137,6 +140,10 @@ input {
 	cursor: pointer;
 	width: 10rem;
 	margin: auto;
+}
+
+[data-select-trigger]:focus {
+	outline: 2px solid var(--primary);
 }
 
 [data-select-content] {
