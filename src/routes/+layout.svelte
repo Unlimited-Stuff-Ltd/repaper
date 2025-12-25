@@ -18,7 +18,7 @@
 
 <svelte:window {oncontextmenu} />
 
-<ModeWatcher lightClassNames={['light']} darkClassNames={['dark']} defaultTheme="serif" />
+<ModeWatcher lightClassNames={['light']} darkClassNames={['dark']} defaultTheme="default-serif" />
 
 <main class="h-screen w-screen">
 	<nav class="fixed h-screen w-70 border-r pt-9">

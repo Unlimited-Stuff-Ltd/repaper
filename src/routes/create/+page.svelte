@@ -144,7 +144,7 @@
 				maxlength="50"
 				required
 			/>
-			<p class="text-sm text-red-800"><I />{codeText}</p>
+			<p class="text-sm text-(--red)"><I />{codeText}</p>
 		</div>
 		<div class="m-auto mb-0.5 inline-flex">
 			<div class="text-left">
@@ -176,7 +176,7 @@
 				/>
 			</div>
 		</div>
-		<p class="text-left text-sm text-red-800"><I />{editorPText}</p>
+		<p class="text-left text-sm text-(--red)"><I />{editorPText}</p>
 		<div class="m-auto mb-0.5 inline-flex">
 			<div class="text-left">
 				<Label.Root for="viewerPassword"
@@ -207,7 +207,7 @@
 				/>
 			</div>
 		</div>
-		<p class="text-left text-sm text-red-800"><I />{viewerPText}</p>
+		<p class="text-left text-sm text-(--red)"><I />{viewerPText}</p>
 		<br />
 		{#if account}
 			<div class="m-auto flex w-fit">

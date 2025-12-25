@@ -49,7 +49,7 @@
 			<Label.Root for="password">Password:</Label.Root><br />
 			<input id="password" class="w-120" bind:value={password} type="password" required />
 		</div>
-		<p class="mb-3 text-left text-sm text-red-800"><I />{text}</p>
+		<p class="mb-3 text-left text-sm text-(--red)"><I />{text}</p>
 		<Button.Root type="submit">Open</Button.Root>
 	</form>
 </div>

@@ -4,42 +4,49 @@
 	font-display: block;
 }
 
-.light {
+::selection {
+	background-color: var(--primary);
+	color: var(--primary-foreground);
+}
+
+[data-theme*='default'] {
 	color-scheme: light;
 	--background: #fff0d5;
-	--foreground: #180000;
+	--foreground: #000000;
 	--primary: #774e24;
 	--primary-foreground: #fff0d5;
+	--red: #991b1b;
 	background-color: var(--background);
 	color: var(--foreground);
 }
 
-.dark {
+[data-theme*='discord'] {
 	color-scheme: dark;
-	--background: #180000;
-	--foreground: #fff0d5;
-	--primary: #774e24;
-	--primary-foreground: #fff0d5;
+	--background: #323338;
+	--foreground: #ffffff;
+	--primary: #5a65ea;
+	--primary-foreground: #ffffff;
+	--red: rgb(222, 78, 69);
 	background-color: var(--background);
 	color: var(--foreground);
 }
 
-[data-theme='serif'] {
+[data-theme*='serif'] {
 	font-family: serif;
 	--font: serif;
 }
 
-[data-theme='sans-serif'] {
+[data-theme*='sans'] {
 	font-family: sans-serif;
 	--font: sans-serif;
 }
 
-[data-theme='cursive'] {
+[data-theme*='cursive'] {
 	font-family: cursive;
 	--font: cursive;
 }
 
-[data-theme='monospace'] {
+[data-theme*='monospace'] {
 	font-family: monospace;
 	--font: monospace;
 }
