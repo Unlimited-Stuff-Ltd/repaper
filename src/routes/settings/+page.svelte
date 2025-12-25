@@ -60,7 +60,12 @@
 	<h1 class="h1">Settings</h1>
 	<div class="m-auto mb-5 w-fit">
 		<Label.Root for="theme">Theme:</Label.Root>
-		<SelectC id="theme" onValueChange={onThemeChange} trigger={selectedModeLabel?.label}>
+		<SelectC
+			bind:value={currentTheme}
+			id="theme"
+			onValueChange={onThemeChange}
+			trigger={selectedModeLabel?.label}
+		>
 			<Select.Group>
 				<Select.GroupHeading class="group-heading">Light Themes</Select.GroupHeading>
 				{#each themes as theme, i (i + theme.value)}
@@ -82,6 +87,7 @@
 	<div class="m-auto w-fit">
 		<Label.Root for="font">Font:</Label.Root>
 		<SelectC
+			bind:value={currentFont}
 			font={currentFont}
 			id="font"
 			onValueChange={onFontChange}
