@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { Select, SelectItem } from '$lib/components';
+	import { SelectC, SelectItem } from '$lib/components';
 	import { setTheme, theme } from 'mode-watcher';
-	import { Label } from 'bits-ui';
+	import { Label, Select } from 'bits-ui';
+	import { onMount } from 'svelte';
 
 	type SelectItemType = {
 		value: string;
@@ -11,11 +12,20 @@
 	let currentTheme = $state('');
 	let currentFont = $state('');
 
+	onMount(() => {
+		const themeCurrent = theme.current;
+		const split = themeCurrent?.split('-') ?? ['default', 'georgia'];
+		currentTheme = split[0];
+		currentFont = split[1];
+	});
+
 	// Light/Dark
 
 	let themes = [
-		{ value: 'default', label: 'Default' },
-		{ value: 'discord', label: 'Discord' }
+		{ value: 'default', label: 'Default', mode: 'light' },
+		{ value: 'blue', label: 'Blue', mode: 'light' },
+		{ value: 'discord', label: 'Discord', mode: 'dark' },
+		{ value: 'og', label: 'OG', mode: 'dark' }
 	];
 
 	const selectedModeLabel = $derived(
@@ -30,10 +40,11 @@
 	// Font
 
 	let fonts = [
-		{ value: 'serif', label: '<span class="font-[serif]">Serif</span>' },
-		{ value: 'sans', label: '<span class="font-[sans-serif]">Sans Serif</span>' },
-		{ value: 'cursive', label: '<span class="font-[cursive]">Cursive</span>' },
-		{ value: 'monospace', label: '<span class="font-[monospace]">Monospace</span>' }
+		{ value: 'georgia', label: 'Georgia' },
+		{ value: 'arial', label: 'Arial' },
+		{ value: 'verdana', label: 'Verdana' },
+		{ value: 'times', label: 'Times New Roman' },
+		{ value: 'monospace', label: 'Monospace' }
 	];
 
 	const selectedFontLabel = $derived(
@@ -50,18 +61,36 @@
 	<h1 class="h1">Settings</h1>
 	<div class="m-auto mb-5 w-fit">
 		<Label.Root for="theme">Theme:</Label.Root>
-		<Select id="theme" onValueChange={onThemeChange} trigger={selectedModeLabel?.label}>
-			{#each themes as theme, i (i + theme.value)}
-				<SelectItem value={theme} />
-			{/each}
-		</Select>
+		<SelectC id="theme" onValueChange={onThemeChange} trigger={selectedModeLabel?.label}>
+			<Select.Group>
+				<Select.GroupHeading class="group-heading">Light Themes</Select.GroupHeading>
+				{#each themes as theme, i (i + theme.value)}
+					{#if theme.mode === 'light'}
+						<SelectItem value={theme} />
+					{/if}
+				{/each}
+			</Select.Group>
+			<Select.Group>
+				<Select.GroupHeading class="group-heading">Dark Themes</Select.GroupHeading>
+				{#each themes as theme, i (i + theme.value)}
+					{#if theme.mode === 'dark'}
+						<SelectItem value={theme} />
+					{/if}
+				{/each}
+			</Select.Group>
+		</SelectC>
 	</div>
 	<div class="m-auto w-fit">
 		<Label.Root for="font">Font:</Label.Root>
-		<Select id="font" onValueChange={onFontChange} trigger={selectedFontLabel?.label}>
+		<SelectC
+			font={currentFont}
+			id="font"
+			onValueChange={onFontChange}
+			trigger={selectedFontLabel?.label}
+		>
 			{#each fonts as theme, i (i + theme.value)}
 				<SelectItem value={theme} />
 			{/each}
-		</Select>
+		</SelectC>
 	</div>
 </div>

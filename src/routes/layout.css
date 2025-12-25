@@ -12,9 +12,10 @@
 [data-theme*='default'] {
 	color-scheme: light;
 	--background: #fff0d5;
-	--foreground: #000000;
+	--foreground: #000;
 	--primary: #774e24;
 	--primary-foreground: #fff0d5;
+	--outline: #000;
 	--red: #991b1b;
 	background-color: var(--background);
 	color: var(--foreground);
@@ -23,32 +24,83 @@
 [data-theme*='discord'] {
 	color-scheme: dark;
 	--background: #323338;
-	--foreground: #ffffff;
+	--foreground: #fff;
 	--primary: #5a65ea;
-	--primary-foreground: #ffffff;
-	--red: rgb(222, 78, 69);
+	--primary-foreground: #fff;
+	--red: #de4e45;
+	--outline: #777;
 	background-color: var(--background);
 	color: var(--foreground);
 }
 
-[data-theme*='serif'] {
-	font-family: serif;
-	--font: serif;
+[data-theme*='og'] {
+	color-scheme: dark;
+	--background: #0a0a0a;
+	--foreground: #fafafa;
+	--primary: #00dfdf;
+	--primary-foreground: #0a0a0a;
+	--red: #de4e45;
+	--outline: #444;
+	background-color: var(--background);
+	color: var(--foreground);
 }
 
-[data-theme*='sans'] {
-	font-family: sans-serif;
-	--font: sans-serif;
+[data-theme*='blue'] {
+	color-scheme: light;
+	--background: #fff;
+	--foreground: #000;
+	--primary: #09f;
+	--primary-foreground: #fff;
+	--red: #991b1b;
+	--outline: #000;
+	background-color: var(--background);
+	color: var(--foreground);
 }
 
-[data-theme*='cursive'] {
-	font-family: cursive;
-	--font: cursive;
+[data-theme*='georgia'] {
+	--font: Georgia, Garamond, serif;
+	font-family: var(--font);
+}
+
+.georgia {
+	font-family: Georgia, Garamond, serif;
+}
+
+[data-theme*='arial'] {
+	--font: Arial, Helvetica, sans-serif;
+	font-family: var(--font);
+}
+
+.arial {
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+[data-theme*='verdana'] {
+	--font: Verdana, Tahoma, sans-serif;
+	font-family: var(--font);
+}
+
+.verdana {
+	font-family: Verdana, Tahoma, sans-serif;
+}
+
+[data-theme*='times'] {
+	--font: 'Times New Roman', serif;
+	font-family: var(--font);
+}
+
+.times {
+	font-family: 'Times New Roman', serif;
+	font-size: 0.85rem;
 }
 
 [data-theme*='monospace'] {
-	font-family: monospace;
 	--font: monospace;
+	font-family: var(--font);
+}
+
+.monospace {
+	font-family: monospace;
 }
 
 [data-button-root] {
@@ -76,7 +128,7 @@
 }
 
 input {
-	border: 1px var(--foreground) solid;
+	border: 1px var(--outline) solid;
 	color: var(--foreground);
 	border-radius: 7px;
 	padding: 0.25rem 0.5rem;
@@ -84,7 +136,7 @@ input {
 }
 
 [data-select-trigger] {
-	border: 1px var(--foreground) solid;
+	border: 1px var(--outline) solid;
 	color: var(--foreground);
 	border-radius: 7px;
 	padding: 0.5rem;
@@ -102,13 +154,20 @@ input {
 	outline: none;
 	height: fit-content;
 	background-color: var(--background);
-	border-color: var(--foreground);
-	border: 1px solid;
+	border: 1px var(--outline) solid;
 }
 
 [data-select-item] {
 	cursor: pointer;
 	padding: 0.25rem 0.5rem;
+}
+
+.group-heading {
+	opacity: 0.6;
+	text-align: center;
+	border-bottom: 0.08rem var(--outline) solid;
+	padding-bottom: 0.25rem;
+	padding-top: 0.5rem;
 }
 
 .h1 {

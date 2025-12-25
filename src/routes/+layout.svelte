@@ -18,10 +18,10 @@
 
 <svelte:window {oncontextmenu} />
 
-<ModeWatcher lightClassNames={['light']} darkClassNames={['dark']} defaultTheme="default-serif" />
+<ModeWatcher lightClassNames={['light']} darkClassNames={['dark']} defaultTheme="default-georgia" />
 
 <main class="h-screen w-screen">
-	<nav class="fixed h-screen w-70 border-r pt-9">
+	<nav class="fixed h-screen w-70 border-r border-(--outline) pt-9">
 		<a href={resolve('/')}><h2 class="text-center text-4xl font-black">Repaper</h2></a>
 		<div class="pt-4 pl-7">
 			<a class="a" href={resolve('/create')}>Create a Document</a><br />
