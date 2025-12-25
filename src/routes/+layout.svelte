@@ -2,6 +2,7 @@
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.png';
 	import { resolve } from '$app/paths';
+	import { ModeWatcher } from 'mode-watcher';
 
 	let { children } = $props();
 
@@ -17,7 +18,9 @@
 
 <svelte:window {oncontextmenu} />
 
-<main class="main h-screen w-screen">
+<ModeWatcher lightClassNames={['light']} darkClassNames={['dark']} defaultTheme="serif" />
+
+<main class="h-screen w-screen">
 	<nav class="fixed h-screen w-70 border-r pt-9">
 		<a href={resolve('/')}><h2 class="text-center text-4xl font-black">Repaper</h2></a>
 		<div class="pt-4 pl-7">

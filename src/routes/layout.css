@@ -1,13 +1,47 @@
 @import 'tailwindcss';
 
 :root {
+	font-display: block;
+}
+
+.light {
+	color-scheme: light;
 	--background: #fff0d5;
 	--foreground: #180000;
 	--primary: #774e24;
 	--primary-foreground: #fff0d5;
-	font-family: serif;
 	background-color: var(--background);
 	color: var(--foreground);
+}
+
+.dark {
+	color-scheme: dark;
+	--background: #180000;
+	--foreground: #fff0d5;
+	--primary: #774e24;
+	--primary-foreground: #fff0d5;
+	background-color: var(--background);
+	color: var(--foreground);
+}
+
+[data-theme='serif'] {
+	font-family: serif;
+	--font: serif;
+}
+
+[data-theme='sans-serif'] {
+	font-family: sans-serif;
+	--font: sans-serif;
+}
+
+[data-theme='cursive'] {
+	font-family: cursive;
+	--font: cursive;
+}
+
+[data-theme='monospace'] {
+	font-family: monospace;
+	--font: monospace;
 }
 
 [data-button-root] {
@@ -16,7 +50,7 @@
 	padding: 0.5rem 1rem;
 	border-radius: 0.75rem;
 	cursor: pointer;
-	opacity: 0.95;
+	opacity: 0.9;
 }
 
 [data-button-root][href='/'] {
@@ -51,12 +85,12 @@ input {
 	display: grid;
 	grid-template-columns: 3fr 1fr;
 	cursor: pointer;
-	width: 7rem;
+	width: 10rem;
 	margin: auto;
 }
 
 [data-select-content] {
-	width: 7rem;
+	width: 10rem;
 	border-radius: 7px;
 	outline: none;
 	height: fit-content;
@@ -68,11 +102,6 @@ input {
 [data-select-item] {
 	cursor: pointer;
 	padding: 0.25rem 0.5rem;
-	font-family: serif;
-}
-
-[data-select-item]:hover {
-	background-color: #18000020;
 }
 
 .h1 {

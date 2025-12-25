@@ -3,13 +3,14 @@
 	import ChevronsUpDown from '@lucide/svelte/icons/chevrons-up-down';
 	import ChevronUp from '@lucide/svelte/icons/chevron-up';
 	import ChevronDown from '@lucide/svelte/icons/chevron-down';
+	import DOMPurify from 'dompurify';
 
-	let { value = $bindable(), trigger, children, ...props } = $props();
+	let { trigger, children, ...props } = $props();
 </script>
 
-<Select.Root bind:value {...props} type="single">
+<Select.Root {...props} type="single">
 	<Select.Trigger
-		><div class="text-left">{trigger}</div>
+		><div class="text-left">{@html DOMPurify.sanitize(trigger)}</div>
 		<div class="text-right"><ChevronsUpDown size="20" class="m-auto ml-2" /></div></Select.Trigger
 	>
 	<Select.Portal>

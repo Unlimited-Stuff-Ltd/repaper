@@ -1,38 +1,55 @@
 <script lang="ts">
-	import { SelectC } from '$lib/components';
-	import { Select } from 'bits-ui';
-	import Check from '@lucide/svelte/icons/check';
+	import { Select, SelectItem } from '$lib/components';
+	import { setMode, mode, setTheme, theme } from 'mode-watcher';
 
-	type Theme = {
+	type SelectItemType = {
 		value: string;
 		label: string;
 	};
 
-	let value = $state('light');
+	// Light/Dark
 
 	let themes = [
 		{ value: 'light', label: 'Light' },
 		{ value: 'dark', label: 'Dark' }
 	];
 
-	const selectedLabel = $derived(themes.find((theme: Theme) => theme.value === value));
+	const selectedModeLabel = $derived(
+		themes.find((theme: SelectItemType) => theme.value === mode.current)
+	);
+
+	function onThemeChange(value: 'light' | 'dark') {
+		setMode(value);
+	}
+
+	// Font
+
+	let fonts = [
+		{ value: 'serif', label: '<span class="font-[serif]">Serif</span>' },
+		{ value: 'sans-serif', label: '<span class="font-[sans-serif]">Sans Serif</span>' },
+		{ value: 'cursive', label: '<span class="font-[cursive]">Cursive</span>' },
+		{ value: 'monospace', label: '<span class="font-[monospace]">Monospace</span>' }
+	];
+
+	const selectedFontLabel = $derived(
+		fonts.find((font: SelectItemType) => font.value === theme.current)
+	);
+
+	function onFontChange(value: string) {
+		setTheme(value);
+	}
 </script>
 
 <div>
 	<h1 class="h1">Settings</h1>
-	<SelectC bind:value trigger={selectedLabel?.label}>
+	<Select onValueChange={onThemeChange} trigger={selectedModeLabel?.label}>
 		{#each themes as theme, i (i + theme.value)}
-			<Select.Item value={theme.value} label={theme.label}>
-				{#snippet children({ selected })}
-					<div class="flex">
-						{#if selected}<Check size={20} class="my-auto mr-2" />{:else}<Check
-								size={20}
-								class="my-auto mr-2 opacity-0"
-							/>{/if}
-						{theme.label}
-					</div>
-				{/snippet}
-			</Select.Item>
+			<SelectItem value={theme} />
 		{/each}
-	</SelectC>
+	</Select>
+	<Select onValueChange={onFontChange} trigger={selectedFontLabel?.label}>
+		{#each fonts as theme, i (i + theme.value)}
+			<SelectItem value={theme} />
+		{/each}
+	</Select>
 </div>
