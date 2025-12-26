@@ -83,8 +83,6 @@
 				viewerPassword
 			})
 		});
-		const createJson = await createResponse.json();
-		console.log(createJson);
 		if (createResponse.status === 409) {
 			codeText = 'Document code is already taken.';
 			loading = false;

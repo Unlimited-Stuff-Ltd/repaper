@@ -29,7 +29,6 @@ export const POST: RequestHandler = async ({ request }) => {
 		});
 		return new Response(null, { status: 500 });
 	}
-	console.log(editDocuments.length, viewDocuments.length);
 	if (editDocuments.length > 0) {
 		return new Response(
 			JSON.stringify({
