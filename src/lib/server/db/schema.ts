@@ -1,3 +1,4 @@
+import { relations } from 'drizzle-orm';
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
 
 export const documents = sqliteTable('documents', {
@@ -8,7 +9,7 @@ export const documents = sqliteTable('documents', {
 	code: text('code').unique().notNull(),
 	editorPassword: text('editor_password').notNull(),
 	viewerPassword: text('viewer_password'),
-	content: text('content').notNull().default('◊'),
+	content: text('content').notNull().default('empty'),
 	createdAt: text('created_at')
 		.notNull()
 		.$default(() => new Date().toISOString()),
@@ -16,6 +17,24 @@ export const documents = sqliteTable('documents', {
 		.notNull()
 		.$default(() => new Date().toISOString())
 		.$onUpdate(() => new Date().toISOString())
+});
+
+export const documentsRelations = relations(documents, ({ one }) => ({
+	sessions: one(sessions)
+}));
+
+export const sessions = sqliteTable('sessions', {
+	token: text('token')
+		.primaryKey()
+		.$default(() => crypto.randomUUID()),
+	permissions: text('permissions').notNull().default('viewer'),
+	documentCode: text('document_code')
+		.notNull()
+		.references(() => documents.code),
+	date: text('date')
+		.$default(() => new Date().toISOString())
+		.notNull(),
+	userAgent: text('user_agent')
 });
 
 export const accounts = sqliteTable('accounts', {

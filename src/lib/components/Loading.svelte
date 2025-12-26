@@ -1,18 +1,13 @@
 <script lang="ts">
 	import Loader from '@lucide/svelte/icons/loader-circle';
 
-	let { show, background = false } = $props();
+	let { show } = $props();
 </script>
 
 {#if show}
 	<div
-		class="fixed inset-0 z-50 flex cursor-not-allowed items-center justify-center {background
-			? 'bg-(--background)'
-			: 'bg-black/70'}"
+		class="fixed inset-0 z-50 flex cursor-not-allowed items-center justify-center bg-(--background)"
 	>
-		<Loader
-			class="animate-spin text-{background ? '(--foreground)' : '(--background)'}"
-			size={40}
-		/>
+		<Loader class="animate-spin text-(--primary)" size={40} />
 	</div>
 {/if}

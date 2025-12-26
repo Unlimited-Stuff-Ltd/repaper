@@ -11,5 +11,8 @@ export const load: PageServerLoad = async ({ params }) => {
 		},
 		where: eq(documents.code, params.document)
 	});
-	return { document: params.document, promise: document };
+	return {
+		document: params.document,
+		promise: document
+	};
 };

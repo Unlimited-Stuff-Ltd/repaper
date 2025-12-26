@@ -1,7 +1,7 @@
 import type { RequestHandler } from './$types';
 import { error } from '$lib/server/db/logs';
 import { db } from '$lib/server/db';
-import { documents } from '$lib/server/db/schema';
+import { documents, sessions } from '$lib/server/db/schema';
 import { and, eq } from 'drizzle-orm';
 
 export const POST: RequestHandler = async ({ request }) => {
@@ -29,23 +29,25 @@ export const POST: RequestHandler = async ({ request }) => {
 		});
 		return new Response(null, { status: 500 });
 	}
-	if (editDocuments.length > 0) {
-		return new Response(
-			JSON.stringify({
-				link: `/editor/${code}`,
-				ls: `${new Date().toISOString()}-${crypto.randomUUID()}-e`
-			}),
-			{ status: 200 }
-		);
-	} else if (viewDocuments.length > 0) {
-		return new Response(
-			JSON.stringify({
-				link: `/viewer/${code}`,
-				ls: `${new Date().toISOString()}-${crypto.randomUUID()}-v`
-			}),
-			{ status: 200 }
-		);
-	} else {
+	let permissions = 'viewer';
+	if (editDocuments.length === 0 && viewDocuments.length === 0) {
 		return new Response(null, { status: 401 });
+	} else if (viewDocuments.length === 0) {
+		permissions = 'editor';
 	}
+	const token = await db
+		.insert(sessions)
+		.values({
+			permissions,
+			documentCode: code,
+			userAgent
+		})
+		.returning({ token: sessions.token });
+	return new Response(
+		JSON.stringify({
+			link: `/document/${code}`,
+			ls: token
+		}),
+		{ status: 200 }
+	);
 };
