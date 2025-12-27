@@ -5,11 +5,7 @@
 	let { value } = $props();
 </script>
 
-<Select.Item
-	value={value.value}
-	label={value.label}
-	class="hover:bg-(--foreground)/10 {value.value}"
->
+<Select.Item value={value.value} label={value.label} class="hover:bg-(--fg)/10 {value.value}">
 	{#snippet children({ selected })}
 		<div class="flex">
 			{#if selected}<Check size={20} class="my-auto mr-2" />{:else}<Check

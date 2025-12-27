@@ -7,7 +7,7 @@
 <Checkbox.Root
 	bind:checked
 	{...props}
-	class="flex h-6 w-6 cursor-pointer items-center justify-center rounded-[5px] border-(--outline) bg-(--background) font-bold"
+	class="flex h-6 w-6 cursor-pointer items-center justify-center rounded-[5px] border-(--o) bg-(--bg) font-bold"
 >
 	{#snippet children({ checked })}
 		{#if checked}X{/if}

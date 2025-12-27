@@ -38,6 +38,7 @@
 		if (!documentCU || response.status === 401) {
 			if (i !== -1) {
 				recentDocuments.splice(i, 1);
+				localStorage.setItem('repaper-recent-documents', JSON.stringify(recentDocuments));
 			}
 			goto(resolve('/recents'), { replaceState: true });
 			return;

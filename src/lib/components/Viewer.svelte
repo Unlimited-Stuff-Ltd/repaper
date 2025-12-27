@@ -4,10 +4,7 @@
 
 <div class="h-screen" style="width: calc(100vw - 17.5rem)">
 	<h1 class="h1 mt-8">{document.title}</h1>
-	<div
-		class="mx-auto rounded-[2vw] border border-(--outline) p-[2vw]"
-		style="height: 11in; width: 8.5in;"
-	>
+	<div class="page">
 		<p>
 			{#each document.content as char, i (i)}
 				<span

@@ -24,10 +24,9 @@
 	let themes = [
 		{ value: 'default', label: 'Default', mode: 'light' },
 		{ value: 'blue', label: 'Blue', mode: 'light' },
-		{ value: 'messenger', label: 'Messenger', mode: 'dark' },
+		{ value: 'wumpus', label: 'Wumpus', mode: 'dark' },
 		{ value: 'og', label: 'OG', mode: 'dark' },
-		{ value: 'nord', label: 'Nord', mode: 'dark' },
-		{ value: 'music', label: 'Music', mode: 'dark' }
+		{ value: 'nord', label: 'Nord', mode: 'dark' }
 	];
 
 	const selectedModeLabel = $derived(
