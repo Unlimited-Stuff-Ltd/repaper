@@ -17,6 +17,7 @@
 	});
 
 	onMount(async () => {
+		console.log(localStorage);
 		// get editor or viewer
 		const mode = page.url.searchParams.get('mode');
 		// if not found, redirect
@@ -72,6 +73,7 @@
 			token
 		};
 		recentDocuments.splice(0, 0, current);
+		console.log(recentDocuments);
 		localStorage.setItem('repaper-recent-documents', JSON.stringify(recentDocuments));
 	});
 </script>

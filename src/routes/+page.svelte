@@ -16,6 +16,6 @@
 		{/if}
 	</div>
 </div>
-<div class="block h-screen w-full overflow-hidden text-left opacity-50">
+<div class="block h-screen w-full text-left opacity-50">
 	<p class="w-full">{text}</p>
 </div>

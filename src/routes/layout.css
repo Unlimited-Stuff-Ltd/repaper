@@ -21,18 +21,6 @@
 	color: var(--foreground);
 }
 
-[data-theme*='videos'] {
-	color-scheme: light;
-	--background: #fff;
-	--foreground: #0f0f0f;
-	--primary: #ff0000;
-	--primary-foreground: #fff0d5;
-	--outline: #c0c0c0;
-	--red: #ff0000;
-	background-color: var(--background);
-	color: var(--foreground);
-}
-
 [data-theme*='messenger'] {
 	color-scheme: dark;
 	--background: #323338;
@@ -107,9 +95,9 @@
 	font-family: var(--font);
 }
 
-[data-theme*='verdana'],
-.verdana {
-	--font: Verdana, Tahoma, sans-serif;
+[data-theme*='tahoma'],
+.tahoma {
+	--font: Tahoma, verdana, sans-serif;
 	font-family: var(--font);
 }
 
@@ -192,7 +180,8 @@ input:focus {
 
 [data-select-item] {
 	cursor: pointer;
-	padding: 0.25rem 0.5rem;
+	padding: 0.45rem 0.5rem;
+	font-size: 0.8rem;
 }
 
 .group-heading {
@@ -200,7 +189,8 @@ input:focus {
 	text-align: center;
 	border-bottom: 0.08rem var(--outline) solid;
 	padding-bottom: 0.25rem;
-	padding-top: 0.5rem;
+	padding-top: 0.25rem;
+	font-size: 0.9rem;
 }
 
 .h1 {

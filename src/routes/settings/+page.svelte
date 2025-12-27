@@ -27,8 +27,7 @@
 		{ value: 'messenger', label: 'Messenger', mode: 'dark' },
 		{ value: 'og', label: 'OG', mode: 'dark' },
 		{ value: 'nord', label: 'Nord', mode: 'dark' },
-		{ value: 'music', label: 'Music', mode: 'dark' },
-		{ value: 'videos', label: 'Videos', mode: 'light' }
+		{ value: 'music', label: 'Music', mode: 'dark' }
 	];
 
 	const selectedModeLabel = $derived(
@@ -45,7 +44,7 @@
 	let fonts = [
 		{ value: 'georgia', label: 'Georgia' },
 		{ value: 'arial', label: 'Arial' },
-		{ value: 'verdana', label: 'Verdana' },
+		{ value: 'tahoma', label: 'Tahoma' },
 		{ value: 'times', label: 'Times New Roman' },
 		{ value: 'trebuchet', label: 'Trebuchet MS' }
 	];
