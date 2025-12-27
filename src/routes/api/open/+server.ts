@@ -35,9 +35,9 @@ export const POST: RequestHandler = async ({ request }) => {
 	} else if (viewDocuments.length === 0) {
 		permissions = 'editor';
 	}
-	let token;
+	let s;
 	try {
-		token = await db
+		let [{ token }] = await db
 			.insert(sessions)
 			.values({
 				permissions,
@@ -45,6 +45,7 @@ export const POST: RequestHandler = async ({ request }) => {
 				userAgent
 			})
 			.returning({ token: sessions.token });
+		s = token
 	} catch (errorV) {
 		error({
 			action: 'create-token',
@@ -55,8 +56,8 @@ export const POST: RequestHandler = async ({ request }) => {
 	}
 	return new Response(
 		JSON.stringify({
-			link: `/document/${code}`,
-			ls: token
+			link: `/document/${code}?mode=${permissions}`,
+			ls: s
 		}),
 		{ status: 200 }
 	);

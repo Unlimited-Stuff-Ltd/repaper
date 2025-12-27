@@ -5,7 +5,7 @@
 	import { resolve } from '$app/paths';
 	import { goto } from '$app/navigation';
 
-	let { size = 'w-50 h-fit', limit = 10, empty = false, length = $bindable() } = $props();
+	let { size = 'w-80 h-fit', limit = 10, empty = false, length = $bindable() } = $props();
 
 	let loading = $state(true);
 
@@ -32,19 +32,26 @@
 
 <Loading show={loading} />
 
-<div class="{size} m-auto">
+<div class="m-auto w-fit">
 	{#if recents.length < 1}
 		{#if empty}
-			<p class="text-lg"><a class="a" href={resolve('/open')}>Open a document</a> to get started</p>
+			<p class="text-center text-lg">
+				<a class="a" href={resolve('/open')}>Open a document</a> to get started.
+			</p>
 		{/if}
 	{:else}
-		{#each recents as document, i (i)}
-			<button
-				onclick={() => click(i)}
-				class="w-full cursor-pointer border p-3 hover:bg-(--foreground)/5 {i === 0
-					? 'rounded-t-lg'
-					: ''} {i === recents.length - 1 ? 'rounded-b-lg' : ''}">{document.title}</button
-			>
-		{/each}
+		<div class={size}>
+			{#each recents as document, i (i)}
+				<button
+					onclick={() => click(i)}
+					class="w-full cursor-pointer border p-3 hover:bg-(--foreground)/5 m-auto {i === 0
+						? 'rounded-t-lg'
+						: ''} {i === recents.length - 1 ? 'rounded-b-lg' : ''}"
+					><span class="font-semibold">{document.title}</span> - {document.mode === 'viewer'
+						? 'View'
+						: 'Edit'}</button
+				>
+			{/each}
+		</div>
 	{/if}
 </div>

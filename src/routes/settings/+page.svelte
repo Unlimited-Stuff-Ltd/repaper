@@ -28,7 +28,7 @@
 		{ value: 'og', label: 'OG', mode: 'dark' },
 		{ value: 'nord', label: 'Nord', mode: 'dark' },
 		{ value: 'music', label: 'Music', mode: 'dark' },
-		{ value: 'video', label: 'Video', mode: 'light' }
+		{ value: 'videos', label: 'Videos', mode: 'light' }
 	];
 
 	const selectedModeLabel = $derived(

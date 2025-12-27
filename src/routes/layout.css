@@ -21,7 +21,7 @@
 	color: var(--foreground);
 }
 
-[data-theme*='video'] {
+[data-theme*='videos'] {
 	color-scheme: light;
 	--background: #fff;
 	--foreground: #0f0f0f;
@@ -63,7 +63,7 @@
 	--foreground: #eceff4;
 	--primary: #88c0d0;
 	--primary-foreground: #0a0a0a;
-	--red: #bf616a;
+	--red: #ff616a;
 	--outline: #4c566a;
 	background-color: var(--background);
 	color: var(--foreground);
@@ -89,7 +89,7 @@
 	--foreground: #000;
 	--primary: #09f;
 	--primary-foreground: #fff;
-	--red: #991b1b;
+	--red: #c91b1b;
 	--outline: #000;
 	background-color: var(--background);
 	color: var(--foreground);

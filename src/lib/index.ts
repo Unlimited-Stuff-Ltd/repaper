@@ -64,6 +64,7 @@ export function encode(chars: Character[]): string {
 export type DocumentLink = {
 	title: string;
 	code: string;
+	mode: string;
 	// eslint-disable-next-line
 	link: any;
 	token: string;
