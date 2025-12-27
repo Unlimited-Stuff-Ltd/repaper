@@ -6,6 +6,7 @@
 	import { resolve } from '$app/paths';
 	import { Loading, Viewer, Editor } from '$lib/components';
 	import { page } from '$app/state';
+	import { Slider } from '$lib/components';
 
 	let { data }: PageProps = $props();
 
@@ -17,6 +18,8 @@
 	});
 
 	let mode = $state('viewer');
+
+	let scale = $state(100);
 
 	onMount(async () => {
 		const modeLS = page.url.searchParams.get('mode');
@@ -71,8 +74,16 @@
 
 <Loading show={loading} />
 
-{#if mode === 'viewer'}
-	<Viewer {document} />
-{:else}
-	<Editor {document} />
-{/if}
+<div class="pt-20">
+	<div class="m-auto w-fit">
+		<p class="mt-7 mb-1 font-bold text-(--fg)/60">Zoom:</p>
+		<div class="m-auto w-120">
+			<Slider bind:value={scale} max={100} min={30} />
+		</div>
+	</div>
+	{#if mode === 'viewer'}
+		<Viewer {document} {scale} />
+	{:else}
+		<Editor {document} {scale} />
+	{/if}
+</div>
