@@ -8,7 +8,7 @@
 	<h2 class="mt-8 text-center text-lg text-(--fg)/60">View</h2>
 	<h1 class="h1">{document.title}</h1>
 	<div class="page">
-		<p><Text content={document.content} /></p>
+		<pre class="content"><Text content={document.content} /></pre>
 	</div>
 	<div class="h-[2vw]"></div>
 </div>

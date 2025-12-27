@@ -2,6 +2,7 @@
 
 :root {
 	font-display: block;
+	--page: calc(8.5in - 40px);
 }
 
 ::selection {
@@ -200,4 +201,24 @@ form {
 	height: 11in;
 	width: 8.5in;
 	padding: 20px;
+}
+
+.content {
+	font-family: var(--font);
+	max-width: calc(8.5in - 40px);
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+.cursor {
+	height: 20px;
+	background-color: var(--p);
+	width: 1.5px;
+	display: inline-block;
+	position: relative;
+	top: 4px;
+}
+
+.hidden-cursor {
+	background-color: transparent;
 }
