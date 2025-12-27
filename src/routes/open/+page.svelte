@@ -47,7 +47,7 @@
 		</div>
 		<div class="m-auto mb-0.5 w-fit text-left">
 			<Label.Root for="password">Password:</Label.Root><br />
-			<input id="password" class="w-120" bind:value={password} type="password" required />
+			<input id="password" class="w-120" bind:value={password} type="password" />
 		</div>
 		<p class="mb-3 text-left text-sm text-(--red)"><I />{text}</p>
 		<Button.Root type="submit">Open</Button.Root>

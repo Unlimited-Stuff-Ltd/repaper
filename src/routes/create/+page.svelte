@@ -19,7 +19,7 @@
 	let viewerPassword = $state('');
 	let confirmViewerPassword = $state('');
 
-	let publicDocument = $state(false);
+	let passwordNotRequired = $state(false);
 	let associateAccount = $state(false);
 
 	onMount(() => {
@@ -81,7 +81,8 @@
 				title,
 				code,
 				editorPassword,
-				viewerPassword
+				viewerPassword,
+				passwordRequired: !passwordNotRequired
 			})
 		});
 		if (createResponse.status === 409) {
@@ -178,9 +179,11 @@
 		<p class="text-left text-sm text-(--red)"><I />{editorPText}</p>
 		<div class="m-auto mb-0.5 inline-flex">
 			<div class="text-left">
-				<Label.Root for="viewerPassword"
+				<Label.Root
+					for="viewerPassword"
+					class={passwordNotRequired ? 'cursor-not-allowed text-(--fg)/50' : ''}
 					>Viewer Password:
-					<Popover
+					<Popover disabled={passwordNotRequired}
 						>This is the password used to view the document.<br />This <strong>cannot</strong> be changed
 						later.</Popover
 					>
@@ -188,31 +191,37 @@
 				<input
 					id="viewerPassword"
 					autocomplete="off"
-					class="mt-0.5 mr-3 w-58"
+					class="mt-0.5 mr-3 w-58 disabled:cursor-not-allowed disabled:bg-(--fg)/2"
 					bind:value={viewerPassword}
 					type="password"
-					required
+					required={!passwordNotRequired}
+					disabled={passwordNotRequired}
 				/>
 			</div>
 			<div class="text-left">
-				<Label.Root for="confirmViewerPassword">Confirm Viewer Password:</Label.Root><br />
+				<Label.Root
+					for="confirmViewerPassword"
+					class={passwordNotRequired ? 'cursor-not-allowed text-(--fg)/50' : ''}
+					>Confirm Viewer Password:</Label.Root
+				><br />
 				<input
 					id="confirmViewerPassword"
 					autocomplete="off"
 					bind:value={confirmViewerPassword}
-					class="mt-0.5 w-58"
+					class="mt-0.5 w-58 disabled:cursor-not-allowed disabled:bg-(--fg)/2"
 					type="password"
-					required
+					required={!passwordNotRequired}
+					disabled={passwordNotRequired}
 				/>
 			</div>
 		</div>
 		<p class="text-left text-sm text-(--red)"><I />{viewerPText}</p>
 		<div class="m-auto mb-7 flex w-fit">
-			<Checkbox bind:checked={publicDocument} id="publicDocument" />
-			<Label.Root class="ml-2" for="publicDocument">
-				Public Document
+			<Checkbox bind:checked={passwordNotRequired} id="passwordNotRequired" />
+			<Label.Root class="ml-2" for="passwordNotRequired">
+				Password not required to view
 				<Popover>
-					Public Documents can be <strong>viewed</strong> with only the file code.<br />
+					If this is checked, anyone can view this document with just the document code.<br />
 					This <strong>cannot</strong> be changed later.
 				</Popover>
 			</Label.Root>

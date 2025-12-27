@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { Popover } from 'bits-ui';
 
-	let { children } = $props();
+	let { children, ...props } = $props();
 </script>
 
 <Popover.Root>
 	<Popover.Trigger
 		tabindex={-1}
-		class="m-auto h-6 w-6 cursor-pointer items-center justify-center rounded-[50%] align-baseline hover:bg-(--fg)/10 data-[state=open]:bg-(--fg)/10"
+		{...props}
+		class="m-auto h-6 w-6 cursor-pointer items-center justify-center rounded-[50%] align-baseline hover:bg-(--fg)/10 disabled:cursor-not-allowed disabled:hover:bg-transparent data-[state=open]:bg-(--fg)/10"
 		>?</Popover.Trigger
 	>
 	<Popover.Portal>

@@ -8,18 +8,28 @@ export const POST: RequestHandler = async ({ request }) => {
 	const userAgent = request.headers.get('user-agent') || '';
 	const requestJson = await request.json();
 	const code = requestJson.code;
-	const password = requestJson.password;
+	let password = null;
+	if (requestJson.password) {
+		password = requestJson.password;
+	}
 	let editDocuments = [];
 	let viewDocuments = [];
 	try {
-		editDocuments = await db
-			.select()
-			.from(documents)
-			.where(and(eq(documents.code, code), eq(documents.editorPassword, password)));
-		viewDocuments = await db
-			.select()
-			.from(documents)
-			.where(and(eq(documents.code, code), eq(documents.viewerPassword, password)));
+		if (password) {
+			editDocuments = await db
+				.select()
+				.from(documents)
+				.where(and(eq(documents.code, code), eq(documents.editorPassword, password)));
+			viewDocuments = await db
+				.select()
+				.from(documents)
+				.where(and(eq(documents.code, code), eq(documents.viewerPassword, password)));
+		} else {
+			viewDocuments = await db
+				.select()
+				.from(documents)
+				.where(and(eq(documents.code, code), eq(documents.passwordRequired, 0)));
+		}
 	} catch (errorO) {
 		error({
 			action: 'open-document',

@@ -10,6 +10,7 @@ export const documents = sqliteTable('documents', {
 	editorPassword: text('editor_password').notNull(),
 	viewerPassword: text('viewer_password'),
 	content: text('content').notNull().default('empty'),
+	passwordRequired: integer('passwordRequired').notNull().default(1),
 	createdAt: text('created_at')
 		.notNull()
 		.$default(() => new Date().toISOString()),
