@@ -4,7 +4,7 @@
 	import { decode, type DocumentLink, type Character } from '$lib';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import { Loading, Viewer } from '$lib/components';
+	import { Loading, Viewer, Editor } from '$lib/components';
 	import { page } from '$app/state';
 
 	let { data }: PageProps = $props();
@@ -16,12 +16,15 @@
 		content: []
 	});
 
+	let mode = $state('viewer');
+
 	onMount(async () => {
-		const mode = page.url.searchParams.get('mode');
-		if (!mode) {
+		const modeLS = page.url.searchParams.get('mode');
+		if (!modeLS) {
 			goto(resolve('/recents'), { replaceState: true });
 			return;
 		}
+		mode = modeLS;
 		const documentCU = await data.promise;
 		let recentDocuments: DocumentLink[] = JSON.parse(
 			localStorage.getItem('repaper-recent-documents') ?? '[]'
@@ -32,7 +35,8 @@
 			method: 'POST',
 			body: JSON.stringify({
 				token,
-				documentCode: data.document
+				documentCode: data.document,
+				mode
 			})
 		});
 		if (!documentCU || response.status === 401) {
@@ -67,4 +71,8 @@
 
 <Loading show={loading} />
 
-<Viewer {document} />
+{#if mode === 'viewer'}
+	<Viewer {document} />
+{:else}
+	<Editor {document} />
+{/if}

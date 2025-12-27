@@ -9,6 +9,7 @@ export const POST: RequestHandler = async ({ request }) => {
 	const json = await request.json();
 	const token = json.token;
 	const documentCode = json.documentCode;
+	const permissions = json.mode;
 	let session;
 	try {
 		session = await db
@@ -18,7 +19,8 @@ export const POST: RequestHandler = async ({ request }) => {
 				and(
 					eq(sessions.token, token),
 					eq(sessions.documentCode, documentCode),
-					eq(sessions.userAgent, userAgent)
+					eq(sessions.userAgent, userAgent),
+					eq(sessions.permissions, permissions)
 				)
 			);
 	} catch (errorV) {
