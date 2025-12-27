@@ -19,6 +19,7 @@
 	let viewerPassword = $state('');
 	let confirmViewerPassword = $state('');
 
+	let publicDocument = $state(false);
 	let associateAccount = $state(false);
 
 	onMount(() => {
@@ -206,12 +207,20 @@
 			</div>
 		</div>
 		<p class="text-left text-sm text-(--red)"><I />{viewerPText}</p>
-		<br />
+		<div class="m-auto mb-7 flex w-fit">
+			<Checkbox bind:checked={publicDocument} id="publicDocument" />
+			<Label.Root class="ml-2" for="publicDocument">
+				Public Document
+				<Popover>
+					Public Documents can be <strong>viewed</strong> with only the file code.<br />
+					This <strong>cannot</strong> be changed later.
+				</Popover>
+			</Label.Root>
+		</div>
 		{#if account}
-			<div class="m-auto flex w-fit">
-				<input hidden name="account" value={account} />
-				<Checkbox bind:checked={associateAccount} />
-				<p class="ml-2">Associate with account</p>
+			<div class="m-auto mb-7 flex w-fit">
+				<Checkbox bind:checked={associateAccount} id="associateAccount" />
+				<Label.Root class="ml-2" for="associateAccount">Associate with account</Label.Root>
 			</div>
 		{/if}
 		<Button.Root type="submit">Create</Button.Root>

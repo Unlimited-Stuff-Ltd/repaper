@@ -9,6 +9,10 @@
 	color: var(--p-fg);
 }
 
+:focus {
+	outline-color: var(--p);
+}
+
 [data-theme*='default'] {
 	color-scheme: light;
 	--bg: #fff0d5;

@@ -14,6 +14,7 @@
 		<Popover.Content
 			class="w-fit rounded-md border border-(--o) bg-(--bg) px-5 py-3 text-center"
 			sideOffset={5}
+			tabindex={-1}
 		>
 			<p>{@render children()}</p>
 		</Popover.Content>
