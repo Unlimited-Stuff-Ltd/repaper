@@ -29,7 +29,6 @@ export const POST: RequestHandler = async ({ request }) => {
 			userAgent
 		});
 	}
-	console.log(session);
 	if (!session || session.length === 0) {
 		return new Response(null, { status: 401 });
 	}

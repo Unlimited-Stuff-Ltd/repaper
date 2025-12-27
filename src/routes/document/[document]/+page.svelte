@@ -17,26 +17,17 @@
 	});
 
 	onMount(async () => {
-		console.log(localStorage);
-		// get editor or viewer
 		const mode = page.url.searchParams.get('mode');
-		// if not found, redirect
 		if (!mode) {
 			goto(resolve('/recents'), { replaceState: true });
 			return;
 		}
-		// wait for document from db to load
 		const documentCU = await data.promise;
-		// get recent documents from localStorage
 		let recentDocuments: DocumentLink[] = JSON.parse(
 			localStorage.getItem('repaper-recent-documents') ?? '[]'
 		);
-		console.log(recentDocuments);
-		// find current document in localStorage
-		let i = recentDocuments.findIndex((a) => (a.code = data.document));
-		// get token from ls
+		let i = recentDocuments.findIndex((a) => a.code === data.document);
 		const token = localStorage.getItem('repaper-token');
-		// check if token is valid
 		const response = await fetch('/api/token', {
 			method: 'POST',
 			body: JSON.stringify({
@@ -45,10 +36,8 @@
 			})
 		});
 		if (!documentCU || response.status === 401) {
-			// if not valid token, remove document from history and redirect
 			if (i !== -1) {
 				recentDocuments.splice(i, 1);
-				localStorage.setItem('repaper-recent-documents', JSON.stringify(recentDocuments));
 			}
 			goto(resolve('/recents'), { replaceState: true });
 			return;
@@ -60,11 +49,9 @@
 			recentDocuments.splice(i, 1);
 		}
 		if (!token) {
-			localStorage.setItem('repaper-recent-documents', JSON.stringify(recentDocuments));
 			goto(resolve('/recents'), { replaceState: true });
 			return;
 		}
-		console.log(recentDocuments);
 		const current = {
 			title: document.title,
 			code: data.document,
@@ -73,7 +60,6 @@
 			token
 		};
 		recentDocuments.splice(0, 0, current);
-		console.log(recentDocuments);
 		localStorage.setItem('repaper-recent-documents', JSON.stringify(recentDocuments));
 	});
 </script>

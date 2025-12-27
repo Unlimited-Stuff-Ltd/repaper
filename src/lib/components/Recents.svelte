@@ -44,7 +44,7 @@
 			{#each recents as document, i (i)}
 				<button
 					onclick={() => click(i)}
-					class="w-full cursor-pointer border p-3 hover:bg-(--foreground)/5 m-auto {i === 0
+					class="m-auto w-full cursor-pointer border p-3 hover:bg-(--foreground)/5 {i === 0
 						? 'rounded-t-lg'
 						: ''} {i === recents.length - 1 ? 'rounded-b-lg' : ''}"
 					><span class="font-semibold">{document.title}</span> - {document.mode === 'viewer'

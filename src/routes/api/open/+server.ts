@@ -37,7 +37,7 @@ export const POST: RequestHandler = async ({ request }) => {
 	}
 	let s;
 	try {
-		let [{ token }] = await db
+		const [{ token }] = await db
 			.insert(sessions)
 			.values({
 				permissions,
@@ -45,7 +45,7 @@ export const POST: RequestHandler = async ({ request }) => {
 				userAgent
 			})
 			.returning({ token: sessions.token });
-		s = token
+		s = token;
 	} catch (errorV) {
 		error({
 			action: 'create-token',
