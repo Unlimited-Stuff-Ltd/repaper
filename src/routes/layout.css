@@ -21,7 +21,19 @@
 	color: var(--foreground);
 }
 
-[data-theme*='discord'] {
+[data-theme*='video'] {
+	color-scheme: light;
+	--background: #fff;
+	--foreground: #0f0f0f;
+	--primary: #ff0000;
+	--primary-foreground: #fff0d5;
+	--outline: #c0c0c0;
+	--red: #ff0000;
+	background-color: var(--background);
+	color: var(--foreground);
+}
+
+[data-theme*='messenger'] {
 	color-scheme: dark;
 	--background: #323338;
 	--foreground: #fff;
@@ -32,6 +44,31 @@
 	background-color: var(--background);
 	color: var(--foreground);
 }
+
+[data-theme*='music'] {
+	color-scheme: light;
+	--background: #191414;
+	--foreground: #fff;
+	--primary: #1db954;
+	--primary-foreground: #000;
+	--red: #ea333e;
+	--outline: #383838;
+	background-color: var(--background);
+	color: var(--foreground);
+}
+
+[data-theme*='nord'] {
+	color-scheme: dark;
+	--background: #2e3440;
+	--foreground: #eceff4;
+	--primary: #88c0d0;
+	--primary-foreground: #0a0a0a;
+	--red: #bf616a;
+	--outline: #4c566a;
+	background-color: var(--background);
+	color: var(--foreground);
+}
+
 
 [data-theme*='og'] {
 	color-scheme: dark;
@@ -44,6 +81,7 @@
 	background-color: var(--background);
 	color: var(--foreground);
 }
+
 
 [data-theme*='blue'] {
 	color-scheme: light;
