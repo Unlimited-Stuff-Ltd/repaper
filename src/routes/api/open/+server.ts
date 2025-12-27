@@ -35,14 +35,24 @@ export const POST: RequestHandler = async ({ request }) => {
 	} else if (viewDocuments.length === 0) {
 		permissions = 'editor';
 	}
-	const token = await db
-		.insert(sessions)
-		.values({
-			permissions,
-			documentCode: code,
+	let token;
+	try {
+		token = await db
+			.insert(sessions)
+			.values({
+				permissions,
+				documentCode: code,
+				userAgent
+			})
+			.returning({ token: sessions.token });
+	} catch (errorV) {
+		error({
+			action: 'create-token',
+			info: `p.:${permissions},code:${code}`,
+			error: JSON.stringify(errorV),
 			userAgent
-		})
-		.returning({ token: sessions.token });
+		});
+	}
 	return new Response(
 		JSON.stringify({
 			link: `/document/${code}`,

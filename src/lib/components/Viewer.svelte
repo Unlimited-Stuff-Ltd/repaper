@@ -1,5 +1,5 @@
 <script lang="ts">
-    let { document } = $props();
+	let { document } = $props();
 </script>
 
 <div class="h-screen" style="width: calc(100vw - 17.5rem)">
@@ -10,7 +10,7 @@
 				<span
 					class="{char.bold ? 'font-bold' : ''} {char.italic ? 'italic' : ''} {char.underline
 						? 'underline'
-						: ''} text-[{char.fontSize}rem]">{char.value}</span
+						: ''} text-[{char.fontSize * 0.8}rem]">{char.value}</span
 				>
 			{/each}
 		</p>

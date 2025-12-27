@@ -22,12 +22,18 @@
 		);
 		let i = recentDocuments.findIndex((a) => (a.code = data.document));
 		const token = localStorage.getItem('repaper-token');
-		
-		if (!documentCU) {
+		const response = await fetch('/api/token', {
+			method: 'POST',
+			body: JSON.stringify({
+				token,
+				documentCode: data.document
+			})
+		});
+		if (!documentCU || response.status === 401) {
 			if (i !== -1) {
 				recentDocuments.splice(i, 1);
+				localStorage.setItem('repaper-recent-documents', JSON.stringify(recentDocuments));
 			}
-			localStorage.setItem('repaper-recent-documents', JSON.stringify(recentDocuments));
 			goto(resolve('/recents'), { replaceState: true });
 			return;
 		}
@@ -44,7 +50,7 @@
 		const current = {
 			title: document.title,
 			code: data.document,
-			link: `/viewer/${data.document}`,
+			link: `/document/${data.document}`,
 			token
 		};
 		recentDocuments.splice(0, 0, current);
