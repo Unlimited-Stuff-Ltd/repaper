@@ -36,7 +36,7 @@
 	{#if recents.length < 1}
 		{#if empty}
 			<p class="text-center text-lg">
-				<a class="a" href={resolve('/open')}>Open a document</a> to get started.
+				<a class="underline underline-offset-2" href={resolve('/open')}>Open a document</a> to get started.
 			</p>
 		{/if}
 	{:else}
