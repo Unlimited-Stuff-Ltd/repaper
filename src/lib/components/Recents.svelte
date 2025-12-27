@@ -5,7 +5,7 @@
 	import { resolve } from '$app/paths';
 	import { goto } from '$app/navigation';
 
-	let { size = 'w-50 h-fit', limit = 10, empty = false } = $props();
+	let { size = 'w-50 h-fit', limit = 10, empty = false, length = $bindable() } = $props();
 
 	let loading = $state(true);
 
@@ -16,7 +16,8 @@
 		if (recentDocuments) {
 			recents = JSON.parse(recentDocuments);
 		}
-		if (recents.length > 10) {
+		length = recents.length;
+		if (recents.length > limit) {
 			recents = recents.slice(0, limit);
 		}
 		loading = false;
@@ -32,7 +33,7 @@
 <Loading show={loading} />
 
 <div class="{size} m-auto">
-	{#if recents.length === 0}
+	{#if recents.length < 1}
 		{#if empty}
 			<p class="text-lg"><a class="a" href={resolve('/open')}>Open a document</a> to get started</p>
 		{/if}
