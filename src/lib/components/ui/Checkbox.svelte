@@ -8,7 +8,9 @@
 <Checkbox.Root bind:checked {...props}>
 	{#snippet children({ checked })}
 		{#if checked}
-			<div class="flex h-6 w-6 cursor-pointer items-center justify-center rounded-[5px] bg-(--p)">
+			<div
+				class="checkbox-bg flex h-6 w-6 cursor-pointer items-center justify-center rounded-[5px]"
+			>
 				<Check size={18} class="m-auto text-(--p-fg)" />
 			</div>
 		{:else}
@@ -16,3 +18,9 @@
 		{/if}
 	{/snippet}
 </Checkbox.Root>
+
+<style>
+	.checkbox-bg {
+		background: var(--p);
+	}
+</style>

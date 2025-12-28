@@ -11,7 +11,7 @@
 	<span
 		class="relative text-transparent {char.bold ? 'font-bold ' : ''}{char.italic
 			? 'italic '
-			: ''}{char.underline ? 'underline ' : ''}text-[{char.fontSize * 17}px]">{char.value}</span
+			: ''}{char.underline ? 'underline ' : ''}text-[17px]">{char.value}</span
 	>
 	{#if content.length - (cursorPos + 1) === i && cursor}
 		<Cursor {blinking} />

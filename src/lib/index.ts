@@ -42,9 +42,12 @@ export function encode(chars: Character[]): string {
 	if (chars.length === 0) {
 		return 'empty';
 	}
-	const encoded = '';
+	let encoded = '';
 	for (let i = 0; i < chars.length; i++) {
 		const char = chars[i];
+		if (char.value === undefined) {
+			continue;
+		}
 		let toAdd = char.value;
 		if (char.bold) {
 			toAdd += 'b';
@@ -56,7 +59,11 @@ export function encode(chars: Character[]): string {
 			toAdd += 'u';
 		}
 		toAdd += `-${char.fontSize}`;
-		encoded.concat('¬', toAdd);
+		if (encoded === '') {
+			encoded += toAdd;
+		} else {
+			encoded += `¬${toAdd}`;
+		}
 	}
 	return encoded;
 }

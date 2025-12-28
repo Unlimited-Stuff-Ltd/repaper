@@ -21,6 +21,8 @@
 
 	let scale = $state(100);
 
+	let token = $state('');
+
 	onMount(async () => {
 		const modeLS = page.url.searchParams.get('mode');
 		if (!modeLS) {
@@ -33,7 +35,12 @@
 			localStorage.getItem('repaper-recent-documents') ?? '[]'
 		);
 		let i = recentDocuments.findIndex((a) => a.code === data.document);
-		const token = localStorage.getItem('repaper-token');
+		const tokenV = localStorage.getItem('repaper-token');
+		if (!tokenV) {
+			goto(resolve('/recents'), { replaceState: true });
+			return;
+		}
+		token = tokenV;
 		const response = await fetch('/api/token', {
 			method: 'POST',
 			body: JSON.stringify({
@@ -56,10 +63,6 @@
 		if (i !== -1) {
 			recentDocuments.splice(i, 1);
 		}
-		if (!token) {
-			goto(resolve('/recents'), { replaceState: true });
-			return;
-		}
 		const current = {
 			title: document.title,
 			code: data.document,
@@ -70,6 +73,22 @@
 		recentDocuments.splice(0, 0, current);
 		localStorage.setItem('repaper-recent-documents', JSON.stringify(recentDocuments));
 	});
+
+	async function save(content: string) {
+		const response = await fetch('/api/save', {
+			method: 'POST',
+			body: JSON.stringify({
+				content,
+				code: data.document,
+				token
+			})
+		});
+		if (response.status === 401) {
+			goto(resolve('/'), { replaceState: true });
+		} else {
+			return response.status;
+		}
+	}
 </script>
 
 <Loading show={loading} />
@@ -84,6 +103,6 @@
 	{#if mode === 'viewer'}
 		<Viewer {document} {scale} />
 	{:else}
-		<Editor {document} {scale} />
+		<Editor {document} {scale} {save} />
 	{/if}
 </div>

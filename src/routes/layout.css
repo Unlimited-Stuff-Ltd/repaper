@@ -6,7 +6,7 @@
 }
 
 ::selection {
-	background-color: var(--p);
+	background: var(--p);
 	color: var(--p-fg);
 }
 
@@ -23,6 +23,30 @@
 	--o: #000;
 	--red: #991b1b;
 	background-color: var(--bg);
+	color: var(--fg);
+}
+
+[data-theme*='coral'] {
+	color-scheme: light;
+	--bg: #fff5f0;
+	--fg: #100;
+	--p: #ee5a6f;
+	--p-fg: #fffae3;
+	--o: #100;
+	--red: #ee5a6f;
+	background: var(--bg);
+	color: var(--fg);
+}
+
+[data-theme*='cucumber'] {
+	color-scheme: light;
+	--bg: #f5fff5;
+	--fg: #010;
+	--p: #22c55e;
+	--p-fg: #f5fff5;
+	--o: #010;
+	--red: #de4e30;
+	background: var(--bg);
 	color: var(--fg);
 }
 
@@ -62,18 +86,6 @@
 	color: var(--fg);
 }
 
-[data-theme*='blue'] {
-	color-scheme: light;
-	--bg: #fff;
-	--fg: #000;
-	--p: #09f;
-	--p-fg: #fff;
-	--red: #c91b1b;
-	--o: #000;
-	background-color: var(--bg);
-	color: var(--fg);
-}
-
 [data-theme*='georgia'],
 .georgia {
 	--font: Georgia, Garamond, serif;
@@ -109,7 +121,7 @@
 }
 
 [data-button-root] {
-	background-color: var(--p);
+	background: var(--p);
 	color: var(--p-fg);
 	padding: 0.5rem 1rem;
 	border-radius: 0.75rem;
@@ -122,8 +134,16 @@
 }
 
 [data-button-root]:hover {
-	background-color: var(--p);
 	opacity: 1;
+}
+
+.small-button {
+	font-size: 0.85rem;
+}
+
+.outline {
+	background-color: var(--bg);
+	color: var(--fg);
 }
 
 .a:hover {
@@ -223,7 +243,7 @@ form {
 .cursor {
 	display: relative;
 	height: 20px;
-	background-color: var(--p);
+	background: var(--p);
 	width: 1.5px;
 	display: inline-block;
 	position: relative;
