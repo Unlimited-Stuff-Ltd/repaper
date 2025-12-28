@@ -1,0 +1,109 @@
+/* Color Schemes */
+
+[data-theme*='default'] {
+	color-scheme: light;
+	--bg: #fff0d5;
+	--fg: #000;
+	--p: #774e24;
+	--p-fg: #fff0d5;
+	--o: #000;
+	--red: #991b1b;
+	background-color: var(--bg);
+	color: var(--fg);
+}
+
+[data-theme*='coral'] {
+	color-scheme: light;
+	--bg: #fff5f0;
+	--fg: #100;
+	--p: #ee5a6f;
+	--p-fg: #fffae3;
+	--o: #100;
+	--red: #ee5a6f;
+	background: var(--bg);
+	color: var(--fg);
+}
+
+[data-theme*='cucumber'] {
+	color-scheme: light;
+	--bg: #f5fff5;
+	--fg: #010;
+	--p: #22c55e;
+	--p-fg: #f5fff5;
+	--o: #010;
+	--red: #de4e30;
+	background: var(--bg);
+	color: var(--fg);
+}
+
+[data-theme*='wumpus'] {
+	color-scheme: dark;
+	--bg: #323338;
+	--fg: #fff;
+	--p: #5a65ea;
+	--p-fg: #fff;
+	--red: #de4e45;
+	--o: #777;
+	background-color: var(--bg);
+	color: var(--fg);
+}
+
+[data-theme*='nord'] {
+	color-scheme: dark;
+	--bg: #2e3440;
+	--fg: #eceff4;
+	--p: #88c0d0;
+	--p-fg: #0a0a0a;
+	--red: #ff616a;
+	--o: #4c566a;
+	background-color: var(--bg);
+	color: var(--fg);
+}
+
+[data-theme*='og'] {
+	color-scheme: dark;
+	--bg: #0a0a0a;
+	--fg: #fafafa;
+	--p: #00dfdf;
+	--p-fg: #0a0a0a;
+	--red: #de4e45;
+	--o: #444;
+	background-color: var(--bg);
+	color: var(--fg);
+}
+
+/* Fonts */
+
+[data-theme*='georgia'],
+.georgia {
+	--font: Georgia, Garamond, serif;
+	font-family: var(--font);
+}
+
+[data-theme*='arial'],
+.arial {
+	--font: Arial, Helvetica, sans-serif;
+	font-family: var(--font);
+}
+
+[data-theme*='tahoma'],
+.tahoma {
+	--font: Tahoma, verdana, sans-serif;
+	font-family: var(--font);
+}
+
+[data-theme*='times'] {
+	--font: 'Times New Roman', serif;
+	font-family: var(--font);
+}
+
+.times {
+	font-family: 'Times New Roman', serif;
+	font-size: 0.85rem;
+}
+
+[data-theme*='trebuchet'],
+.trebuchet {
+	--font: 'Trebuchet MS', 'Fira Sans', sans-serif;
+	font-family: var(--font);
+}
