@@ -21,7 +21,7 @@
 <ModeWatcher lightClassNames={['light']} darkClassNames={['dark']} defaultTheme="default-georgia" />
 
 <main class="h-screen w-screen">
-	<nav class="fixed h-screen w-70 border-r border-(--o) bg-(--bg) pt-9">
+	<nav class="fixed z-50 h-screen w-70 border-r border-(--o) bg-(--bg) pt-9">
 		<a href={resolve('/')}><h2 class="text-center text-4xl font-black">Repaper</h2></a>
 		<div class="pt-4 pl-7">
 			<a class="a" href={resolve('/create')}>Create a Document</a><br />

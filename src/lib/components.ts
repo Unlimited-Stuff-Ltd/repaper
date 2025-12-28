@@ -8,5 +8,6 @@ export { default as Viewer } from '$lib/components/pages/Viewer.svelte';
 export { default as Editor } from '$lib/components/pages/Editor.svelte';
 export { default as Recents } from '$lib/components/pages/Recents.svelte';
 export { default as Text } from '$lib/components/utility/Text.svelte';
+export { default as TextCursor } from '$lib/components/utility/TextCursor.svelte';
 export { default as Cursor } from '$lib/components/utility/Cursor.svelte';
 export { default as Slider } from '$lib/components/ui/Slider.svelte';

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	let { blinking } = $props();
+	let { blinking, hidden = false } = $props();
 
 	let shown = $state(true);
 
@@ -18,4 +18,4 @@
 	});
 </script>
 
-<div class="cursor {shown ? '' : 'hidden-cursor'}"></div>
+<div class={shown && !hidden ? 'cursor' : 'hidden-cursor'}></div>

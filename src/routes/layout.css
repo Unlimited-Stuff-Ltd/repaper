@@ -196,7 +196,7 @@ form {
 
 .page {
 	margin: auto;
-	border-radius: 15px;
+	border-radius: 5px;
 	border: 1px solid var(--o);
 	height: 11in;
 	width: 8.5in;
@@ -208,9 +208,20 @@ form {
 	max-width: calc(8.5in - 40px);
 	white-space: pre-wrap;
 	overflow-wrap: break-word;
+	letter-spacing: 0;
+	font-size: 0;
+	color: var(--fg);
+}
+
+.content-cursor {
+	font-family: var(--font);
+	max-width: calc(8.5in - 40px);
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
 }
 
 .cursor {
+	display: relative;
 	height: 20px;
 	background-color: var(--p);
 	width: 1.5px;
@@ -220,5 +231,11 @@ form {
 }
 
 .hidden-cursor {
-	background-color: transparent;
+	position: relative;
+	height: 20px;
+	background-color: var(--bg);
+	width: 1.5px;
+	display: inline-block;
+	position: relative;
+	top: 4px;
 }
