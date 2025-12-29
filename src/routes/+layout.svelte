@@ -18,7 +18,12 @@
 
 <svelte:window {oncontextmenu} />
 
-<ModeWatcher lightClassNames={['light']} darkClassNames={['dark']} defaultTheme="default-georgia" />
+<ModeWatcher
+	lightClassNames={['light']}
+	darkClassNames={['dark']}
+	defaultTheme="default-georgia"
+	defaultMode="light"
+/>
 
 <main class="h-screen w-screen">
 	<nav class="fixed z-40 h-screen w-70 border-r border-(--o) bg-(--bg) pt-9">

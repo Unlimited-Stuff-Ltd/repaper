@@ -11,3 +11,4 @@ export { default as Text } from '$lib/components/utility/Text.svelte';
 export { default as TextCursor } from '$lib/components/utility/TextCursor.svelte';
 export { default as Cursor } from '$lib/components/utility/Cursor.svelte';
 export { default as Slider } from '$lib/components/ui/Slider.svelte';
+export { default as DocumentSettings } from '$lib/components/pages/DocumentSettings.svelte';

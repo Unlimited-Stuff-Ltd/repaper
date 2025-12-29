@@ -32,13 +32,13 @@
 	opacity: 1;
 }
 
-.small-button {
-	font-size: 0.85rem;
+.red-button {
+	background-color: var(--red);
 }
 
-.outline {
-	background-color: var(--bg);
-	color: var(--fg);
+.red-button:hover {
+	background-color: var(--red);
+	opacity: 1;
 }
 
 .a:hover {

@@ -1,14 +1,13 @@
-import { checkToken } from '$lib/server/db/token';
-import type { RequestHandler } from './$types';
-import { error, success } from '$lib/server/db/logs';
 import { db } from '$lib/server/db';
-import { documents } from '$lib/server/db/schema';
+import { documents, sessions } from '$lib/server/db/schema';
+import { checkToken } from '$lib/server/db/token';
 import { eq } from 'drizzle-orm';
+import type { RequestHandler } from './$types';
+import { error } from '$lib/server/db/logs';
 
 export const POST: RequestHandler = async ({ request }) => {
 	const userAgent = request.headers.get('user-agent') ?? '';
 	const json = await request.json();
-	const content = json.content;
 	const code = json.code;
 	const token = json.token;
 	const tokenCheck = await checkToken(userAgent, token, code, 'editor');
@@ -16,25 +15,16 @@ export const POST: RequestHandler = async ({ request }) => {
 		return new Response(null, { status: 401 });
 	}
 	try {
-		await db
-			.update(documents)
-			.set({
-				content
-			})
-			.where(eq(documents.code, code));
+		await db.delete(sessions).where(eq(sessions.documentCode, code));
+		await db.delete(documents).where(eq(documents.code, code));
 	} catch (errorV) {
 		error({
 			userAgent,
 			info: `code:${code},token:${token}`,
-			action: 'save-file',
+			action: 'delete-document',
 			error: JSON.stringify(errorV)
 		});
 		return new Response(null, { status: 500 });
 	}
-	success({
-		userAgent,
-		info: `code:${code},token:${token}`,
-		action: 'save-file'
-	});
-	return new Response(null, { status: 200 });
+	return new Response(null, { status: 204 });
 };

@@ -4,7 +4,7 @@
 	import { decode, type DocumentLink, type Character } from '$lib';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import { Loading, Viewer, Editor } from '$lib/components';
+	import { Loading, Viewer, Editor, DocumentSettings } from '$lib/components';
 	import { page } from '$app/state';
 	import { Slider } from '$lib/components';
 
@@ -22,6 +22,8 @@
 	let scale = $state(100);
 
 	let token = $state('');
+
+	let showSettings = $state(false);
 
 	onMount(async () => {
 		const modeLS = page.url.searchParams.get('mode');
@@ -89,20 +91,45 @@
 			return response.status;
 		}
 	}
+
+	function settings() {
+		showSettings = true;
+	}
+
+	async function deleteFunc() {
+		loading = true;
+		await fetch('/api/delete', {
+			method: 'POST',
+			body: JSON.stringify({
+				code: data.document,
+				token
+			})
+		});
+		let recentDocuments: DocumentLink[] = JSON.parse(
+			localStorage.getItem('repaper-recent-documents') ?? '[]'
+		);
+		const newRecentDocuments = recentDocuments.filter((a) => a.code !== data.document);
+		localStorage.setItem('repaper-recent-documents', JSON.stringify(newRecentDocuments));
+		goto(resolve('/'), { replaceState: true });
+	}
 </script>
 
 <Loading show={loading} />
 
 <div class="pt-20">
-	<div class="m-auto w-fit">
-		<p class="mt-7 mb-1 font-bold text-(--fg)/60">Zoom:</p>
-		<div class="m-auto w-120">
-			<Slider bind:value={scale} max={100} min={30} />
+	{#if !showSettings}
+		<div class="m-auto w-fit">
+			<p class="mt-7 mb-1 font-bold text-(--fg)/60">Zoom:</p>
+			<div class="m-auto w-120">
+				<Slider bind:value={scale} max={100} min={30} />
+			</div>
 		</div>
-	</div>
+	{/if}
 	{#if mode === 'viewer'}
 		<Viewer {document} {scale} />
+	{:else if showSettings}
+		<DocumentSettings {deleteFunc} />
 	{:else}
-		<Editor {document} {scale} {save} />
+		<Editor {document} {scale} {save} {settings} />
 	{/if}
 </div>

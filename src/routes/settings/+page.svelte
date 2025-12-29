@@ -30,17 +30,6 @@
 		{ value: 'nord', label: 'Nord', mode: 'dark' }
 	];
 
-	const selectedModeLabel = $derived(
-		themes.find((themeV: SelectItemType) => themeV.value === currentTheme)
-	);
-
-	function onThemeChange(value: string) {
-		currentTheme = value;
-		setTheme(`${currentTheme}-${currentFont}`);
-	}
-
-	// Font
-
 	let fonts = [
 		{ value: 'georgia', label: 'Georgia' },
 		{ value: 'arial', label: 'Arial' },
@@ -49,9 +38,18 @@
 		{ value: 'trebuchet', label: 'Trebuchet MS' }
 	];
 
+	const selectedModeLabel = $derived(
+		themes.find((themeV: SelectItemType) => themeV.value === currentTheme)
+	);
+
 	const selectedFontLabel = $derived(
 		fonts.find((font: SelectItemType) => font.value === currentFont)
 	);
+
+	function onThemeChange(value: string) {
+		currentTheme = value;
+		setTheme(`${currentTheme}-${currentFont}`);
+	}
 
 	function onFontChange(value: string) {
 		currentFont = value;
