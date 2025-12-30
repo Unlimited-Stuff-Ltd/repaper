@@ -69,7 +69,6 @@
 		document.title = documentCU.title;
 		document.content = documentCU.content;
 		resolveP(true);
-		console.log(document.content);
 		loading = false;
 		if (i !== -1) {
 			recentDocuments.splice(i, 1);

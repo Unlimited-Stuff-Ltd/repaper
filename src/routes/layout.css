@@ -4,7 +4,6 @@
 :root {
 	font-display: block;
 	--page: calc(8.5in - 40px);
-	caret-color: var(--p);
 }
 
 ::selection {
@@ -31,6 +30,13 @@
 
 [data-button-root]:hover {
 	opacity: 1;
+}
+
+[data-toggle-root] {
+	padding: 0.5rem 1rem;
+	border-radius: 0.75rem;
+	cursor: pointer;
+	opacity: 0.9;
 }
 
 .red-button {

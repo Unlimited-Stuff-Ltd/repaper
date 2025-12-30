@@ -12,5 +12,5 @@ export { default as TextCursor } from '$lib/components/utility/TextCursor.svelte
 export { default as Cursor } from '$lib/components/utility/Cursor.svelte';
 export { default as Slider } from '$lib/components/ui/Slider.svelte';
 export { default as DocumentSettings } from '$lib/components/pages/DocumentSettings.svelte';
-export { default as TipTap } from '$lib/components/utility/TipTap.svelte';
+export { default as TextEditor } from '$lib/components/utility/TextEditor.svelte';
 export { default as Toggle } from '$lib/components/ui/Toggle.svelte';
