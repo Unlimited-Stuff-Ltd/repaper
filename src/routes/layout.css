@@ -4,6 +4,7 @@
 :root {
 	font-display: block;
 	--page: calc(8.5in - 40px);
+	caret-color: var(--p);
 }
 
 ::selection {
@@ -109,15 +110,6 @@ form {
 	text-align: center;
 }
 
-.page {
-	margin: auto;
-	border-radius: 5px;
-	border: 1px solid var(--o);
-	height: 11in;
-	width: 8.5in;
-	padding: 20px;
-}
-
 .content {
 	font-family: var(--font);
 	max-width: calc(8.5in - 40px);
@@ -153,4 +145,14 @@ form {
 	display: inline-block;
 	position: relative;
 	top: 4px;
+}
+
+.tiptap {
+	outline: none;
+	border: 1px solid var(--o);
+	width: 8.5in;
+	height: 11in;
+	padding: 10px;
+	border-radius: 5px;
+	margin: auto;
 }

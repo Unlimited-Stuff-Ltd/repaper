@@ -1,3 +1,7 @@
+import { writable } from 'svelte/store';
+
+export const changed = writable(false);
+
 export type Character = {
 	value: string;
 	bold: boolean;
@@ -72,7 +76,6 @@ export type DocumentLink = {
 	title: string;
 	code: string;
 	mode: string;
-	// eslint-disable-next-line
 	link: any;
 	token: string;
 };

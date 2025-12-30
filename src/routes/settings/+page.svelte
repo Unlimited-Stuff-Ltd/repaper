@@ -35,7 +35,8 @@
 		{ value: 'arial', label: 'Arial' },
 		{ value: 'tahoma', label: 'Tahoma' },
 		{ value: 'times', label: 'Times New Roman' },
-		{ value: 'trebuchet', label: 'Trebuchet MS' }
+		{ value: 'trebuchet', label: 'Trebuchet MS' },
+		{ value: 'system', label: 'System' }
 	];
 
 	const selectedModeLabel = $derived(

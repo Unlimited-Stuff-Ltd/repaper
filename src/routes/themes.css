@@ -107,3 +107,9 @@
 	--font: 'Trebuchet MS', 'Fira Sans', sans-serif;
 	font-family: var(--font);
 }
+
+[data-theme*='system'],
+.system {
+	--font: system-ui;
+	font-family: var(--font);
+}

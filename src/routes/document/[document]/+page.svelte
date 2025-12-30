@@ -1,20 +1,27 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import type { PageProps } from './$types';
-	import { decode, type DocumentLink, type Character } from '$lib';
+	import type { DocumentLink } from '$lib';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { Loading, Viewer, Editor, DocumentSettings } from '$lib/components';
 	import { page } from '$app/state';
 	import { Slider } from '$lib/components';
 
+	let resolveP: (value: boolean) => void;
+
+	let promise: Promise<boolean> = new Promise((resolve) => {
+		resolveP = resolve;
+	});
+
 	let { data }: PageProps = $props();
 
 	let loading = $state(true);
 
-	let document = $state<{ title: string; content: Character[] }>({
+	let document = $state<{ title: string; content: string; promise: Promise<boolean> }>({
 		title: '',
-		content: []
+		content: '',
+		promise
 	});
 
 	let mode = $state('viewer');
@@ -60,7 +67,9 @@
 			return;
 		}
 		document.title = documentCU.title;
-		document.content = decode(documentCU.content);
+		document.content = documentCU.content;
+		resolveP(true);
+		console.log(document.content);
 		loading = false;
 		if (i !== -1) {
 			recentDocuments.splice(i, 1);
@@ -128,7 +137,7 @@
 	{#if mode === 'viewer'}
 		<Viewer {document} {scale} />
 	{:else if showSettings}
-		<DocumentSettings {deleteFunc} />
+		<DocumentSettings {deleteFunc} back={() => (showSettings = false)} />
 	{:else}
 		<Editor {document} {scale} {save} {settings} />
 	{/if}
