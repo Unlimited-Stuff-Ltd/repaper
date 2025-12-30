@@ -9,7 +9,9 @@ export const documents = sqliteTable('documents', {
 	code: text('code').unique().notNull(),
 	editorPassword: text('editor_password').notNull(),
 	viewerPassword: text('viewer_password'),
-	content: text('content').notNull().default('empty'),
+	content: text('content')
+		.notNull()
+		.$default(() => JSON.stringify('')),
 	passwordRequired: integer('passwordRequired').notNull().default(1),
 	createdAt: text('created_at')
 		.notNull()
