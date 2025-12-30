@@ -21,7 +21,7 @@
 
 	let loading = $state(true);
 
-	let { initial, promise, save = () => {}, editor = true, ...props } = $props();
+	let { initial, promise, save = () => {}, editor = true, scale, ...props } = $props();
 
 	async function saveFunc() {
 		loading = true;
@@ -152,5 +152,5 @@
 		</div>
 	{/if}
 
-	<div bind:this={element}></div>
+	<div bind:this={element} style={scale}></div>
 </div>

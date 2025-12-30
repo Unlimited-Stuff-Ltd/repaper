@@ -29,7 +29,7 @@
 		promise={document.promise}
 		{save}
 		initial={document.content}
-		style="transform: scale({scale / 100}); margin-top: -{(100 - scale) / 2.25}%"
+		scale="transform: scale({scale / 100}); margin-top: -{(100 - scale) / 2.25}%"
 	/>
 	<div class="h-[2vw]"></div>
 </div>
