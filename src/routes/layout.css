@@ -157,7 +157,7 @@ form {
 	outline: none;
 	border: 1px solid var(--o);
 	width: 8.5in;
-	height: 11in;
+	min-height: 11in;
 	padding: 10px;
 	border-radius: 5px;
 	margin: auto;

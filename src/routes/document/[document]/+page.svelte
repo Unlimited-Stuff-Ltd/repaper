@@ -120,6 +120,27 @@
 		localStorage.setItem('repaper-recent-documents', JSON.stringify(newRecentDocuments));
 		goto(resolve('/'), { replaceState: true });
 	}
+
+	async function renameDocument(to: string) {
+		loading = true;
+		const response = await fetch('/api/rename', {
+			method: 'POST',
+			body: JSON.stringify({
+				code: data.document,
+				token,
+				title: to
+			})
+		});
+		if (response.status === 401) {
+			goto(resolve('/'), { replaceState: true });
+		} else if (response.status === 500) {
+			alert('Failed to rename document. Please try again later');
+		} else {
+			alert('Document renamed successfully.');
+			location.reload();
+		}
+		loading = false;
+	}
 </script>
 
 <Loading show={loading} />
@@ -136,7 +157,7 @@
 	{#if mode === 'viewer'}
 		<Viewer {document} {scale} />
 	{:else if showSettings}
-		<DocumentSettings {deleteFunc} back={() => (showSettings = false)} />
+		<DocumentSettings {deleteFunc} {renameDocument} back={() => (showSettings = false)} />
 	{:else}
 		<Editor {document} {scale} {save} {settings} />
 	{/if}

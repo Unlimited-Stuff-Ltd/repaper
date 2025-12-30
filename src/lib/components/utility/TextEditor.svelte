@@ -89,8 +89,8 @@
 	let fontSize = $state(16);
 
 	function fontSizeChange() {
-		if (fontSize > 100) {
-			fontSize = 100;
+		if (fontSize > 99) {
+			fontSize = 99;
 		} else if (fontSize < 1) {
 			fontSize = 1;
 		}
@@ -105,14 +105,17 @@
 <div class="app relative" {...props}>
 	{#if editorState.editor && editor}
 		<div class="m-auto mb-5 flex w-fit gap-3">
-			<input
-				type="number"
-				class="w-20"
-				min="1"
-				max="100"
-				bind:value={fontSize}
-				onchange={fontSizeChange}
-			/>
+			<div class="relative inline-block">
+				<input
+					type="number"
+					class="h-full w-22"
+					min="1"
+					max="99"
+					bind:value={fontSize}
+					onchange={fontSizeChange}
+				/>
+				<span class="absolute top-[50%] right-10 -translate-y-[50%] text-(--fg)/50">px</span>
+			</div>
 			<Toggle
 				onclick={() => editorState.editor.chain().focus().toggleBold().run()}
 				active={editorState.editor.isActive('bold')}>Bold</Toggle
@@ -125,7 +128,7 @@
 				onclick={() => editorState.editor.chain().focus().toggleUnderline().run()}
 				active={editorState.editor.isActive('underline')}>Underline</Toggle
 			>
-			<div class="flex gap-1 rounded-xl bg-(--fg)/5 p-1.5">
+			<div class="flex gap-1 rounded-xl border border-(--o) p-1.5">
 				<Toggle
 					onclick={() => editorState.editor.chain().focus().setTextAlign('left').run()}
 					active={editorState.editor.isActive({ textAlign: 'left' })}
