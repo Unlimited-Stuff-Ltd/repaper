@@ -47,6 +47,7 @@
 		"@tiptap/extension-bold": "^3.27.1",
 		"@tiptap/extension-document": "^3.27.1",
 		"@tiptap/extension-heading": "^3.27.1",
+		"@tiptap/extension-horizontal-rule": "^3.27.2",
 		"@tiptap/extension-italic": "^3.27.1",
 		"@tiptap/extension-paragraph": "^3.27.1",
 		"@tiptap/extension-text": "^3.27.1",

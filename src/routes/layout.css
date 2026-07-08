@@ -143,6 +143,10 @@ form {
 	margin-bottom: 0.8rem;
 }
 
+.tiptap hr {
+	border: 1px solid var(--fg);
+}
+
 hr {
 	border-color: var(--o);
 }

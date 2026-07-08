@@ -12,6 +12,7 @@
 		Underline,
 		UndoRedo,
 		Tab,
+		HorizontalRule,
 		Heading as HeadingTiptap
 	} from '$lib/extensions';
 	import { Button } from 'bits-ui';
@@ -73,7 +74,8 @@
 				Bold,
 				Underline,
 				UndoRedo,
-				Tab
+				Tab,
+				HorizontalRule
 			],
 			editorProps: {
 				handlePaste: () => true,
