@@ -24,15 +24,21 @@
 	let editorState: { editor: Editor | null } = $state({ editor: null });
 
 	let loading = $state(true);
+	let saving = $state(false);
 
 	let hasFocus = $state(true);
 
 	let { initial, promise, save = () => {}, autosave: as, title, editor = true, scale } = $props();
 
 	export async function saveFunc(after = false, failed = true, l = true) {
-		loading = l;
+		if (after) {
+			loading = true;
+		} else {
+			saving = l;
+		}
 		const status = await save(editorState.editor?.getHTML());
 		loading = after;
+		saving = after;
 		if (status === 200) {
 			localStorage.removeItem('repaper-document-unsaved');
 			changed.set(false);
@@ -232,9 +238,15 @@
 				active={editorState.editor.isActive('underline')}
 				>{lang(lS, 'Underline', 'Soulignement')}</Toggle
 			>
-			<Button.Root class="ml-10" onclick={() => saveFunc(false)}
-				>{lang(lS, 'Save', 'Enregistrer')}</Button.Root
-			>
+			{#if !saving}
+				<Button.Root class="ml-10" onclick={() => saveFunc(false)}
+					>{lang(lS, 'Save', 'Enregistrer')}</Button.Root
+				>
+			{:else}
+				<Button.Root class="ml-2 opacity-50! cursor-not-allowed!"
+					>{lang(lS, 'Saving...', 'En Enregistrant')}</Button.Root
+				>
+			{/if}
 		</div>
 	</div>
 {:else}
