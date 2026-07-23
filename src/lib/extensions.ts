@@ -9,15 +9,3 @@ export { default as Italic } from '@tiptap/extension-italic';
 export { default as Underline } from '@tiptap/extension-underline';
 export { default as Heading } from '@tiptap/extension-heading';
 export { default as HorizontalRule } from '@tiptap/extension-horizontal-rule';
-
-import { Extension } from '@tiptap/core';
-
-export const Tab = Extension.create({
-	name: 'tab',
-
-	addKeyboardShortcuts() {
-		return {
-			Tab: () => this.editor.commands.insertContent('\t')
-		};
-	}
-});

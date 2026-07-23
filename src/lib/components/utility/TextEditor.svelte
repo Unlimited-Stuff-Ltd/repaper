@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
-	import { Editor } from '@tiptap/core';
+	import { Editor, Extension } from '@tiptap/core';
 	import { Loading, Toggle, Popover, Select } from '$lib/components';
 	import {
 		Document,
@@ -11,9 +11,8 @@
 		Bold,
 		Underline,
 		UndoRedo,
-		Tab,
 		HorizontalRule,
-		Heading as HeadingTiptap
+		Heading
 	} from '$lib/extensions';
 	import { Button } from 'bits-ui';
 	import { changed } from '$lib';
@@ -25,6 +24,8 @@
 	let editorState: { editor: Editor | null } = $state({ editor: null });
 
 	let loading = $state(true);
+
+	let hasFocus = $state(true);
 
 	let { initial, promise, save = () => {}, autosave: as, title, editor = true, scale } = $props();
 
@@ -46,12 +47,13 @@
 		}
 	}
 
-	export const Heading = HeadingTiptap.extend({
+	export const Keybindings = Extension.create({
 		addKeyboardShortcuts() {
 			return {
 				F1: () => this.editor.commands.setHeading({ level: 1 }),
 				F2: () => this.editor.commands.setHeading({ level: 2 }),
-				F3: () => this.editor.commands.setParagraph()
+				F3: () => this.editor.commands.setParagraph(),
+				Tab: () => this.editor.commands.insertContent('\t')
 			};
 		}
 	});
@@ -61,6 +63,9 @@
 		let i = initial;
 		if (i[0] === '{') {
 			i = JSON.parse(initial);
+		}
+		if (!document.hasFocus()) {
+			hasFocus = false;
 		}
 		editorState.editor = new Editor({
 			element,
@@ -74,8 +79,8 @@
 				Bold,
 				Underline,
 				UndoRedo,
-				Tab,
-				HorizontalRule
+				HorizontalRule,
+				Keybindings
 			],
 			editorProps: {
 				handlePaste: () => true,
@@ -105,7 +110,7 @@
 	});
 
 	async function autosave() {
-		if (editor && as) {
+		if (editor && as && hasFocus) {
 			await saveFunc(false, false, false);
 		}
 	}
@@ -169,11 +174,21 @@
 		if (event.key === 'p' && (event.ctrlKey || event.metaKey)) {
 			event.preventDefault();
 			download();
+		} else if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
+			saveFunc(false);
 		}
+	}
+
+	function onfocus() {
+		hasFocus = true;
+	}
+
+	function onblur() {
+		hasFocus = false;
 	}
 </script>
 
-<svelte:window {onbeforeunload} {onkeydown} />
+<svelte:window {onbeforeunload} {onkeydown} {onblur} {onfocus} />
 
 <Loading show={loading} />
 
