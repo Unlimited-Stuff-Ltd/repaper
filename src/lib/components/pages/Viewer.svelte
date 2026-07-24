@@ -45,6 +45,7 @@
 		initial={document.content}
 		editor={false}
 		title={document.title}
+		autosave={false}
 		scale="zoom: {scale / 100}; transform-origin: top center;"
 	/>
 	<div class="h-[2vw]"></div>

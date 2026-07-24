@@ -1,6 +1,5 @@
 <script>
-	import { text } from '$lib/background';
-	import { Recents } from '$lib/components';
+	import { Recents, Background } from '$lib/components';
 	import lang, { languageState } from '$lib/lang.svelte';
 	import { onMount } from 'svelte';
 
@@ -22,10 +21,7 @@
 
 <div class="fixed inset-0 left-70 z-30 flex items-center justify-center">
 	<div>
-		<h1
-			class="rounded-2xl p-5 text-8xl font-black text-shadow-(color:--p) text-shadow-lg"
-			
-		>
+		<h1 class="rounded-2xl p-5 text-8xl font-black text-shadow-(color:--p) text-shadow-lg">
 			Repaper
 		</h1>
 		{#if length > 0}
@@ -38,6 +34,5 @@
 		{/if}
 	</div>
 </div>
-<div class="block h-screen w-full overflow-hidden text-justify opacity-50">
-	<p class="w-full">{text(lang(languageState, 'a', 'b'))}</p>
-</div>
+
+<Background class="absolute top-0 left-0" />

@@ -2,13 +2,13 @@
 	import Check from '@lucide/svelte/icons/check';
 	import { Select } from 'bits-ui';
 
-	let { value, styling = true, c = '' } = $props();
+	let { value, styling = true, class: c = '', rounded } = $props();
 </script>
 
 <Select.Item
 	value={value.value}
 	label={value.label}
-	class="hover:bg-(--fg)/10 rounded-xl {c} {styling ? value.value : ''}"
+	class="hover:bg-(--fg)/10 {c} {rounded} {styling ? value.value : ''}"
 >
 	{#snippet children({ selected })}
 		<div class="flex">

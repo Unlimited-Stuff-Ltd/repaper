@@ -14,3 +14,4 @@ export { default as Toggle } from '$lib/components/ui/Toggle.svelte';
 export { default as LinkButton } from '$lib/components/ui/LinkButton.svelte';
 export { default as Select } from '$lib/components/ui/Select.svelte';
 export { default as ContextMenu } from '$lib/components/ui/ContextMenu.svelte';
+export { default as Background } from '$lib/components/ui/Background.svelte';
