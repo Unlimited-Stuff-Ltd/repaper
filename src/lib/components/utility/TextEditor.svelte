@@ -198,6 +198,20 @@
 
 <Loading show={loading} />
 
+{#snippet sharedButtons()}
+	<Button.Root onclick={download}>{lang(lS, 'Download PDF', 'Télécharger comme PDF')}</Button.Root>
+	<Popover
+		questionMark={false}
+		bClass="mr-10"
+		message={lang(lS, 'Document Info', 'Info sur le Document')}
+		>{lang(lS, 'Word Count', 'Nombre de Mots')}: <strong>{wordCount}</strong>
+		{lang(lS, 'Words', 'Mots')}<br />{#if selectionWordCount || 0 > 0}
+			{lang(lS, 'Selection Word Count', 'Nombre de Mots de la Sélection')}:
+			<strong>{selectionWordCount}</strong>
+			{lang(lS, 'Words', 'Mots')}{/if}</Popover
+	>
+{/snippet}
+
 {#if editorState.editor && editor}
 	<div
 		class="mb-5 border-b border-(--o) py-5 bg-(--bg) sticky top-0 z-30 {$fullscreen
@@ -205,19 +219,7 @@
 			: 'w-[calc(100vw-17.5rem)] left-70'}"
 	>
 		<div class="m-auto flex w-fit gap-3">
-			<Button.Root onclick={download}
-				>{lang(lS, 'Download PDF', 'Télécharger comme PDF')}</Button.Root
-			>
-			<Popover
-				questionMark={false}
-				bClass="mr-10"
-				message={lang(lS, 'Document Info', 'Info sur le Document')}
-				>{lang(lS, 'Word Count', 'Nombre de Mots')}: <strong>{wordCount}</strong>
-				{lang(lS, 'Words', 'Mots')}<br />{#if selectionWordCount || 0 > 0}
-					{lang(lS, 'Selection Word Count', 'Nombre de Mots de la Sélection')}:
-					<strong>{selectionWordCount}</strong>
-					{lang(lS, 'Words', 'Mots')}{/if}</Popover
-			>
+			{@render sharedButtons()}
 			<Select
 				options={textStyles}
 				onValueChange={textStyleChange}
@@ -251,19 +253,10 @@
 	</div>
 {:else}
 	<div class="w-fit m-auto mb-6">
-		<Button.Root onclick={download}>{lang(lS, 'Download PDF', 'Télécharger comme PDF')}</Button.Root
-		>
-		<Popover
-			questionMark={false}
-			bClass="mr-10"
-			message={lang(lS, 'Document Info', 'Info sur le Document')}
-			>{lang(lS, 'Word Count', 'Nombre de Mots')}: <strong>{wordCount}</strong>
-			{lang(lS, 'Words', 'Mots')}<br />{#if selectionWordCount || 0 > 0}
-				{lang(lS, 'Selection Word Count', 'Nombre de Mots de la Sélection')}:
-				<strong>{selectionWordCount}</strong>
-				{lang(lS, 'Words', 'Mots')}{/if}</Popover
-		>
+		{@render sharedButtons()}
 	</div>
 {/if}
 
-<div bind:this={element} style={scale} spellcheck="false" class="relative overflow-visible"></div>
+<div class="tiptap-container">
+	<div bind:this={element} style={scale} spellcheck="false" class="relative overflow-visible"></div>
+</div>

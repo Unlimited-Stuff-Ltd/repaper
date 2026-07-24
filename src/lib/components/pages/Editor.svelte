@@ -49,7 +49,7 @@
 
 <div class="w-fit" hidden={!show}>
 	<div class="sticky {$fullscreen ? 'w-screen left-0' : 'left-70 w-[calc(100vw-17.5rem)]'}">
-		<div class="mt-8 flex w-fit m-auto">
+		<div class="relative top-0 mt-8 flex w-fit m-auto">
 			<h2 class="m-auto text-center font-bold text-lg text-(--fg)/60">
 				{lang(lS, 'Edit Mode', "Mode d'Éditeur")}
 			</h2>

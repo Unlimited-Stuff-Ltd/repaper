@@ -116,7 +116,6 @@ form {
 
 .tiptap {
 	outline: none;
-	border: 1px solid var(--o);
 	padding: 2rem;
 	width: 14in;
 	border-radius: 0.85rem;
@@ -126,6 +125,12 @@ form {
 	position: absolute;
 	text-align: left;
 	tab-size: 0.5in;
+}
+
+.tiptap-container {
+	display: inline-block;
+	border-radius: 0.85rem;
+	border: 1px solid var(--o);
 }
 
 .tiptap h1 {

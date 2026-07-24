@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Popover, Button } from 'bits-ui';
+	import { Popover } from 'bits-ui';
 
 	let {
 		children,
@@ -20,13 +20,13 @@
 			>?</Popover.Trigger
 		>
 	{:else if button}
-		<Button.Root class={bClass}>
+		<Popover.Trigger {...props} data-button-root class={bClass}>
 			{message}
-		</Button.Root>
+		</Popover.Trigger>
 	{/if}
 	<Popover.Portal>
 		<Popover.Content
-			class="w-fit z-50 rounded-md border border-(--o) bg-(--bg) px-5 py-3 text-center {bClass}"
+			class="w-fit z-70! rounded-md border border-(--o) bg-(--bg) px-5 py-3 text-center {bClass}"
 			sideOffset={5}
 			tabindex={-1}
 		>

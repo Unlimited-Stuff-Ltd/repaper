@@ -321,11 +321,12 @@
 
 <Loading show={loading} />
 
-<div class="w-fit">
+<div class="w-fit min-h-screen">
 	{#if !showSettings}
 		<div class="sticky {$fullscreen ? 'w-screen left-0' : 'left-70 w-[calc(100vw-17.5rem)]'}">
 			<div class="text-left w-fit m-auto">
-				<p class="mt-7 mb-1 font-bold text-(--fg)/60">Zoom:</p>
+				<div class="w-full invisible">Invisible Text</div>
+				<p class="mb-1 font-bold text-(--fg)/60">Zoom:</p>
 				<div class="m-auto w-120">
 					<Slider bind:value={scale} max={150} min={30} />
 				</div>
