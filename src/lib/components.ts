@@ -11,3 +11,4 @@ export { default as Select } from '$lib/components/ui/Select.svelte';
 export { default as ContextMenu } from '$lib/components/ui/ContextMenu.svelte';
 export { default as Background } from '$lib/components/ui/Background.svelte';
 export { default as Recents } from '$lib/components/Recents.svelte';
+export { default as Switch } from '$lib/components/ui/Switch.svelte';
