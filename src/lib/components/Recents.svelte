@@ -5,6 +5,7 @@
 	import { resolve } from '$app/paths';
 	import { goto } from '$app/navigation';
 	import lang, { languageState as lS } from '$lib/lang.svelte';
+	import { forgetDocument } from '$lib/actions.remote';
 
 	let { size = 'w-80 h-fit', limit = 10, empty = false, length = $bindable() } = $props();
 
@@ -39,6 +40,7 @@
 				token: recents[index].token
 			})
 		});
+		await forgetDocument(recents[index].token);
 		recents.splice(index, 1);
 		length = recents.length;
 		localStorage.setItem('repaper-recent-documents', JSON.stringify(recents));

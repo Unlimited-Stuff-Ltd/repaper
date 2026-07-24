@@ -3,8 +3,9 @@
 	import { Checkbox, Popover, Loading, I } from '$lib/components';
 	import { Label, Button } from 'bits-ui';
 	import { onMount } from 'svelte';
-	import { resolve } from '$app/paths';
 	import lang, { languageState as lS } from '$lib/lang.svelte';
+	import { openDocument } from '$lib/actions.remote';
+	import { createDocument } from './actions.remote';
 
 	let account: string | null = $state(null);
 	let loading = $state(false);
@@ -93,28 +94,23 @@
 			loading = false;
 			return;
 		}
-		const createResponse = await fetch('/api/create', {
-			method: 'POST',
-			body: JSON.stringify({
-				title,
-				code,
-				editorPassword,
-				viewerPassword,
-				passwordRequired,
-				autosave
-			})
+		const createResponse = await createDocument({
+			title,
+			code,
+			editorPassword,
+			viewerPassword,
+			passwordRequired,
+			autosave,
+			classroom: false
 		});
 		if (createResponse.status === 409) {
 			codeText = lang(lS, 'Document code is already taken.', 'Code du Document est déjà pris.');
 			loading = false;
 			return;
 		}
-		const openResponse = await fetch('/api/open', {
-			method: 'POST',
-			body: JSON.stringify({
-				code,
-				password: editorPassword
-			})
+		const openResponse = await openDocument({
+			code,
+			password: editorPassword
 		});
 		if (openResponse.status === 401 || openResponse.status === 500) {
 			codeText = lang(
@@ -125,9 +121,8 @@
 			loading = false;
 			return;
 		}
-		const openJson = await openResponse.json();
-		localStorage.setItem('repaper-token', openJson.ls);
-		goto(resolve(openJson.link), { replaceState: true });
+		localStorage.setItem('repaper-token', openResponse.ls);
+		goto(openResponse.link, { replaceState: true });
 	}
 </script>
 
@@ -154,7 +149,7 @@
 			<input
 				id="title"
 				autocomplete="off"
-				class="mt-0.5 w-120 h-10"
+				class="mt-0.5 h-10 w-120"
 				bind:value={title}
 				maxlength="50"
 				required
@@ -174,7 +169,7 @@
 			<input
 				id="code"
 				autocomplete="off"
-				class="mt-0.5 w-120 h-10"
+				class="mt-0.5 h-10 w-120"
 				bind:value={code}
 				maxlength="50"
 				required
@@ -195,7 +190,7 @@
 				</Label.Root><br />
 				<input
 					id="editorPassword"
-					class="mt-0.5 mr-3 w-58 h-10"
+					class="mt-0.5 mr-3 h-10 w-58"
 					bind:value={editorPassword}
 					type="password"
 					autocomplete="off"
@@ -213,7 +208,7 @@
 				<input
 					id="confirmEditorPassword"
 					bind:value={confirmEditorPassword}
-					class="mt-0.5 w-58 h-10"
+					class="mt-0.5 h-10 w-58"
 					type="password"
 					autocomplete="off"
 					required
@@ -305,7 +300,7 @@
 		{/if}
 		<Button.Root type="submit">{lang(lS, 'Create', 'Créer')}</Button.Root>
 	</form>
-	<a class="a block mt-6" href="/help/create" target="_blank"
+	<a class="a mt-6 block" href="/help/create" target="_blank"
 		>{lang(lS, 'Need Help?', "Besoin d'Aide?")}</a
 	>
 </div>

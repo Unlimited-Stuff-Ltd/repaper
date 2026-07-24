@@ -5,25 +5,23 @@
 	import { onMount } from 'svelte';
 	import { resolve } from '$app/paths';
 	import fullscreenState from '$lib/fullscreen';
+	import { openDocument } from '$lib/actions.remote';
 
 	onMount(async () => {
-		const code = page.params.documentCode;
-		const response = await fetch('/api/open', {
-			method: 'POST',
-			body: JSON.stringify({
-				code
-			})
+		const code = page.params.documentCode ?? '';
+		const response = await openDocument({
+			code,
+			password: null
 		});
 		if (response.status === 401 || response.status === 500) {
 			goto(resolve('/'), { replaceState: true });
 		}
-		const json = await response.json();
-		localStorage.setItem('repaper-token', json.ls);
+		localStorage.setItem('repaper-token', response.ls);
 		let fullscreen = page.url.searchParams.getAll('fullscreen');
 		if (fullscreen.length > 0) {
 			fullscreenState.set(true);
 		}
-		goto(json.link);
+		goto(response.link);
 	});
 </script>
 

@@ -2,8 +2,8 @@
 	import { goto } from '$app/navigation';
 	import { Loading, I } from '$lib/components';
 	import { Label, Button } from 'bits-ui';
-	import { resolve } from '$app/paths';
 	import lang, { languageState as lS } from '$lib/lang.svelte';
+	import { openDocument } from '$lib/actions.remote';
 
 	let loading = $state(false);
 
@@ -15,12 +15,9 @@
 	async function onsubmit(event: Event) {
 		event.preventDefault();
 		loading = true;
-		const response = await fetch('/api/open', {
-			method: 'POST',
-			body: JSON.stringify({
-				code,
-				password
-			})
+		const response = await openDocument({
+			code,
+			password
 		});
 		if (response.status === 401) {
 			text = lang(
@@ -39,9 +36,8 @@
 			loading = false;
 			return;
 		}
-		const json = await response.json();
-		localStorage.setItem('repaper-token', json.ls);
-		goto(resolve(json.link), { replaceState: true });
+		localStorage.setItem('repaper-token', response.ls);
+		goto(response.link, { replaceState: true });
 	}
 </script>
 
@@ -56,11 +52,11 @@
 	<form {onsubmit}>
 		<div class="m-auto mb-5 w-fit text-left">
 			<Label.Root for="code">{lang(lS, 'Document Code', 'Code du Document')}:</Label.Root><br />
-			<input id="code" class="w-120 h-10" bind:value={code} maxlength="50" required />
+			<input id="code" class="h-10 w-120" bind:value={code} maxlength="50" required />
 		</div>
 		<div class="m-auto mb-0.5 w-fit text-left">
 			<Label.Root for="password">{lang(lS, 'Password', 'Mot de Passe')}:</Label.Root><br />
-			<input id="password" class="w-120 h-10" bind:value={password} type="password" />
+			<input id="password" class="h-10 w-120" bind:value={password} type="password" />
 		</div>
 		<p class="mb-3 text-left text-sm text-(--red)"><I />{text}</p>
 		<Button.Root type="submit">{lang(lS, 'Open', 'Ouvrir')}</Button.Root>

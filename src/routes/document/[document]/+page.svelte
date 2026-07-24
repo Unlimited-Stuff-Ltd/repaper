@@ -12,6 +12,7 @@
 	import { Slider } from '$lib/components';
 	import lang, { languageState as lS } from '$lib/lang.svelte';
 	import fullscreen from '$lib/fullscreen';
+	import { checkToken, deleteDocument, saveDocument } from './actions.remote';
 
 	let resolveP: (value: boolean) => void;
 
@@ -68,15 +69,12 @@
 			return;
 		}
 		token = tokenV;
-		const response = await fetch('/api/token', {
-			method: 'POST',
-			body: JSON.stringify({
-				token,
-				documentCode: page.params.document,
-				mode
-			})
+		const tokenCheck = await checkToken({
+			token,
+			documentCode: page.params.document ?? '',
+			permissions: mode
 		});
-		if (!documentCU || response.status !== 200) {
+		if (!documentCU || !tokenCheck) {
 			if (i !== -1) {
 				recentDocuments.splice(i, 1);
 				localStorage.setItem('repaper-recent-documents', JSON.stringify(recentDocuments));
@@ -105,13 +103,10 @@
 	});
 
 	async function save(content: string) {
-		const response = await fetch('/api/save', {
-			method: 'POST',
-			body: JSON.stringify({
-				content,
-				code: page.params.document,
-				token
-			})
+		const response = await saveDocument({
+			content,
+			code: page.params.document ?? '',
+			token
 		});
 		if (response.status === 401) {
 			goto(resolve('/'), { replaceState: true });
@@ -129,12 +124,9 @@
 	async function deleteFunc() {
 		loading = true;
 		changesMadeSinceSave = false;
-		await fetch('/api/delete', {
-			method: 'POST',
-			body: JSON.stringify({
-				code: data.document,
-				token
-			})
+		await deleteDocument({
+			code: data.document,
+			token
 		});
 		let recentDocuments: DocumentLink[] = JSON.parse(
 			localStorage.getItem('repaper-recent-documents') ?? '[]'
@@ -324,11 +316,11 @@
 
 <Loading show={loading} />
 
-<div class="w-fit min-h-screen">
+<div class="min-h-screen w-fit">
 	{#if !showSettings}
-		<div class="sticky {$fullscreen ? 'w-screen left-0' : 'left-70 w-[calc(100vw-17.5rem)]'}">
-			<div class="text-left w-fit m-auto">
-				<div class="w-full invisible">Invisible Text</div>
+		<div class="sticky {$fullscreen ? 'left-0 w-screen' : 'left-70 w-[calc(100vw-17.5rem)]'}">
+			<div class="m-auto w-fit text-left">
+				<div class="invisible w-full">Invisible Text</div>
 				<p class="mb-1 font-bold text-(--fg)/60">Zoom:</p>
 				<div class="m-auto w-120">
 					<Slider bind:value={scale} max={150} min={30} />
