@@ -34,12 +34,6 @@
 	}
 
 	async function remove(index: number) {
-		fetch('/api/forget', {
-			method: 'POST',
-			body: JSON.stringify({
-				token: recents[index].token
-			})
-		});
 		await forgetDocument(recents[index].token);
 		recents.splice(index, 1);
 		length = recents.length;

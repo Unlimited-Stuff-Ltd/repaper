@@ -13,6 +13,7 @@
 	import lang, { languageState as lS } from '$lib/lang.svelte';
 	import fullscreen from '$lib/fullscreen';
 	import { checkToken, deleteDocument, saveDocument } from './actions.remote';
+	import { autosave, changeTitle, code, password, passwordRequired } from './settings.remote';
 
 	let resolveP: (value: boolean) => void;
 
@@ -139,15 +140,12 @@
 	async function changePassword(oldPassword: string, newPassword: string, editorPassword: boolean) {
 		loading = true;
 		await editor.saveFunction();
-		const response = await fetch('/api/change/password', {
-			method: 'POST',
-			body: JSON.stringify({
-				code: data.document,
-				token,
-				oldPassword,
-				newPassword,
-				editor: editorPassword
-			})
+		const response = await password({
+			code: data.document,
+			token,
+			oldPassword,
+			newPassword,
+			editor: editorPassword
 		});
 		if (response.status === 401) {
 			goto(resolve('/'), { replaceState: true });
@@ -172,13 +170,10 @@
 	async function changeCode(to: string) {
 		loading = true;
 		await editor.saveFunction();
-		const response = await fetch('/api/change/code', {
-			method: 'POST',
-			body: JSON.stringify({
-				code: data.document,
-				token,
-				newCode: to
-			})
+		const response = await code({
+			code: data.document,
+			token,
+			newCode: to
 		});
 		if (response.status === 401) {
 			goto(resolve('/'), { replaceState: true });
@@ -208,13 +203,10 @@
 	async function changeAutosave(to: boolean) {
 		loading = true;
 		await editor.saveFunction();
-		const response = await fetch('/api/change/autosave', {
-			method: 'POST',
-			body: JSON.stringify({
-				code: data.document,
-				token,
-				autosave: to
-			})
+		const response = await autosave({
+			code: data.document,
+			token,
+			autosave: to
 		});
 		if (response.status === 401) {
 			goto(resolve('/'), { replaceState: true });
@@ -244,13 +236,10 @@
 	async function changePasswordRequired(to: boolean) {
 		loading = true;
 		await editor.saveFunction();
-		const response = await fetch('/api/change/passwordrequired', {
-			method: 'POST',
-			body: JSON.stringify({
-				code: data.document,
-				token,
-				passwordRequired: to
-			})
+		const response = await passwordRequired({
+			code: data.document,
+			token,
+			passwordRequired: to
 		});
 		if (response.status === 401) {
 			goto(resolve('/'), { replaceState: true });
@@ -280,13 +269,10 @@
 	async function renameDocument(to: string) {
 		loading = true;
 		await editor.saveFunction();
-		const response = await fetch('/api/change/title', {
-			method: 'POST',
-			body: JSON.stringify({
-				code: data.document,
-				token,
-				title: to
-			})
+		const response = await changeTitle({
+			code: data.document,
+			token,
+			title: to
 		});
 		if (response.status === 401) {
 			goto(resolve('/'), { replaceState: true });
