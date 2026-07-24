@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { TextEditor } from '$lib/components';
+	import TextEditor from './TextEditor.svelte';
 	import { Button } from 'bits-ui';
 	import lang, { languageState as lS } from '$lib/lang.svelte';
 	import fullscreen from '$lib/fullscreen';

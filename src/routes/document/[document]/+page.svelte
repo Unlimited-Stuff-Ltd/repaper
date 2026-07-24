@@ -4,7 +4,10 @@
 	import type { DocumentLink } from '$lib';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import { Loading, Viewer, Editor, DocumentSettings } from '$lib/components';
+	import { Loading } from '$lib/components';
+	import Viewer from './Viewer.svelte';
+	import Editor from './Editor.svelte';
+	import DocumentSettings from './DocumentSettings.svelte';
 	import { page } from '$app/state';
 	import { Slider } from '$lib/components';
 	import lang, { languageState as lS } from '$lib/lang.svelte';

@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import lang, { languageState as lS } from '$lib/lang.svelte';
-	import English from '$lib/help/create/English.svelte';
-	import French from '$lib/help/create/French.svelte';
+	import English from './English.svelte';
+	import French from './French.svelte';
 </script>
 
 <svelte:head>

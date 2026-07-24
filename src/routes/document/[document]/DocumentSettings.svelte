@@ -217,9 +217,9 @@
 				)}
 			</p>
 			<Button.Root
-				class="disabled:bg-(--fg)/20! disabled:opacity-100! disabled:cursor-not-allowed!"
+				class="disabled:bg-(--fg)/20! disabled:opacity-100! disabled:cursor-not-allowed! cursor-text!"
 				onclick={togglePassordRequired}
-				disabled={viewerPasswordRequired}>{lang(lS, 'Yes', 'Oui')}</Button.Root
+				disabled={viewerPasswordRequired}>Yes</Button.Root
 			>
 			<Button.Root
 				class="disabled:bg-(--fg)/20! disabled:opacity-100! disabled:cursor-not-allowed!"

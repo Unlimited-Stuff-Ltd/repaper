@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { Loading, TextEditor, Popover } from '$lib/components';
+	import { Loading, Popover } from '$lib/components';
+	import TextEditor from './TextEditor.svelte';
 	import { Button } from 'bits-ui';
 	import lang, { languageState as lS } from '$lib/lang.svelte';
 	import fullscreen from '$lib/fullscreen';
