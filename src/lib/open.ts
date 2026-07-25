@@ -13,10 +13,8 @@ export const openFn = async (data: OpenData, userAgent: string) => {
 	let viewDocuments;
 	try {
 		if (data.password) {
-			editDocuments = await db
-				.select()
-				.from(documents)
-				.where(and(eq(documents.code, data.code), eq(documents.editorPassword, data.password)));
+			editDocuments = await db.select().from(documents).where(eq(document.code, data.code));
+			//.where(and(eq(documents.code, data.code), eq(documents.editorPassword, data.password)));
 			viewDocuments = await db
 				.select()
 				.from(documents)

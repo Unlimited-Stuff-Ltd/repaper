@@ -3,10 +3,13 @@
 	import { setTheme, theme } from 'mode-watcher';
 	import { Label } from 'bits-ui';
 	import { onMount } from 'svelte';
-	import lang, { languageState as lS, setLanguage } from '$lib/lang.svelte';
+	import { getLocale, setLocale } from '$lib/paraglide/runtime';
+	import { m } from '$lib/paraglide/messages';
 
 	let currentTheme = $state('');
 	let currentFont = $state('');
+
+	let locale = $state(getLocale());
 
 	onMount(() => {
 		const themeCurrent = theme.current;
@@ -50,28 +53,27 @@
 		{ value: 'fr', label: 'Français' }
 	];
 
-	function onLangChange(value: string) {
-		localStorage.setItem('repaper-lang', value);
-		setLanguage(value);
+	function onLangChange(value: 'en' | 'fr') {
+		setLocale(value);
 	}
 </script>
 
 <svelte:head>
-	<title>{lang(lS, 'Settings - Repaper', 'Paramètres - Repaper')}</title>
+	<title>{m.settings_title()} - Repaper</title>
 </svelte:head>
 
 <div class="text-left">
-	<h1 class="h1">{lang(lS, 'Settings', 'Paramètres')}</h1>
+	<h1 class="h1">{m.settings_title()}</h1>
 	<div class="m-auto mb-5 w-fit">
-		<Label.Root for="theme">{lang(lS, 'Theme', 'Thème')}:</Label.Root>
+		<Label.Root for="theme">{m.settings_theme()}:</Label.Root>
 		<EnhancedSelect bind:value={currentTheme} options={themes} onValueChange={onThemeChange} />
 	</div>
-	<div class="m-auto w-fit mb-5">
-		<Label.Root for="font">{lang(lS, 'Font', 'Police')}:</Label.Root>
+	<div class="m-auto mb-5 w-fit">
+		<Label.Root for="font">{m.settings_font()}:</Label.Root>
 		<EnhancedSelect bind:value={currentFont} options={fonts} onValueChange={onFontChange} />
 	</div>
 	<div class="m-auto w-fit">
-		<Label.Root for="lang">{lang(lS, 'Language', 'Langue')}:</Label.Root>
-		<EnhancedSelect bind:value={lS.lang} options={languages} onValueChange={onLangChange} />
+		<Label.Root for="lang">{m.settings_language()}:</Label.Root>
+		<EnhancedSelect bind:value={locale} options={languages} onValueChange={onLangChange} />
 	</div>
 </div>

@@ -4,8 +4,8 @@
 	import type { DocumentLink } from '$lib';
 	import { resolve } from '$app/paths';
 	import { goto } from '$app/navigation';
-	import lang, { languageState as lS } from '$lib/lang.svelte';
 	import { forgetDocument } from '$lib/actions.remote';
+	import { m } from '$lib/paraglide/messages';
 
 	let { size = 'w-80 h-fit', limit = 10, empty = false, length = $bindable() } = $props();
 
@@ -50,7 +50,7 @@
 				<ContextMenu
 					actions={[
 						{
-							label: lang(lS, 'Forget this Document', 'Oublier ce Document'),
+							label: m.forget_document(),
 							action: () => remove(i)
 						}
 					]}
@@ -62,8 +62,8 @@
 							? 'rounded-t-lg'
 							: ''} {i === recents.length - 1 ? 'rounded-b-lg border' : ' border-x border-t'}"
 						><span class="font-semibold">{document.title}</span> - {document.mode === 'viewer'
-							? lang(lS, 'View', 'Spectateur')
-							: lang(lS, 'Edit', 'Éditeur')}</button
+							? m.viewer()
+							: m.editor()}</button
 					>
 				</ContextMenu>
 			{/each}
@@ -71,7 +71,7 @@
 	{:else}
 		{#if empty}
 			<p class="text-center text-lg">
-				{lang(lS, 'Open a document to get started.', 'Ouvrir un document pour commencer.')}
+				{m.open_to_get_started()}
 			</p>
 		{/if}
 	{/if}

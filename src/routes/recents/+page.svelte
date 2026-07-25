@@ -1,24 +1,18 @@
 <script lang="ts">
 	import { Recents } from '$lib/components';
 	import { resolve } from '$app/paths';
-	import lang, { languageState as lS } from '$lib/lang.svelte';
+	import { m } from '$lib/paraglide/messages';
 </script>
 
 <svelte:head>
-	<title>{lang(lS, 'Recent Documents - Repaper', 'Documents Récents - Repaper')}</title>
+	<title>{m.recent_documents()} - Repaper</title>
 </svelte:head>
 
 <div>
-	<h1 class="h1">{lang(lS, 'Recent Documents', 'Documents Récents')}</h1>
+	<h1 class="h1">{m.recent_documents()}</h1>
 	<Recents empty={true} />
 	<p class="m-auto mt-6 w-fit text-center">
-		{lang(
-			lS,
-			"If the document you're looking for is not here, try opening it",
-			"Si le document que vous cherchez n'est pas ici, essayez de l'ouvrir"
-		)}
-		<a href={resolve('/open')} class="text-center underline underline-offset-2"
-			>{lang(lS, 'here', 'ici')}</a
-		>.
+		{m.document_not_here()}
+		<a href={resolve('/open')} class="text-center underline underline-offset-2">{m.here()}</a>.
 	</p>
 </div>

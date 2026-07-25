@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { Loading, I } from '$lib/components';
 	import { Label, Button } from 'bits-ui';
-	import lang, { languageState as lS } from '$lib/lang.svelte';
+	import { m } from '$lib/paraglide/messages';
 	import { openDocument } from '$lib/actions.remote';
 
 	let loading = $state(false);
@@ -20,19 +20,11 @@
 			password
 		});
 		if (response.status === 401) {
-			text = lang(
-				lS,
-				'Document code or password is wrong.',
-				'Code du document ou mot de passe est incorrect.'
-			);
+			text = m.incorrect();
 			loading = false;
 			return;
 		} else if (response.status === 500) {
-			text = lang(
-				lS,
-				'Something unexpected happened on our end. Please try again later.',
-				"Quelque chose inattendu s'est passé sur notre dimension. Essayez encore s'il vout plaît."
-			);
+			text = m.something_happened();
 			loading = false;
 			return;
 		}
@@ -42,23 +34,23 @@
 </script>
 
 <svelte:head>
-	<title>{lang(lS, 'Open a Document - Repaper', 'Ouvrir un Document - Repaper')}</title>
+	<title>{m.open_document()} - Repaper</title>
 </svelte:head>
 
 <Loading show={loading} />
 
 <div>
-	<h1 class="h1">{lang(lS, 'Open a Document', 'Ouvrir un Document')}</h1>
+	<h1 class="h1">{m.open_document()}</h1>
 	<form {onsubmit}>
 		<div class="m-auto mb-5 w-fit text-left">
-			<Label.Root for="code">{lang(lS, 'Document Code', 'Code du Document')}:</Label.Root><br />
+			<Label.Root for="code">{m.code()}:</Label.Root><br />
 			<input id="code" class="h-10 w-120" bind:value={code} maxlength="50" required />
 		</div>
 		<div class="m-auto mb-0.5 w-fit text-left">
-			<Label.Root for="password">{lang(lS, 'Password', 'Mot de Passe')}:</Label.Root><br />
+			<Label.Root for="password">{m.password()}:</Label.Root><br />
 			<input id="password" class="h-10 w-120" bind:value={password} type="password" />
 		</div>
 		<p class="mb-3 text-left text-sm text-(--red)"><I />{text}</p>
-		<Button.Root type="submit">{lang(lS, 'Open', 'Ouvrir')}</Button.Root>
+		<Button.Root type="submit">{m.go()}</Button.Root>
 	</form>
 </div>
