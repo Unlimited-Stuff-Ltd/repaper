@@ -2,7 +2,7 @@
 	import { Loading, Popover } from '$lib/components';
 	import TextEditor from './TextEditor.svelte';
 	import { Button } from 'bits-ui';
-	import lang, { languageState as lS } from '$lib/lang.svelte';
+	import { m } from '$lib/paraglide/messages';
 	import fullscreen from '$lib/fullscreen';
 
 	let {
@@ -49,41 +49,34 @@
 </svelte:head>
 
 <div class="w-fit" hidden={!show}>
-	<div class="sticky {$fullscreen ? 'w-screen left-0' : 'left-70 w-[calc(100vw-17.5rem)]'}">
-		<div class="relative top-0 mt-8 flex w-fit m-auto">
-			<h2 class="m-auto text-center font-bold text-lg text-(--fg)/60">
-				{lang(lS, 'Edit Mode', "Mode d'Éditeur")}
+	<div class="sticky {$fullscreen ? 'left-0 w-screen' : 'left-70 w-[calc(100vw-17.5rem)]'}">
+		<div class="relative top-0 m-auto mt-8 flex w-fit">
+			<h2 class="m-auto text-center text-lg font-bold text-(--fg)/60">
+				{m.edit_mode()}
 			</h2>
-			<Button.Root onclick={settings} class="m-auto ml-5 h-fit"
-				>{lang(lS, 'Document Settings', 'Paramètres du Document')}</Button.Root
+			<Button.Root onclick={settings} class="m-auto ml-5 h-fit">{m.document_settings()}</Button.Root
 			>
-			<Popover questionMark={false} bClass="m-auto ml-5" message={lang(lS, 'Share', 'Partager')}>
-				{lang(
-					lS,
-					'Share the document code and editor password for other editors.',
-					"Partager le code du document et le mot de passe d'éditeur pour les autres éditeurs."
-				)}<br />
-				{#if document.passwordRequired}
-					{lang(lS, '', '')}
-				{:else}
-					{lang(lS, `Share this link for viewers`, 'Partager ce lien pour les spectateurs')}:
+			<Popover questionMark={false} bClass="m-auto ml-5" message={m.share()}>
+				{m.share_code_editor()}<br />
+				{#if !document.passwordRequired}
+					{m.share_viewers()}:
 					<span class="underline">https://repaper.unlimitedstuffltd.com/open/{document.code}</span>
 				{/if}
 			</Popover>
 			{#if !$fullscreen}
 				<Button.Root onclick={enableFullscreen} class="m-auto ml-5 h-fit"
-					>{lang(lS, 'Fullscreen', 'Plein Écran')}</Button.Root
+					>{m.fullscreen()}</Button.Root
 				>
 			{:else}
 				<Button.Root onclick={disableFullscreen} class="m-auto ml-5 h-fit"
-					>{lang(lS, 'Exit Fullscreen', 'Sortir de Plein Écran')}</Button.Root
+					>{m.exit()} {m.fullscreen()}</Button.Root
 				>
 			{/if}
 			<Button.Root onclick={() => window.location.reload()} class="m-auto ml-5 h-fit"
-				>{lang(lS, 'Reload', 'Rafraîchir')}</Button.Root
+				>{m.reload()}</Button.Root
 			>
 		</div>
-		<h1 class="h1 mb-0! mt-5">{document.title}</h1>
+		<h1 class="h1 mt-5 mb-0!">{document.title}</h1>
 	</div>
 	<TextEditor
 		promise={document.promise}

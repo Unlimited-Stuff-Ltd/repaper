@@ -16,7 +16,7 @@
 	} from '$lib/extensions';
 	import { Button } from 'bits-ui';
 	import { changed } from '$lib';
-	import lang, { languageState as lS } from '$lib/lang.svelte';
+	import { m } from '$lib/paraglide/messages';
 	import { downloadDocument } from '$lib/pdf';
 	import fullscreen from '$lib/fullscreen';
 
@@ -43,13 +43,7 @@
 			localStorage.removeItem('repaper-document-unsaved');
 			changed.set(false);
 		} else if (failed) {
-			alert(
-				lang(
-					lS,
-					'Failed to save document. Please try again later.',
-					"Échoué à enregistrer le document. Essayez plus tard s'il vous plaît."
-				)
-			);
+			alert(m.something_happened());
 		}
 	}
 
@@ -199,24 +193,21 @@
 <Loading show={loading} />
 
 {#snippet sharedButtons()}
-	<Button.Root onclick={download}>{lang(lS, 'Download PDF', 'Télécharger comme PDF')}</Button.Root>
-	<Popover
-		questionMark={false}
-		bClass="mr-10"
-		message={lang(lS, 'Document Info', 'Info sur le Document')}
-		>{lang(lS, 'Word Count', 'Nombre de Mots')}: <strong>{wordCount}</strong>
-		{lang(lS, 'Words', 'Mots')}<br />{#if selectionWordCount || 0 > 0}
-			{lang(lS, 'Selection Word Count', 'Nombre de Mots de la Sélection')}:
+	<Button.Root onclick={download}>{m.download_pdf()}</Button.Root>
+	<Popover questionMark={false} bClass="mr-10" message={m.document_info()}
+		>{m.word_count()}: <strong>{wordCount}</strong>
+		{m.words()}<br />{#if selectionWordCount || 0 > 0}
+			{m.selection_word_count()}:
 			<strong>{selectionWordCount}</strong>
-			{lang(lS, 'Words', 'Mots')}{/if}</Popover
+			{m.words()}{/if}</Popover
 	>
 {/snippet}
 
 {#if editorState.editor && editor}
 	<div
-		class="mb-5 border-b border-(--o) py-5 bg-(--bg) sticky top-0 z-30 {$fullscreen
-			? 'w-screen left-0'
-			: 'w-[calc(100vw-17.5rem)] left-70'}"
+		class="sticky top-0 z-30 mb-5 border-b border-(--o) bg-(--bg) py-5 {$fullscreen
+			? 'left-0 w-screen'
+			: 'left-70 w-[calc(100vw-17.5rem)]'}"
 	>
 		<div class="m-auto flex w-fit gap-3">
 			{@render sharedButtons()}
@@ -229,30 +220,25 @@
 			/>
 			<Toggle
 				onclick={() => editorState.editor?.chain().focus().toggleBold().run()}
-				active={editorState.editor.isActive('bold')}>{lang(lS, 'Bold', 'Gras')}</Toggle
+				active={editorState.editor.isActive('bold')}>{m.bold()}</Toggle
 			>
 			<Toggle
 				onclick={() => editorState.editor?.chain().focus().toggleItalic().run()}
-				active={editorState.editor.isActive('italic')}>{lang(lS, 'Italic', 'Italique')}</Toggle
+				active={editorState.editor.isActive('italic')}>{m.italic()}</Toggle
 			>
 			<Toggle
 				onclick={() => editorState.editor?.chain().focus().toggleUnderline().run()}
-				active={editorState.editor.isActive('underline')}
-				>{lang(lS, 'Underline', 'Soulignement')}</Toggle
+				active={editorState.editor.isActive('underline')}>{m.underline()}</Toggle
 			>
 			{#if !saving}
-				<Button.Root class="ml-10" onclick={() => saveFunc(false)}
-					>{lang(lS, 'Save', 'Enregistrer')}</Button.Root
-				>
+				<Button.Root class="ml-10" onclick={() => saveFunc(false)}>{m.save()}</Button.Root>
 			{:else}
-				<Button.Root class="ml-2 opacity-50! cursor-not-allowed!"
-					>{lang(lS, 'Saving...', 'En Enregistrant')}</Button.Root
-				>
+				<Button.Root class="ml-2 cursor-not-allowed! opacity-50!">{m.saving()}</Button.Root>
 			{/if}
 		</div>
 	</div>
 {:else}
-	<div class="w-fit m-auto mb-6">
+	<div class="m-auto mb-6 w-fit">
 		{@render sharedButtons()}
 	</div>
 {/if}

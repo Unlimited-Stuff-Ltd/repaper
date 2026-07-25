@@ -1,7 +1,7 @@
 <script lang="ts">
 	import TextEditor from './TextEditor.svelte';
 	import { Button } from 'bits-ui';
-	import lang, { languageState as lS } from '$lib/lang.svelte';
+	import { m } from '$lib/paraglide/messages';
 	import fullscreen from '$lib/fullscreen';
 
 	let { document, scale = $bindable() } = $props();
@@ -22,24 +22,24 @@
 </svelte:head>
 
 <div class="h-screen" style={$fullscreen ? '' : 'max-width: calc(100vw - 17.5rem)'}>
-	<div class="flex m-auto mt-8 w-fit">
+	<div class="m-auto mt-8 flex w-fit">
 		<h2 class="m-auto text-center text-lg font-bold text-(--fg)/60">
-			{lang(lS, 'View Mode', 'Mode de Spectateur')}
+			{m.view_mode()}
 		</h2>
 		{#if !$fullscreen}
 			<Button.Root onclick={enableFullscreen} class="m-auto ml-5 h-fit"
-				>{lang(lS, 'Fullscreen', 'Plein Écran')}</Button.Root
+				>{m.fullscreen()}</Button.Root
 			>
 		{:else}
 			<Button.Root onclick={disableFullscreen} class="m-auto ml-5 h-fit"
-				>{lang(lS, 'Exit Fullscreen', 'Quitter Plein Écran')}</Button.Root
+				>{m.exit()} {m.fullscreen()}</Button.Root
 			>
 		{/if}
 		<Button.Root onclick={() => window.location.reload()} class="m-auto ml-5 h-fit"
-			>{lang(lS, 'Reload', 'Rafraîchir')}</Button.Root
+			>{m.reload()}</Button.Root
 		>
 	</div>
-	<h1 class="h1 mt-5 w-fit m-auto">{document.title}</h1>
+	<h1 class="h1 m-auto mt-5 w-fit">{document.title}</h1>
 	<TextEditor
 		promise={document.promise}
 		initial={document.content}

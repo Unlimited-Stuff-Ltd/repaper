@@ -2,12 +2,10 @@
 	import { goto } from '$app/navigation';
 	import { Checkbox, Popover, Loading, I } from '$lib/components';
 	import { Label, Button } from 'bits-ui';
-	import { onMount } from 'svelte';
-	import lang, { languageState as lS } from '$lib/lang.svelte';
+	import { m } from '$lib/paraglide/messages';
 	import { openDocument } from '$lib/actions.remote';
 	import { createDocument } from './actions.remote';
 
-	let account: string | null = $state(null);
 	let loading = $state(false);
 
 	let codeText = $state('');
@@ -22,15 +20,7 @@
 	let confirmViewerPassword = $state('');
 
 	let passwordRequired = $state(false);
-	let associateAccount = $state(false);
 	let autosave = $state(true);
-
-	onMount(() => {
-		const accountLS = localStorage.getItem('repaper-account');
-		if (accountLS) {
-			account = accountLS;
-		}
-	});
 
 	const codeCharacters = 'abcdefghijklmnopqrstuvwxyz0123456789-';
 
@@ -46,41 +36,25 @@
 	function check() {
 		let errors = 0;
 		if (!checkCode(code)) {
-			codeText = lang(
-				lS,
-				'Code can only contain numbers, lowercase letters and hyphens.',
-				"Le code peut seulement contenir les nombres, les lettres miniscules et les traits d'union."
-			);
+			codeText = m.invalid_code();
 			errors++;
 		} else {
 			codeText = '';
 		}
 		if (editorPassword === viewerPassword) {
-			viewerPText = lang(
-				lS,
-				'Editor Password and Viewer Password cannot match.',
-				"Mot de Passe de l'Éditeur et Mot de Passe du Spectateur ne peuvent pas être les mêmes."
-			);
+			viewerPText = m.passwords_cannot_match();
 			errors++;
 		} else if (viewerPassword === confirmViewerPassword) {
 			viewerPText = '';
 		}
 		if (editorPassword !== confirmEditorPassword) {
-			editorPText = lang(
-				lS,
-				'Editor Password and Confirm Editor Password do not match.',
-				"Mot de Passe de l'Éditeur et Confirmer Mot de Passe de l'Éditeur ne sont pas les mêmes."
-			);
+			editorPText = m.editor_passwords_dont_match();
 			errors++;
 		} else {
 			editorPText = '';
 		}
 		if (viewerPassword !== confirmViewerPassword) {
-			viewerPText = lang(
-				lS,
-				'Viewer Password and Confirm Viewer Password do not match.',
-				'Mot de Passe du Spectateur et Confirmer Mot de Passe du Spectateur ne sont pas les mêmes.'
-			);
+			viewerPText = m.viewer_passwords_dont_match();
 			errors++;
 		}
 		return errors;
@@ -104,7 +78,7 @@
 			classroom: false
 		});
 		if (createResponse.status === 409) {
-			codeText = lang(lS, 'Document code is already taken.', 'Code du Document est déjà pris.');
+			codeText = m.document_code_taken();
 			loading = false;
 			return;
 		}
@@ -113,11 +87,7 @@
 			password: editorPassword
 		});
 		if (openResponse.status === 401 || openResponse.status === 500) {
-			codeText = lang(
-				lS,
-				'Something unexpected happened on our end. Please try again later.',
-				"Quelque chose inattendu s'est passé sur notre dimension. Essayez encore s'il vout plaît."
-			);
+			codeText = m.something_happened();
 			loading = false;
 			return;
 		}
@@ -127,24 +97,18 @@
 </script>
 
 <svelte:head>
-	<title>{lang(lS, 'Create a Document - Repaper', 'Créer un Document - Repaper')}</title>
+	<title>{m.create_document()} - Repaper</title>
 </svelte:head>
 
 <Loading show={loading} />
 
 <div>
-	<h1 class="h1">{lang(lS, 'Create a Document', 'Créer un Document')}</h1>
+	<h1 class="h1">{m.create_document()}</h1>
 	<form {onsubmit}>
 		<div class="m-auto mb-5 w-fit text-left">
 			<Label.Root for="title"
-				>{lang(lS, 'Document Title', 'Titre du Document')}:
-				<Popover
-					>{@html lang(
-						lS,
-						'This is the title of the document.',
-						"Ceci c'est le titre du document."
-					)}</Popover
-				>
+				>{m.document_title()}:
+				<Popover>{m.this_title()}</Popover>
 			</Label.Root><br />
 			<input
 				id="title"
@@ -157,13 +121,9 @@
 		</div>
 		<div class="m-auto mb-0.5 w-fit text-left">
 			<Label.Root for="code"
-				>{lang(lS, 'Document Code', 'Code du Document')}:
+				>{m.code()}:
 				<Popover>
-					{@html lang(
-						lS,
-						'This is the code to access the document.',
-						"Ceci c'est le code pour accéder au document."
-					)}
+					{m.this_code()}
 				</Popover>
 			</Label.Root><br />
 			<input
@@ -179,13 +139,9 @@
 		<div class="m-auto mb-0.5 inline-flex">
 			<div class="text-left">
 				<Label.Root for="editorPassword"
-					>{lang(lS, 'Editor Password', "Mot de Passe de l'Éditeur")}:
+					>{m.editor_password()}:
 					<Popover>
-						{@html lang(
-							lS,
-							'This is the password used to edit the document.',
-							"Ceci c'est le mot de passe utilisé pour changer le document."
-						)}
+						{m.this_editor_password()}
 					</Popover>
 				</Label.Root><br />
 				<input
@@ -198,13 +154,8 @@
 				/>
 			</div>
 			<div class="text-left">
-				<Label.Root for="confirmEditorPassword"
-					>{@html lang(
-						lS,
-						'Confirm Editor Password:',
-						'<span class="text-sm">Confirmer Mot de Passe de l\'Éditeur:</span>'
-					)}</Label.Root
-				><br />
+				<Label.Root for="confirmEditorPassword">{m.confirm()} {m.editor_password()}</Label.Root><br
+				/>
 				<input
 					id="confirmEditorPassword"
 					bind:value={confirmEditorPassword}
@@ -221,13 +172,9 @@
 				<Label.Root
 					for="viewerPassword"
 					class={passwordRequired ? '' : 'cursor-not-allowed text-(--fg)/50'}
-					>{lang(lS, 'Viewer Password', 'Mot de Passe du Spectateur')}:
+					>{m.viewer_password()}:
 					<Popover disabled={!passwordRequired}>
-						{@html lang(
-							lS,
-							'This is the password used to view the document.',
-							"Ceci c'est le mot de passe utilisé pour regarder le document."
-						)}
+						{m.this_viewer_password()}
 					</Popover>
 				</Label.Root><br />
 				<input
@@ -244,11 +191,7 @@
 				<Label.Root
 					for="confirmViewerPassword"
 					class={passwordRequired ? '' : 'cursor-not-allowed text-(--fg)/50'}
-					>{@html lang(
-						lS,
-						'Confirm Viewer Password:',
-						'<span class="text-xs">Confirmer Mot de Passe du Spectateur:</span>'
-					)}</Label.Root
+					>{m.confirm()} {m.viewer_password()}</Label.Root
 				><br />
 				<input
 					id="confirmViewerPassword"
@@ -266,41 +209,23 @@
 			<div class="m-auto mb-7 flex w-fit">
 				<Checkbox bind:checked={passwordRequired} id="passwordRequired" />
 				<Label.Root class="ml-2" for="passwordRequired">
-					{lang(lS, 'Password required to view', 'Mot de Passe requis pour regarder')}
+					{m.password_required()}
 					<Popover>
-						{@html lang(
-							lS,
-							'If this is checked, anyone can view this document with just the document code.',
-							"Si ceci est coché, n'importe qui pourrait voir ce document avec seulement le code du document."
-						)}
+						{m.this_password_required()}
 					</Popover>
 				</Label.Root>
 			</div>
 			<div class="m-auto mb-7 flex w-fit">
 				<Checkbox bind:checked={autosave} id="autosave" />
 				<Label.Root class="ml-2" for="autosave">
-					{lang(lS, 'Autosave', 'Enregistrement Automatique')}
+					{m.autosave()}
 					<Popover>
-						{@html lang(
-							lS,
-							'If this is checked, this document will automatically save in the background.',
-							'Si ceci est coché, ce document enregistera automatique dans le fond.'
-						)}
+						{m.this_autosave()}
 					</Popover>
 				</Label.Root>
 			</div>
 		</div>
-		{#if account}
-			<div class="m-auto mb-7 flex w-fit">
-				<Checkbox bind:checked={associateAccount} id="associateAccount" />
-				<Label.Root class="ml-2" for="associateAccount"
-					>{lang(lS, 'Associate with account', 'Associer avec un compte')}</Label.Root
-				>
-			</div>
-		{/if}
-		<Button.Root type="submit">{lang(lS, 'Create', 'Créer')}</Button.Root>
+		<Button.Root type="submit">{m.go()}</Button.Root>
 	</form>
-	<a class="a mt-6 block" href="/help/create" target="_blank"
-		>{lang(lS, 'Need Help?', "Besoin d'Aide?")}</a
-	>
+	<a class="a mt-6 block" href="/help/create" target="_blank">{m.need_help()}</a>
 </div>

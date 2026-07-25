@@ -1,32 +1,13 @@
 <script lang="ts">
-	import { Button, Label } from 'bits-ui';
-	import lang, { languageState as lS } from '$lib/lang.svelte';
-	import { I, Switch } from '$lib/components';
+	import { Button /*Label*/ } from 'bits-ui';
+	import { m } from '$lib/paraglide/messages';
+	//import { I, Popover, Switch } from '$lib/components';
 
-	let {
-		deleteFunc,
-		renameDocument,
-		viewerPasswordRequired,
-		autosave,
-		changePassword,
-		changeCode,
-		changePasswordRequired,
-		changeAutosave,
-		back
-	} = $props();
-
-	let renameTo = $state('');
+	let { /*viewerPasswordRequired, autosave,*/ back } = $props();
+	/*let renameTo = $state('');
 
 	async function deleteF() {
-		if (
-			confirm(
-				lang(
-					lS,
-					'Are you sure you want to delete this document? This action cannot be undone.',
-					'Vous êtes certains que vous voulez supprimer ce document ? Cette action ne peut pas être annulé.'
-				)
-			)
-		) {
+		if (confirm(m.confirm_delete())) {
 			await deleteFunc();
 		}
 	}
@@ -52,28 +33,14 @@
 	async function changePasswordFunc(event: Event) {
 		event.preventDefault();
 		if (newPassword !== confirmNewPassword) {
-			text = editor
-				? lang(
-						lS,
-						"New Editor Password and Confirm New Editor Password aren't the same.",
-						"Mot de Passe de l'Éditeur Nouveau et Confirmer Mot de Passe de l'Éditeur Nouveau ne sont pas les mêmes."
-					)
-				: lang(
-						lS,
-						"New Viewer Password and Confirm New Viewer Password aren't the same.",
-						'Mot de Passe du Spectateur Nouveau et Confirmer Mot de Passe du Spectateur Nouveau ne sont pas les mêmes.'
-					);
+			text = editor ? m.editor_passwords_dont_match() : m.viewer_passwords_dont_match();
 			return;
 		} else {
 			text = '';
 		}
 		const response = await changePassword(oldPassword, newPassword, editor);
 		if (response === 1) {
-			text = lang(
-				lS,
-				'Current Editor Password is Incorrect.',
-				"Mot de Passe de l'Éditeur Actuel est Incorrect."
-			);
+			text = m.current_editor_pass_incorrect();
 		}
 	}
 
@@ -83,13 +50,163 @@
 	let newPassword = $state('');
 	let confirmNewPassword = $state('');
 
-	let text = $state('');
+	//let text = $state('');
 
 	// Change Code
 	let newCode = $state('');
+
+	let loading = $state(false);
+
+	async function deleteFunc() {
+		loading = true;
+		changesMadeSinceSave = false;
+		await deleteDocument({
+			code: data.document,
+			token
+		});
+		let recentDocuments: DocumentLink[] = JSON.parse(
+			localStorage.getItem('repaper-recent-documents') ?? '[]'
+		);
+		const newRecentDocuments = recentDocuments.filter((a) => a.code !== data.document);
+		localStorage.setItem('repaper-recent-documents', JSON.stringify(newRecentDocuments));
+		window.location.assign('/');
+	}
+
+	async function changePassword(oldPassword: string, newPassword: string, editorPassword: boolean) {
+		loading = true;
+		await editor.saveFunction();
+		const response = await password({
+			code: data.document,
+			token,
+			oldPassword,
+			newPassword,
+			editor: editorPassword
+		});
+		if (response.status === 401) {
+			goto(resolve('/'), { replaceState: true });
+		} else if (response.status === 400) {
+			loading = false;
+			return 1;
+		} else if (response.status === 500) {
+			alert(m.something_happened());
+		} else {
+			window.location.reload();
+		}
+		showSettings = false;
+		loading = false;
+	}
+
+	async function changeCode(to: string) {
+		loading = true;
+		await editor.saveFunction();
+		const response = await code({
+			code: data.document,
+			token,
+			newCode: to
+		});
+		if (response.status === 401) {
+			goto(resolve('/'), { replaceState: true });
+			return;
+		} else if (response.status === 500) {
+			alert(m.something_happened());
+			return;
+		} else {
+			const recentDocuments = JSON.parse(localStorage.getItem('repaper-recent-documents') ?? '[]');
+			const index = recentDocuments.findIndex((a: any) => a.code === data.document);
+			recentDocuments.splice(index, 1);
+			const document = recentDocuments[index];
+			document.code = to;
+			recentDocuments.splice(0, 0, document);
+			localStorage.setItem('repaper-recent-documents', JSON.stringify(recentDocuments));
+			window.location.assign(`/document/${to}?mode=editor`);
+			return;
+		}
+	}
+
+	async function changeAutosave(to: boolean) {
+		loading = true;
+		await editor.saveFunction();
+		const response = await autosave({
+			code: data.document,
+			token,
+			autosave: to
+		});
+		if (response.status === 401) {
+			goto(resolve('/'), { replaceState: true });
+			return;
+		} else if (response.status === 500) {
+			alert(m.something_happened());
+			return;
+		} else {
+			const recentDocuments = JSON.parse(localStorage.getItem('repaper-recent-documents') ?? '[]');
+			const index = recentDocuments.findIndex((a: any) => a.code === data.document);
+			recentDocuments.splice(index, 1);
+			const document = recentDocuments[index];
+			document.autosave = to;
+			recentDocuments.splice(0, 0, document);
+			localStorage.setItem('repaper-recent-documents', JSON.stringify(recentDocuments));
+			window.location.reload();
+			return;
+		}
+	}
+
+	async function changePasswordRequired(to: boolean) {
+		loading = true;
+		await editor.saveFunction();
+		const response = await passwordRequired({
+			code: data.document,
+			token,
+			passwordRequired: to
+		});
+		if (response.status === 401) {
+			goto(resolve('/'), { replaceState: true });
+			return;
+		} else if (response.status === 500) {
+			alert(m.something_happened());
+			return;
+		} else {
+			const recentDocuments = JSON.parse(localStorage.getItem('repaper-recent-documents') ?? '[]');
+			const index = recentDocuments.findIndex((a: any) => a.code === data.document);
+			recentDocuments.splice(index, 1);
+			const document = recentDocuments[index];
+			document.passwordRequired = to;
+			recentDocuments.splice(0, 0, document);
+			localStorage.setItem('repaper-recent-documents', JSON.stringify(recentDocuments));
+			window.location.reload();
+			return;
+		}
+	}
+
+	async function renameDocument(to: string) {
+		loading = true;
+		await editor.saveFunction();
+		const response = await changeTitle({
+			code: data.document,
+			token,
+			title: to
+		});
+		if (response.status === 401) {
+			goto(resolve('/'), { replaceState: true });
+			return;
+		} else if (response.status === 500) {
+			alert(m.something_happened());
+			return;
+		} else {
+			const recentDocuments = JSON.parse(localStorage.getItem('repaper-recent-documents') ?? '[]');
+			const index = recentDocuments.findIndex((a: any) => a.code === data.document);
+			recentDocuments.splice(index, 1);
+			const document = recentDocuments[index];
+			document.title = to;
+			recentDocuments.splice(0, 0, document);
+			localStorage.setItem('repaper-recent-documents', JSON.stringify(recentDocuments));
+			window.location.reload();
+			return;
+		}
+	}*/
 </script>
 
-<h1 class="h1 mb-18!">{lang(lS, 'Document Settings', 'Paramètres du Document')}</h1>
+<!--
+<h1 class="h1 mt-5 mb-18!">{m.document_settings()}</h1>
 
 <div class="grid grid-cols-2">
 	<div class="m-auto w-fit text-center">
@@ -166,22 +283,6 @@
 				<p class="text-center text-(--red)">{text}<I /></p>
 			</div>
 		</form>
-		<hr class="m-auto my-8 w-100" />
-		<div>
-			<p>
-				{lang(lS, 'Autosave', 'Enregistrement automatique')}
-			</p>
-			<Button.Root
-				class="disabled:cursor-not-allowed! disabled:bg-(--fg)/20! disabled:opacity-100!"
-				onclick={toggleAutosave}
-				disabled={autosave}>{lang(lS, 'Yes', 'Oui')}</Button.Root
-			>
-			<Button.Root
-				class="disabled:cursor-not-allowed! disabled:bg-(--fg)/20! disabled:opacity-100!"
-				onclick={toggleAutosave}
-				disabled={!autosave}>{lang(lS, 'No', 'Non')}</Button.Root
-			>
-		</div>
 	</div>
 	<div class="m-auto h-fit">
 		<form onsubmit={rename} class="block text-left">
@@ -232,24 +333,19 @@
 			>{lang(lS, 'Delete Document', 'Supprimer ce Document')}</Button.Root
 		>
 	</div>
-</div>
-
-<div class="m-auto w-140">
-	<h3 class="text-center text-2xl font-bold">
-		{lang(lS, 'Autosave', 'Enregistrement Automatique')}
-	</h3>
-	<div class="grid grid-cols-2 gap-4">
-		<p class="w-full text-right leading-5">
-			{lang(
-				lS,
-				'Whether the document saves automatically every 60 seconds',
-				'Si le document enregistre automatiquement chaque 60 secondes.'
-			)}
-		</p>
-		<Switch class="my-auto" />
 	</div>
+
+<div class="m-auto flex w-fit">
+	<h3 class="mr-2 text-center text-2xl font-bold">
+		{m.autosave()}
+	</h3>
+	<div>
+		<Popover triggerClass="size-8! text-2xl" bClass="w-100! px-3!">{m.this_autosave()}</Popover>
+	</div>
+	<hr class="my-auto mr-5 ml-2 w-20" />
+	<Switch class="my-auto" checked={autosave} />
 </div>
 
-<hr class="my-10 h-[60%]" />
+<hr class="my-10 h-[60%]" />-->
 
-<Button.Root class="mt-20" onclick={back}>{lang(lS, 'Back', 'Retourner')}</Button.Root>
+<Button.Root class="mt-20" onclick={back}>{m.back()}</Button.Root>

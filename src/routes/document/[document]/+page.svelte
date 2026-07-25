@@ -10,10 +10,8 @@
 	import DocumentSettings from './DocumentSettings.svelte';
 	import { page } from '$app/state';
 	import { Slider } from '$lib/components';
-	import lang, { languageState as lS } from '$lib/lang.svelte';
 	import fullscreen from '$lib/fullscreen';
-	import { checkToken, deleteDocument, saveDocument } from './actions.remote';
-	import { autosave, changeTitle, code, password, passwordRequired } from './settings.remote';
+	import { checkToken, saveDocument } from './actions.remote';
 
 	let resolveP: (value: boolean) => void;
 
@@ -121,183 +119,6 @@
 	}
 
 	let changesMadeSinceSave = $state(false);
-
-	async function deleteFunc() {
-		loading = true;
-		changesMadeSinceSave = false;
-		await deleteDocument({
-			code: data.document,
-			token
-		});
-		let recentDocuments: DocumentLink[] = JSON.parse(
-			localStorage.getItem('repaper-recent-documents') ?? '[]'
-		);
-		const newRecentDocuments = recentDocuments.filter((a) => a.code !== data.document);
-		localStorage.setItem('repaper-recent-documents', JSON.stringify(newRecentDocuments));
-		window.location.assign('/');
-	}
-
-	async function changePassword(oldPassword: string, newPassword: string, editorPassword: boolean) {
-		loading = true;
-		await editor.saveFunction();
-		const response = await password({
-			code: data.document,
-			token,
-			oldPassword,
-			newPassword,
-			editor: editorPassword
-		});
-		if (response.status === 401) {
-			goto(resolve('/'), { replaceState: true });
-		} else if (response.status === 400) {
-			loading = false;
-			return 1;
-		} else if (response.status === 500) {
-			alert(
-				lang(
-					lS,
-					'Failed to change password. Please try again later',
-					"Impossible de changer le mot de passe. Essayez plus tard s'il vous plaît."
-				)
-			);
-		} else {
-			window.location.reload();
-		}
-		showSettings = false;
-		loading = false;
-	}
-
-	async function changeCode(to: string) {
-		loading = true;
-		await editor.saveFunction();
-		const response = await code({
-			code: data.document,
-			token,
-			newCode: to
-		});
-		if (response.status === 401) {
-			goto(resolve('/'), { replaceState: true });
-			return;
-		} else if (response.status === 500) {
-			alert(
-				lang(
-					lS,
-					'Failed to change document code. Please try again later',
-					"Impossible de changer le code du document. Essayez plus tard s'il vous plaît."
-				)
-			);
-			return;
-		} else {
-			const recentDocuments = JSON.parse(localStorage.getItem('repaper-recent-documents') ?? '[]');
-			const index = recentDocuments.findIndex((a: any) => a.code === data.document);
-			recentDocuments.splice(index, 1);
-			const document = recentDocuments[index];
-			document.code = to;
-			recentDocuments.splice(0, 0, document);
-			localStorage.setItem('repaper-recent-documents', JSON.stringify(recentDocuments));
-			window.location.assign(`/document/${to}?mode=editor`);
-			return;
-		}
-	}
-
-	async function changeAutosave(to: boolean) {
-		loading = true;
-		await editor.saveFunction();
-		const response = await autosave({
-			code: data.document,
-			token,
-			autosave: to
-		});
-		if (response.status === 401) {
-			goto(resolve('/'), { replaceState: true });
-			return;
-		} else if (response.status === 500) {
-			alert(
-				lang(
-					lS,
-					'Failed to change autosave. Please try again later',
-					"Impossible de changer l'enregistrement automatique. Essayez plus tard s'il vous plaît."
-				)
-			);
-			return;
-		} else {
-			const recentDocuments = JSON.parse(localStorage.getItem('repaper-recent-documents') ?? '[]');
-			const index = recentDocuments.findIndex((a: any) => a.code === data.document);
-			recentDocuments.splice(index, 1);
-			const document = recentDocuments[index];
-			document.autosave = to;
-			recentDocuments.splice(0, 0, document);
-			localStorage.setItem('repaper-recent-documents', JSON.stringify(recentDocuments));
-			window.location.reload();
-			return;
-		}
-	}
-
-	async function changePasswordRequired(to: boolean) {
-		loading = true;
-		await editor.saveFunction();
-		const response = await passwordRequired({
-			code: data.document,
-			token,
-			passwordRequired: to
-		});
-		if (response.status === 401) {
-			goto(resolve('/'), { replaceState: true });
-			return;
-		} else if (response.status === 500) {
-			alert(
-				lang(
-					lS,
-					'Failed to change if password is required to view. Please try again later',
-					"Impossible de changer si le mot de passe est requis pour spectater. Essayez plus tard s'il vous plaît."
-				)
-			);
-			return;
-		} else {
-			const recentDocuments = JSON.parse(localStorage.getItem('repaper-recent-documents') ?? '[]');
-			const index = recentDocuments.findIndex((a: any) => a.code === data.document);
-			recentDocuments.splice(index, 1);
-			const document = recentDocuments[index];
-			document.passwordRequired = to;
-			recentDocuments.splice(0, 0, document);
-			localStorage.setItem('repaper-recent-documents', JSON.stringify(recentDocuments));
-			window.location.reload();
-			return;
-		}
-	}
-
-	async function renameDocument(to: string) {
-		loading = true;
-		await editor.saveFunction();
-		const response = await changeTitle({
-			code: data.document,
-			token,
-			title: to
-		});
-		if (response.status === 401) {
-			goto(resolve('/'), { replaceState: true });
-			return;
-		} else if (response.status === 500) {
-			alert(
-				lang(
-					lS,
-					'Failed to rename document. Please try again later',
-					"Impossible de renommer le document. Essayez plus tard s'il vous plaît."
-				)
-			);
-			return;
-		} else {
-			const recentDocuments = JSON.parse(localStorage.getItem('repaper-recent-documents') ?? '[]');
-			const index = recentDocuments.findIndex((a: any) => a.code === data.document);
-			recentDocuments.splice(index, 1);
-			const document = recentDocuments[index];
-			document.title = to;
-			recentDocuments.splice(0, 0, document);
-			localStorage.setItem('repaper-recent-documents', JSON.stringify(recentDocuments));
-			window.location.reload();
-			return;
-		}
-	}
 </script>
 
 <Loading show={loading} />
@@ -328,17 +149,13 @@
 			bind:this={editor}
 		/>
 		{#if showSettings}
+			<!--
 			<DocumentSettings
-				{deleteFunc}
-				{renameDocument}
-				{changePassword}
-				{changeCode}
-				{changePasswordRequired}
-				{changeAutosave}
 				autosave={document.autosave}
 				viewerPasswordRequired={document.passwordRequired}
 				back={() => (showSettings = false)}
-			/>
+			/>-->
+			<DocumentSettings back={() => (showSettings = false)} />
 		{/if}
 	{/if}
 </div>

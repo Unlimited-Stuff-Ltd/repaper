@@ -166,7 +166,7 @@ hr {
 	align-items: center;
 	padding-left: 4px;
 	padding-right: 4px;
-	@apply transition-colors;
+	transition: background-color 150ms;
 }
 
 [data-switch-root][data-state='checked'] {
@@ -185,6 +185,7 @@ hr {
 	height: 22px;
 	flex-shrink: 0;
 	border-radius: calc(infinity * 1px);
+	transition: transform 150ms;
 }
 
 @keyframes checked {
@@ -197,22 +198,9 @@ hr {
 }
 
 [data-switch-thumb][data-state='checked'] {
-	animation: checked;
-	animation-duration: 100ms;
-	animation-fill-mode: forwards;
-}
-
-@keyframes unchecked {
-	from {
-		transform: translateX(1.5rem);
-	}
-	to {
-		transform: translateX(0);
-	}
+	transform: translateX(1.5rem);
 }
 
 [data-switch-thumb][data-state='unchecked'] {
-	animation: unchecked;
-	animation-duration: 100ms;
-	animation-fill-mode: forwards;
+	transform: translteX(0);
 }

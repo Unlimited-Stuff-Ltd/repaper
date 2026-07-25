@@ -1,21 +1,18 @@
 <script lang="ts">
 	import { LinkButton } from '$lib/components';
-	import lang, { languageState as lS } from '$lib/lang.svelte';
+	import { m } from '$lib/paraglide/messages';
 </script>
 
 <svelte:head>
-	<title>{lang(lS, 'Repaper Help', 'Aide pour Repaper')}</title>
+	<title>{m.repaper_help()}</title>
 </svelte:head>
 
 <div>
-	<h1 class="h1">{lang(lS, 'Repaper Help', 'Aide pour Repaper')}</h1>
+	<h1 class="h1">{m.repaper_help()}</h1>
 
 	<div class="flex gap-5">
-		<LinkButton href="/help/create">{lang(lS, 'Create a Document', 'Créer un Document')}</LinkButton
-		>
-		<LinkButton href="/help/open">{lang(lS, 'Open a Document', 'Ouvrir un Document')}</LinkButton>
-		<LinkButton href="/help/share"
-			>{lang(lS, 'Share a Document', 'Partager un Document')}</LinkButton
-		>
+		<LinkButton href="/help/create">{m.create_document()}</LinkButton>
+		<LinkButton href="/help/open">{m.open_document()}</LinkButton>
+		<LinkButton href="/help/share">{m.share_document()}</LinkButton>
 	</div>
 </div>

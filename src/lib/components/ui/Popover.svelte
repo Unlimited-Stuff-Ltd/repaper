@@ -4,6 +4,7 @@
 	let {
 		children,
 		bClass = '',
+		triggerClass = '',
 		questionMark = true,
 		button = true,
 		message = '',
@@ -16,7 +17,7 @@
 		<Popover.Trigger
 			tabindex={-1}
 			{...props}
-			class="m-auto h-6 w-6 cursor-pointer items-center justify-center rounded-[50%] align-baseline hover:bg-(--fg)/10 disabled:cursor-not-allowed disabled:hover:bg-transparent data-[state=open]:bg-(--fg)/10"
+			class="m-auto h-6 w-6 cursor-pointer items-center justify-center rounded-[50%] align-baseline hover:bg-(--fg)/10 disabled:cursor-not-allowed disabled:hover:bg-transparent data-[state=open]:bg-(--fg)/10 {triggerClass}"
 			>?</Popover.Trigger
 		>
 	{:else if button}
@@ -26,7 +27,7 @@
 	{/if}
 	<Popover.Portal>
 		<Popover.Content
-			class="w-fit z-70! rounded-md border border-(--o) bg-(--bg) px-5 py-3 text-center {bClass}"
+			class="z-70! w-fit rounded-md border border-(--o) bg-(--bg) px-5 py-3 text-center {bClass}"
 			sideOffset={5}
 			tabindex={-1}
 		>
